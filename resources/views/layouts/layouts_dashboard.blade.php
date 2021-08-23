@@ -19,18 +19,91 @@
     <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
     <!-- Generated: 2018-04-16 09:29:05 +0200 -->
     <title>Homepage - {{env('APP_NAME')}}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    {{-- <script src="https://js.pusher.com/7.0/pusher.min.js"></script> --}}
+    {{-- <link rel="stylesheet" href="{{url('assets/dashboard/css/fontawesome.css')}}"> --}}
+    {{-- <script src="{{url('assets/dashboard/js/jquery3.6.0.js')}}"></script> --}}
     <script src="{{url('assets/dashboard/js/add.js')}}"></script>
-    <script src="{{url('assets/dashboard/js/pusher.js')}}"></script>
-        <script src="{{url('assets/dashboard/js/require.min.js')}}"></script>
+    <link rel="stylesheet" href="{{url('assets/dashboard/css/select.css')}}">
+    <script src="{{url('assets/dashboard/js/select.js')}}"></script>
+    {{-- <script src="{{url('assets/dashboard/js/pusher.js')}}"></script> --}}
+    <link rel="stylesheet" href="{{url('assets/dashboard/formwizard/css/bootstrap.css')}}">
+    <!-- Include SmartWizard CSS -->
+    <link href="{{url('assets/dashboard/formwizard/css/smart_wizard.css')}}" rel="stylesheet" type="text/css" />
+    <!-- Optional SmartWizard theme -->
+    <link href="{{url('assets/dashboard/formwizard/css/smart_wizard_theme_dots.css')}}" rel="stylesheet"
+        type="text/css" />
+    <!-- Include jQuery Validator plugin -->
+    <script src="{{url('assets/dashboard/formwizard/js/bootstrap.js')}}"></script>
+    <script src="{{url('assets/dashboard/formwizard/js/jquery.smartWizard.js')}}"></script>
+    <script src="{{url('assets/dashboard/formwizard/js/addcost.js')}}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            // Toolbar extra buttons
+            var btnFinish = $('<button></button>').text('Finish')
+                .attr('id', 'btn-finish')
+                .addClass('btn btn-info')
+                .on('click', function () {
+
+                });
+            var btnCancel = $('<button></button>').text('Cancel')
+                .addClass('btn btn-danger')
+                .on('click', function () {
+                    $('#myForm').attr('method', 'get');
+                    $('#myForm').attr('action', '/home');
+                    $('#smartwizard').smartWizard("reset");
+                });
+
+
+
+            // Smart Wizard
+            $('#smartwizard').smartWizard({
+                selected: 0,
+                theme: 'dots',
+                transitionEffect: 'fade',
+                toolbarSettings: {
+                    toolbarPosition: 'bottom',
+                    toolbarExtraButtons: [btnFinish, btnCancel]
+                },
+                anchorSettings: {
+                    markDoneStep: true, // add done css
+                    markAllPreviousStepsAsDone: true, // When a step selected by url hash, all previous steps are marked done
+                    removeDoneStepOnNavigateBack: true, // While navigate back done step after active step will be cleared
+                    enableAnchorOnDoneStep: true // Enable/Disable the done steps navigation
+                }
+            });
+
+            $("#btn-finish").addClass('disabled');
+            $("#smartwizard").on("showStep", function (e, anchorObject, stepNumber, stepDirection,
+                stepPosition) {
+                //alert("You are on step "+stepNumber+" now");
+                if (stepPosition == 'first') {
+                    $("#prev-btn").addClass('disabled');
+                    $("#btn-finish").addClass('disabled');
+                } else if (stepPosition == 'final') {
+                    $("#next-btn").addClass('disabled');
+                    $("#btn-finish").removeClass('disabled');
+                } else {
+                    $("#prev-btn").removeClass('disabled');
+                    $("#next-btn").removeClass('disabled');
+                    $("#btn-finish").addClass('disabled');
+                }
+            });
+
+        });
+
+    </script>
+    <script src="{{url('assets/dashboard/js/require.min.js')}}"></script>
     <script>
         requirejs.config({
             baseUrl: '.'
         });
+
     </script>
     <!-- Dashboard Core -->
     <link href="{{url('assets/dashboard/css/dashboard.css')}}" rel="stylesheet" />
@@ -51,60 +124,9 @@
         <div class="page-main">
             @yield('content')
         </div>
-        <div class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="row">
-                            <div class="col-6 col-md-3">
-                                <ul class="list-unstyled mb-0">
-                                    <li><a href="#">First link</a></li>
-                                    <li><a href="#">Second link</a></li>
-                                </ul>
-                            </div>
-                            <div class="col-6 col-md-3">
-                                <ul class="list-unstyled mb-0">
-                                    <li><a href="#">Third link</a></li>
-                                    <li><a href="#">Fourth link</a></li>
-                                </ul>
-                            </div>
-                            <div class="col-6 col-md-3">
-                                <ul class="list-unstyled mb-0">
-                                    <li><a href="#">Fifth link</a></li>
-                                    <li><a href="#">Sixth link</a></li>
-                                </ul>
-                            </div>
-                            <div class="col-6 col-md-3">
-                                <ul class="list-unstyled mb-0">
-                                    <li><a href="#">Other link</a></li>
-                                    <li><a href="#">Last link</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 mt-4 mt-lg-0">
-                        Premium and Open Source dashboard template with responsive and high quality UI. For Free!
-                    </div>
-                </div>
-            </div>
-        </div>
         <footer class="footer">
             <div class="container">
                 <div class="row align-items-center flex-row-reverse">
-                    <div class="col-auto ml-lg-auto">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <ul class="list-inline list-inline-dots mb-0">
-                                    <li class="list-inline-item"><a href="./docs/index.html">Documentation</a></li>
-                                    <li class="list-inline-item"><a href="./faq.html">FAQ</a></li>
-                                </ul>
-                            </div>
-                            <div class="col-auto">
-                                <a href="https://github.com/tabler/tabler" class="btn btn-outline-primary btn-sm">Source
-                                    code</a>
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-12 col-lg-auto mt-3 mt-lg-0 text-center">
                         Copyright © 2018 <a href=".">Tabler</a>. Theme by <a href="https://codecalm.net"
                             target="_blank">codecalm.net</a> All rights reserved.
@@ -113,7 +135,6 @@
             </div>
         </footer>
     </div>
-
 </body>
 
 </html>

@@ -16,7 +16,7 @@
                             <i class="fe fe-dollar-sign"></i>
                         </span>
                         <div>
-                            <h4 class="m-0"> <small></small></h4>
+                            <h4 class="m-0">{{"$ ". number_format($totalhargaprojectrunning)}}</h4>
                         </div>
                     </div>
                 </div>
@@ -49,16 +49,14 @@
         </div>
         <div class="row row-cards row-deck">
             <div class="col-12">
-                @if (request()->user()->role == 'customer')
                 <div class="d-flex flex-row bd-highlight mb-3">
                     <div class="p-2 bd-highlight">
-                        <button type="button" id="tambahcontestproject" class="btn btn-orange" data-toggle="modal"data-target="#projectModal">Add Project Contest</button>
+                        <a href="{{route('contestproject')}}" class="btn btn-orange">Add Project Contest</a>
                     </div>
                     <div class="p-2 bd-highlight">
-                        <button type="button" id="tambahdirectproject" class="btn btn-lime" data-toggle="modal"data-target="#projectModal">Add Direct Contest</button>
+                        <a href="{{route('directproject')}}" class="btn btn-lime">Add Direct Contest</a>
                     </div>
                 </div>
-                @endif
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Project Running</h3>
@@ -68,55 +66,71 @@
                             <thead>
                                 <tr>
                                     <th class="w-1">No.</th>
+                                    <th>Project ID</th>
                                     <th>Name</th>
                                     <th>Project</th>
                                     <th>Bid/Proposals</th>
                                     <th>Worker</th>
                                     <th>Created</th>
                                     <th>Deadline</th>
-                                    <th>Status</th>
+                                    <th>Status/Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php
                                     $i=1;
                                     foreach($project as $itemproject) :
-                                    $desainers    = DB::table('result_contests')->where('contest_id',$itemproject->id)->distinct()->count('user_id_worker');
-                                    $desains      = DB::table('result_contests')->where('contest_id',$itemproject->id)->count();
+                                    if ($itemproject->catagories_project == 'contest') {
+                                        $desainers    = DB::table('result_contests')->where('contest_id',$itemproject->id)->distinct()->count('user_id_worker');
+                                        $desains      = DB::table('result_contests')->where('contest_id',$itemproject->id)->count();
+                                    } else {
+                                        $desainers    = DB::table('result_projects')->where('contest_id',$itemproject->id)->distinct()->count('user_id_worker');
+                                        $desains      = DB::table('result_projects')->where('contest_id',$itemproject->id)->count();
+                                    }
+                                    if ($itemproject->deadline <= date('Y-m-d')) {
+                                        if ($itemproject->is_active == 'running') {
+                                            DB::table('projects')->where('id',$itemproject->id)->update(['is_active' =>'choose winner']);
+                                        }
+                                    }
                                 @endphp
                                 <tr>
                                     <td><span class="text-muted">{{$i}}</span></td>
+                                    <td>{{$itemproject->id_project}}</td>
                                     <td>{{$itemproject->title}}</td>
                                     <td>
-                                        @if ($itemproject->catagories_project == 1)
+                                        @if ($itemproject->catagories_project == 'contest')
                                             Contest Project
                                         @else
                                             Direct Project
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         {{$desains}}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         {{$desainers}}
                                     </td>
                                     <td>
                                         {{date('d M, Y',strtotime($itemproject->created_at))}}
                                     </td>
-                                    <td>
+                                    <td id="deadline" data-deadline="{{$itemproject->deadline}}" data-time="{{date('Y-m-d')}}" data-id="{{$itemproject->id}}">
                                         {{date('d M, Y',strtotime($itemproject->deadline))}}
                                     </td>
                                     <td>
-                                        @if ($itemproject->is_active == 'waiting payment')
+                                        @if ($itemproject->is_active == 'waitting payment')
                                         <a class="btn btn-warning btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                         @elseif ($itemproject->is_active == 'running')
-                                        <a class="btn btn-success btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @if ($itemproject->catagories_project == 'contest')
+                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-success btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @else
+                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-success btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @endif
                                         @elseif ($itemproject->is_active == 'choose winner')
                                         <a class="btn btn-azure btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                         @elseif ($itemproject->is_active == 'handover')
-                                        <a class="btn btn-primary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                        <a href="/handoverproject/{{$itemproject->id}}" class="btn btn-primary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                         @elseif ($itemproject->is_active == 'close')
-                                        <a class="btn btn-secondary btn-sm text-uppercase">{{$itemproject->is_active}}</a>
+                                        <a href="/handoverproject/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-uppercase">{{$itemproject->is_active}}</a>
                                         @elseif ($itemproject->is_active == 'cancel')
                                         <a class="btn btn-danger btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                         @else
@@ -130,53 +144,9 @@
                                 @endphp
                             </tbody>
                         </table>
+                        {{$project->links()}}
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="projectModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"></span>
-                </button>
-            </div>
-            <div class="body_contest">
-                <form action="" method="post" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body">
-                        <input type="hidden" name="catagories_project">
-                        <div class="form-group">
-                            <label for="title">Title Contest</label>
-                            <input type="text" class="form-control" id="title" name="title">
-                        </div>
-                        <div class="form-group">
-                            <label for="deskripsi">Deskripsi Contest</label>
-                            <textarea class="form-control" id="deskripsi" rows="3" name="deskripsi"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="catagories">Catagories</label>
-                            <select class="form-control custom-select" id="catagories" name="catagories">
-                                <option value="">-- Pilih Catagories --</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="thumbnail">File Backgound</label>
-                            <input type="file" class="form-control-file" id="thumbnail" name="thumbnail">
-                            <small id="emailHelp" class="form-text text-muted">Opsional</small>
-                        </div>
-                    </div>
-                    <div class="modal-footer footer_contest">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>

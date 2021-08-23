@@ -17,8 +17,8 @@ class CreateResultProjectsTable extends Migration
             $table->id();
             $table->integer('contest_id');
             $table->integer('user_id_worker');
-            $table->string('title');
             $table->text('description');
+            $table->integer('nilai')->nullable();
             $table->timestamps();
         });
     }

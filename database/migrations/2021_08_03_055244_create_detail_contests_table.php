@@ -18,8 +18,12 @@ class CreateDetailContestsTable extends Migration
             $table->integer('project_id');
             $table->string('title');
             $table->text('description');
+            $table->string('title_logo');
             $table->integer('catagories');
-            $table->string('thumbnail');
+            $table->integer('subcatagories');
+            $table->integer('package');
+            $table->integer('packageupgrade')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->integer('harga');
             $table->timestamps();
         });

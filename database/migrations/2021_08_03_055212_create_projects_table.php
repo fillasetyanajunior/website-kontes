@@ -16,10 +16,15 @@ class CreateProjectsTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->string('id_project');
             $table->string('title');
             $table->enum('catagories_project',['contest','direct']);
-            $table->enum('is_active', ['waiting payment', 'running', 'choose winner', 'handover', 'close', 'cancel', 'mediation']);
-            $table->date('deadline');
+            $table->string('catagories');
+            $table->enum('is_active', ['waitting payment', 'running', 'choose winner', 'handover', 'close', 'cancel', 'mediation']);
+            $table->date('deadline')->nullable();
+            $table->integer('harga');
+            $table->integer('nilai')->nullable();
+            $table->date('submit')->nullable();
             $table->timestamps();
         });
     }

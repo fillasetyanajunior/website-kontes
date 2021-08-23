@@ -15,6 +15,12 @@ class CreateDetailProjectsTable extends Migration
     {
         Schema::create('detail_projects', function (Blueprint $table) {
             $table->id();
+            $table->integer('project_id');
+            $table->string('title');
+            $table->text('description');
+            $table->integer('job_description');
+            $table->string('thumbnail')->nullable();
+            $table->integer('harga');
             $table->timestamps();
         });
     }

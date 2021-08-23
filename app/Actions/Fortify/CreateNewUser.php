@@ -42,12 +42,15 @@ class CreateNewUser implements CreatesNewUsers
         }
 
         $id = User::create([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'password' => Hash::make($input['password']),
-            'role' => $role,
-            'avatar' => 'default.jpg',
+            'name'              => $input['name'],
+            'email'             => $input['email'],
+            'password'          => Hash::make($input['password']),
+            'role'              => $role,
+            'avatar'            => 'default.jpg',
+            'messenger_color'   => '#2180f3',
         ]);
+
+        $location = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
 
         if ($input['role'] == 1) {
             $no = Worker::orderBy('worker_id', 'DESC')->first();
@@ -68,11 +71,13 @@ class CreateNewUser implements CreatesNewUsers
             }
 
             Worker::create([
-                'user_id' => $id->id,
-                'worker_id' => $idworker,
-                'name' => $input['name'],
-                'email' => $input['email'],
-                'status_account' => 'unverified',
+                'user_id'           => $id->id,
+                'worker_id'         => $idworker,
+                'name'              => $input['name'],
+                'email'             => $input['email'],
+                'status_account'    => 'unverified',
+                'avatar'            => 'default.jpg',
+                'location'          => $location->country . ',' . $location->city . ',' . $location->state_name,
             ]);
 
         }else{
@@ -94,10 +99,11 @@ class CreateNewUser implements CreatesNewUsers
             }
 
             Customer::create([
-                'user_id' => $id->id,
-                'customer_id' => $idcustomer,
-                'name' => $input['name'],
-                'email' => $input['email'],
+                'user_id'       => $id->id,
+                'customer_id'   => $idcustomer,
+                'name'          => $input['name'],
+                'email'         => $input['email'],
+                'avatar'            => 'default.jpg',
             ]);
         }
         return $id;
