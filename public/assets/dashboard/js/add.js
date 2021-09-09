@@ -1,5 +1,42 @@
 $(document).ready(function () {
-    //Search
+    //Format Currency
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2
+    })
+    //Search Data
+    $("#searchworker").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#resulttabelworker tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+    $("#searchprojectrunningadmin").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#resultprojectrunningadmin tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+    $("#searchpaymentlist").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#resultpaymentlist tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+    $("#searchprojectrunningworker").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#resultprojectrunningworker tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+    $("#searchprojectrunningcustomer").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#resultprojectrunningcustomer tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+    //Search Browse
     $('#show_fillters').hide();
     $('#button_fillter').click(function () {
         var html = $(this).html();
@@ -54,8 +91,33 @@ $(document).ready(function () {
             window.location.assign('/browseproject/sort/' + value)
         }
     });
+    $("#search_payment").on("change", function () {
+        var value = $(this).val();
+        if (value == 8) {
+            window.location.assign('/browseproject')
+        } else {
+            window.location.assign('/browseproject/sort/' + value)
+        }
+    });
 
     //Contest
+    var s = $('#tambahresultcontest').data('catagories')
+    // console.log(s.substring(0, 4).toLowerCase() == 'logo' || s.substring(0, 4).charAt(0).toUpperCase() + s.slice(1, 3) == 'Logo' || s.substring(8, 12).toLowerCase() == 'logo' ||
+    //     s.substring(8, 12).charAt(0).toUpperCase() + s.slice(1, 3) == 'Logo' || s.substring(8, 11).toLowerCase() == 'logo' || s.substring(8, 11).charAt(0).toUpperCase() + s.slice(1, 3) == 'Logo')
+    if (s != null) {
+        if (s.substring(0, 4).toLowerCase() == 'logo' || s.substring(0, 4).charAt(0).toUpperCase() + s.slice(1, 3) == 'Logo' || s.substring(8, 12).toLowerCase() == 'logo' ||
+            s.substring(8, 12).charAt(0).toUpperCase() + s.slice(1, 3) == 'Logo' || s.substring(7, 11).toLowerCase() == 'logo' || s.substring(7, 11).charAt(0).toUpperCase() + s.slice(1, 3) == 'Logo') {
+            $('input[name="licensed"]').change(function () {
+                if ($(this).val() == 1) {
+                    $('.footer_resultcontest button[type=submit]').attr('disabled', false);
+                } else {
+                    $('.footer_resultcontest button[type=submit]').attr('disabled', true);
+                }
+            });
+        } else {
+            $('.footer_resultcontest button[type=submit]').attr('disabled', false);
+        }
+    }
     $('#tambahresultcontest').on('click', function () {
         let idcontest = $(this).attr('idcontest');
         $('.footer_resultcontest button[type=submit]').html('Add');
@@ -65,6 +127,19 @@ $(document).ready(function () {
 
         $("#title").val("");
         $('#id').val(idcontest)
+
+        if (s.substring(0, 4).toLowerCase() == 'logo' || s.substring(0, 4).charAt(0).toUpperCase() + s.slice(1, 3) == 'Logo' || s.substring(8, 12).toLowerCase() == 'logo' ||
+            s.substring(8, 12).charAt(0).toUpperCase() + s.slice(1, 3) == 'Logo' || s.substring(7, 11).toLowerCase() == 'logo' || s.substring(7, 11).charAt(0).toUpperCase() + s.slice(1, 3) == 'Logo') {
+            $('input[name="licensed"]').change(function () {
+                if ($(this).val() == 1) {
+                    $('.footer_resultcontest button[type=submit]').attr('disabled', false);
+                } else {
+                    $('.footer_resultcontest button[type=submit]').attr('disabled', true);
+                }
+            });
+        } else {
+            $('.footer_resultcontest button[type=submit]').attr('disabled', false);
+        }
     });
 
     $('#feedback*').click(function () {
@@ -84,12 +159,79 @@ $(document).ready(function () {
             },
             success: function (hasil) {
                 $('#feedback_card').empty()
+                $('.rating').empty()
+
                 let url2 = '/feedback/users/' + _id
                 $('#hasilcontest').attr('src', _urlasset + '/resultcontest/' + hasil.resultcontest.filecontest)
                 $('#profileworker').css('background-image', 'url(' + _urlasset + '/profile/' + hasil.user.avatar + ')')
                 $('#name_worker').html(hasil.user.name)
                 $('#description').html(hasil.resultcontest.title)
+                $('#btneliminasicontest').click(function () {
+                   $('#ActionModalLabel').html('Eliminasi')
+                   $('.footer_contest').html('Eliminasi')
+                   $('#captions_contest').html('Are you sure you chose this design as the eliminasi?')
+                   $('#gambarAction').attr('src', $(this).data('url') + '/gembok.png')
+                    $('.body_contest form').attr('action', '/feedback/eliminasi/' + _id)
+                })
+                $('#btnpickwinnercontest').click(function () {
+                     $('#ActionModalLabel').html('Pick Winner')
+                     $('.footer_contest').html('Pick Winner')
+                     $('#gambarAction').attr('src', $(this).data('url') + '/piala.png')
+                     $('#captions_contest').html('Are you sure you chose this design as the winner?')
+                    $('.body_contest form').attr('action', '/feedback/choosewinner/pickwinner/' + _id)
+                })
+                $('#id_worker').val(hasil.resultcontest.user_id_worker)
+                $('#id_project').val(hasil.project.id)
 
+                if (hasil.resultcontest.nilai == 1) {
+                    $('.rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                    )
+                } else if (hasil.resultcontest.nilai == 2) {
+                    $('.rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                    )
+                } else if (hasil.resultcontest.nilai == 3) {
+                    $('.rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                    )
+                } else if (hasil.resultcontest.nilai == 4) {
+                    $('.rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                    )
+                } else if (hasil.resultcontest.nilai == 5) {
+                    $('.rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>'
+                    )
+                } else {
+                    $('.rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                    )
+                }
                 $.each(hasil.feedback, function (index, feedbackall) {
                     if (feedbackall.feedback_worker == null) {
                         $.ajax({
@@ -139,11 +281,26 @@ $(document).ready(function () {
             success: function (hasil) {
                 console.log(hasil.nilai)
                 if (hasil.status == 200) {
-                    location.reload()
+                    window.location.reload()
                 }
             }
         });
     });
+
+    $('#btneliminasicontests').click(function () {
+        $('#ActionModalLabel').html('Eliminasi')
+        $('.footer_contest').html('Eliminasi')
+        $('#captions_contest').html('Are you sure you chose this design as the eliminasi?')
+        $('#gambarAction').attr('src', $(this).data('url') + '/gembok.png')
+        $('.body_contest form').attr('action', '/feedback/eliminasi/' + $(this).data('id'))
+    })
+    $('#btnpickwinnercontests').click(function () {
+        $('#ActionModalLabel').html('Pick Winner')
+        $('.footer_contest').html('Pick Winner')
+        $('#gambarAction').attr('src', $(this).data('url') + '/piala.png')
+        $('#captions_contest').html('Are you sure you chose this design as the winner?')
+        $('.body_contest form').attr('action', '/feedback/choosewinner/pickwinner/' + $(this).data('id'))
+    })
 
     //Direct
     $('#tambahresultdirect').on('click', function () {
@@ -174,10 +331,77 @@ $(document).ready(function () {
             },
             success: function (hasil) {
                 $('#feedback_card').empty()
+                $('.rating').empty()
                 let url2 = '/feedbackbid/users/' + _id
                 $('#profileworker').css('background-image', 'url(' + _urlasset + '/profile/' + hasil.user.avatar + ')')
                 $('#name_worker').html(hasil.user.name)
                 $('#descriptions').text(hasil.resultproject.description)
+                $('#btneliminasidirect').click(function () {
+                    $('#ActionDirectModalLabel').html('Eliminasi')
+                    $('.footer_direct').html('Eliminasi')
+                    $('#captions_direct').html('Are you sure you chose this design as the eliminasi?')
+                    $('#gambarAction').attr('src', $(this).data('url') + '/gembok.png')
+                    $('#body_direct form').attr('action', '/feedbackbid/eliminasi/' + _id)
+                })
+                $('#btnpickwinnerdirect').click(function () {
+                    $('#ActionDirectModalLabel').html('Pick Winner')
+                    $('.footer_direct').html('Pick Winner')
+                    $('#gambarAction').attr('src', $(this).data('url') + '/piala.png')
+                    $('#captions_direct').html('Are you sure you chose this design as the winner?')
+                    $('#body_direct form').attr('action', '/feedbackbid/choosewinner/pickwinner/' + _id)
+                })
+                $('#id_worker').val(hasil.resultproject.user_id_worker)
+                $('#id_project').val(hasil.project.id)
+
+                if (hasil.resultproject.nilai == 1) {
+                    $('.rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                    )
+                } else if (hasil.resultproject.nilai == 2) {
+                    $('.rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                    )
+                } else if (hasil.resultproject.nilai == 3) {
+                    $('.rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                    )
+                } else if (hasil.resultproject.nilai == 4) {
+                    $('.rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                    )
+                } else if (hasil.resultproject.nilai == 5) {
+                    $('.rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>'
+                    )
+                } else {
+                    $('.rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                    )
+                }
 
                 $.each(hasil.feedback, function (index, feedbackall) {
                     if (feedbackall.feedback_worker == null) {
@@ -227,11 +451,26 @@ $(document).ready(function () {
             },
             success: function (hasil) {
                 if (hasil.status == 200) {
-                    location.reload()
+                    window.location.reload()
                 }
             }
         });
     });
+
+    $('#btneliminasidirects').click(function () {
+        $('#ActionDirectModalLabel').html('Eliminasi')
+        $('.footer_direct').html('Eliminasi')
+        $('#captions_direct').html('Are you sure you chose this design as the eliminasi?')
+        $('#gambarAction').attr('src', $(this).data('url') + '/gembok.png')
+        $('.body_direct form').attr('action', '/feedback/eliminasi/' + $(this).data('id'))
+    })
+    $('#btnpickwinnerdirects').click(function () {
+        $('#ActionDirectModalLabel').html('Pick Winner')
+        $('.footer_direct').html('Pick Winner')
+        $('#gambarAction').attr('src', $(this).data('url') + '/piala.png')
+        $('#captions_direct').html('Are you sure you chose this design as the winner?')
+        $('.body_direct form').attr('action', '/feedback/choosewinner/pickwinner/' + $(this).data('id'))
+    })
 
     //FileUpload
     $('#uploadfile').click(function () {
@@ -266,11 +505,11 @@ $(document).ready(function () {
     //Button Reverse
     $('#buttonlogotext').click(function () {
         var url = $(this).data('url')
-        window.open(url,'_blank')
+        window.open(url, '_blank')
     })
     $('#buttonlogo').click(function () {
         var url = $(this).data('url')
-        window.open(url,'_blank')
+        window.open(url, '_blank')
     })
 
     //worker
@@ -320,7 +559,7 @@ $(document).ready(function () {
                 $('#name').val(hasil.catagories.name)
                 $('#harga').val(hasil.catagories.harga)
                 $("#icon option[value='" + hasil.catagories.icon + "']").attr('selected', true);
-                $('#pilihaninput').attr('disabled',true)
+                $('#pilihaninput').attr('disabled', true)
             }
         });
     });
@@ -397,14 +636,14 @@ $(document).ready(function () {
             $('#catagories_table').show()
             $('#sub_catagories_table').hide()
             $('#sort_catagories_table').hide()
-        }else if ($(this).val() == 2) {
+        } else if ($(this).val() == 2) {
             $('#catagories_table').hide()
             $('#sub_catagories_table').hide()
             $('#sort_catagories_table').show()
         } else {
-           $('#catagories_table').hide()
-           $('#sub_catagories_table').show()
-           $('#sort_catagories_table').hide()
+            $('#catagories_table').hide()
+            $('#sub_catagories_table').show()
+            $('#sort_catagories_table').hide()
         }
 
     });
@@ -461,7 +700,7 @@ $(document).ready(function () {
                 $('#name').val(hasil.opsi.name)
                 $('#description').val(hasil.opsi.description)
                 $('#harga').val(hasil.opsi.harga)
-                $("#pilihaninput").attr('disabled',true)
+                $("#pilihaninput").attr('disabled', true)
                 $("#iconopsi option[value='" + hasil.opsi.icon + "']").attr('selected', true);
             }
         });
@@ -493,7 +732,7 @@ $(document).ready(function () {
                 $('#harga').val(hasil.opsi.harga)
                 $('#hari').val(hasil.opsi.hari).attr('disabled', false)
                 $("#iconopsi option[value='" + hasil.opsi.icon + "']").attr('selected', true);
-                $("#pilihaninput").attr('disabled',true)
+                $("#pilihaninput").attr('disabled', true)
             }
         });
     });
@@ -541,65 +780,70 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: _url,
-            data:{
+            data: {
                 _token: _token,
             },
             success: function (hasil) {
+                $('#rating').empty()
+                $('#portfolio').empty()
                 if (hasil.worker.avatar != 'default.jpg') {
                     $('#workerprofile').attr('src', _asset + '/profile/' + hasil.worker.avatar)
                 } else {
                     $('#workerprofile').attr('src', '/assets/dashboard/images/default.jpg')
                 }
-                $('#rangking').html('#' + hasil.worker.id)
+                $('#rangking').html('#' + hasil.worker.rangking)
                 $('#location').html(hasil.worker.location)
-                $('#rating').empty()
+                $('#status').html(hasil.status)
+                $('#statusaccount').html(hasil.worker.status_account)
+                $('#earnings').html(formatter.format(hasil.worker.earning))
+                $('#oncesuspend').html(hasil.suspend + ' X Account Suspend')
+
                 if (hasil.rating > 20) {
                     $('#rating').append(
-                    '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>'+
-                    '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>'+
-                    '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>'+
-                    '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>'+
-                    '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>')
-                } else if(hasil.rating > 40) {
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>')
+                } else if (hasil.rating > 40) {
                     $('#rating').append(
-                    '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>'+
-                    '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
-                    '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>'+
-                    '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>'+
-                    '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>')
-                }else if (hasil.rating > 60) {
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>')
+                } else if (hasil.rating > 60) {
                     $('#rating').append(
-                    '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>'+
-                    '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
-                    '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
-                    '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>'+
-                    '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>')
-                }else if (hasil.rating > 80) {
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>')
+                } else if (hasil.rating > 80) {
                     $('#rating').append(
-                    '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>'+
-                    '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
-                    '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
-                    '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
-                    '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>')
-                }else if (hasil.rating > 100) {
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>')
+                } else if (hasil.rating > 100) {
                     $('#rating').append(
-                    '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>'+
-                    '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
-                    '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
-                    '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
-                    '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>')
-                }else{
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>')
+                } else {
                     $('#rating').append(
-                    '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
-                    '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
-                    '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
-                    '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
-                    '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>')
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>')
                 }
 
                 let _url2 = '/managementworker/viewproject/'
-
-                $.each(hasil.project,function (index,project) {
+                $.each(hasil.project, function (index, project) {
                     $.ajax({
                         type: 'POST',
                         url: _url2 + project.id,
@@ -608,70 +852,134 @@ $(document).ready(function () {
                             user_id: hasil.worker.user_id,
                         },
                         success: function (hasils) {
-                            $('#portfolio').empty()
-                            $('#earnings').html('$' + (hasils.earning / 1000).toFixed(0))
-                            $.each(hasils.resultproject,function (index,resultproject) {
-                                $('#portfolio').append(
-                                    '<div class="col-sm-6 col-lg-2">'+
-                                        '<div class="card p-3" >'+
-                                            '<a href="javascript:void(0)" >'+
-                                                '<img src="' + _asset + '/result' + project.catagories_project + '/' + resultproject.filecontest + '" class="rounded" style="width: 300px; height: 300px; overflow: hidden width: 100%;" >'+
-                                            '</a>'+
-                                            '<div class="d-flex align-items-center px-2 mt-5">' +
-                                                '<div id="ratingcontest">'+
-                                                '</div>'+
-                                            '</div>'+
-                                        '</div>'+
-                                    '</div>'
-                                )
-                                if (resultproject.nilai == 1) {
-                                    $('#ratingcontest').append(
-                                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                            $.each(hasils.resultproject, function (index, resultproject) {
+                                if (project.catagories_project == 'contest') {
+                                    $('#portfolio').append(
+                                        '<div class="col-sm-6 col-lg-2">' +
+                                        '<div class="card p-3" >' +
+                                        '<a href="javascript:void(0)" >' +
+                                        '<img src="' + _asset + '/result' + project.catagories_project + '/' + resultproject.filecontest + '" class="rounded" style="width: 300px; height: 300px; overflow: hidden width: 100%;" >' +
+                                        '</a>' +
+                                        '<div class="d-flex align-items-center px-2 mt-5">' +
+                                        '<div id="ratingcontest">' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</div>'
                                     )
-                                } else if(resultproject.nilai == 2) {
-                                    $('#ratingcontest').append(
-                                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
-                                    )
-                                } else if(resultproject.nilai == 3) {
-                                    $('#ratingcontest').append(
-                                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
-                                    )
-                                } else if(resultproject.nilai == 4) {
-                                    $('#ratingcontest').append(
-                                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
-                                    )
-                                } else if(resultproject.nilai == 5) {
-                                    $('#ratingcontest').append(
-                                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>'
+                                    if (resultproject.nilai == 1) {
+                                        $('#ratingcontest').append(
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
                                         )
-                                }else{
-                                    $('#ratingcontest').append(
-                                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
-                                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                                    } else if (resultproject.nilai == 2) {
+                                        $('#ratingcontest').append(
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                                        )
+                                    } else if (resultproject.nilai == 3) {
+                                        $('#ratingcontest').append(
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                                        )
+                                    } else if (resultproject.nilai == 4) {
+                                        $('#ratingcontest').append(
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                                        )
+                                    } else if (resultproject.nilai == 5) {
+                                        $('#ratingcontest').append(
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>'
+                                        )
+                                    } else {
+                                        $('#ratingcontest').append(
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                                        )
+                                    }
+                                } else {
+                                    $('#portfolio').append(
+                                        '<div class="col-sm-6 col-lg-2">' +
+                                        '<div class="card p-3" >' +
+                                        '<a href="javascript:void(0)" >' +
+                                        '<img src="assets/dashboard/images/bid.png" class="rounded" style="width: 300px; height: 300px; overflow: hidden width: 100%;" >' +
+                                        '</a>' +
+                                        '<div class="d-flex align-items-center px-2 mt-5">' +
+                                        '<div id="ratingdirect">' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</div>'
                                     )
+
+                                    if (resultproject.nilai == 1) {
+                                        $('#ratingdirect').append(
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                                        )
+                                    } else if (resultproject.nilai == 2) {
+                                        $('#ratingdirect').append(
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                                        )
+                                    } else if (resultproject.nilai == 3) {
+                                        $('#ratingdirect').append(
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                                        )
+                                    } else if (resultproject.nilai == 4) {
+                                        $('#ratingdirect').append(
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                                        )
+                                    } else if (resultproject.nilai == 5) {
+                                        $('#ratingdirect').append(
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>'
+                                        )
+                                    } else {
+                                        $('#ratingdirect').append(
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                                            '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
+                                        )
+                                    }
                                 }
                             })
                         }
@@ -681,20 +989,84 @@ $(document).ready(function () {
         });
     });
 
+    //Font Color Used
+    //Font Used
+    var maxField = 10; //Input fields increment limitation
+    var addButtonfont = $('.add_button_font'); //Add button selector
+    var font = $('.field_font'); //Input field font
+    var fieldHTMLfont = '<div class="mb-2 d-flex data"><div class="font flex-grow-1 bd-highlight field_font"><label for="font">Font Used</label><input type="text" class="form-control" name="font[]" id="font"value=""></div><a href="javascript:void(0);" class="remove_button_font" title="Remove field"><i class="fe fe-minus"></i></a></div>'; //New input field html
+    var x = 1; //Initial field counter is 1
+    $(addButtonfont).click(function () { //Once add button is clicked
+        if (x < maxField) { //Check maximum number of input fields
+            x++; //Increment field counter
+            $(font).append(fieldHTMLfont); // Add field html
+        }
+    });
+    $(font).on('click', '.remove_button_font', function (e) { //Once remove button is clicked
+        e.preventDefault();
+        $(this).parent('div').remove(); //Remove field html
+        x--; //Decrement field counter
+    });
+    //Hexa Color Used
+    var addButtonhexa = $('.add_button_hexa'); //Add button selector
+    var hexa = $('.field_hexa'); //Input field hexa
+    var fieldHTMLhexa = '<div class="mb-2 d-flex data"><div class="flex-grow-1 bd-highlight field_hexa"><label for="hexa_color">Hexa Color Used</label><input type="text" class="form-control" name="hexa_color[]" id="hexa_color"value=""></div><a href="javascript:void(0);" class="remove_button_hexa" title="Remove field"><i class="fe fe-minus"></i></a></div>'; //New input field html
+    var x = 1; //Initial field counter is 1
+    $(addButtonhexa).click(function () { //Once add button is clicked
+        if (x < maxField) { //Check maximum number of input fields
+            x++; //Increment field counter
+            $(hexa).append(fieldHTMLhexa); // Add field html
+        }
+    });
+    $(hexa).on('click', '.remove_button_hexa', function (e) { //Once remove button is clicked
+        e.preventDefault();
+        $(this).parent('div').remove(); //Remove field html
+        x--; //Decrement field counter
+    });
+    //RGB Color Used
+    var addButtonrgb = $('.add_button_rgb'); //Add button selector
+    var rgb = $('.field_rgb'); //Input field rgb
+    var fieldHTMLrgb = '<div class="mb-2 d-flex data"><div class="flex-grow-1 bd-highlight field_rgb"><label for="rgb_color">RGB Color Used</label><input type="text" class="form-control" name="rgb_color[]" id="rgb_color"value=""></div><a href="javascript:void(0);" class="remove_button_rgb" title="Remove field"><i class="fe fe-minus"></i></a></div>'; //New input field html
+    var x = 1; //Initial field counter is 1
+    $(addButtonrgb).click(function () { //Once add button is clicked
+        if (x < maxField) { //Check maximum number of input fields
+            x++; //Increment field counter
+            $(rgb).append(fieldHTMLrgb); // Add field html
+        }
+    });
+    $(rgb).on('click', '.remove_button_rgb', function (e) { //Once remove button is clicked
+        e.preventDefault();
+        $(this).parent('div').remove(); //Remove field html
+        x--; //Decrement field counter
+    });
+
+    //Show Hide Brief
+    $('#gallery').hide()
+    $('#tabs a').click(function () {
+        var role = $(this).data('role')
+        if (role == 'description') {
+            $('#entriestoggel').removeClass('active')
+            $('#descriptiontoggel').toggleClass('active')
+            $('#descri').show()
+            $('#gallery').hide()
+        } else {
+            $('#descriptiontoggel').removeClass('active')
+            $('#entriestoggel').toggleClass('active')
+            $('#descri').hide()
+            $('#gallery').show()
+        }
+    })
+
     $('#submitpembayaran*').click(function () {
         let id = $(this).data('id');
-        $('.footer_pembayaran button[type=submit]').html('Add');W
+        $('.footer_pembayaran button[type=submit]').html('Add');
+        W
         $('#PembayaranModalLabel').html('Add Konfirmasi');
         $('.body_pembayaran form').attr('action', '/projectstatus/paymentsubmit/' + id);
         $('.body_pembayaran form').attr('method', 'post');
     });
 
-    $('#title_winner').prop('disabled',true);
-    $('#name_winner').prop('disabled', true);
-    $('#id_worker_winner').prop('disabled', true);
     $('#customer_id').prop('disabled', true);
-    $('#worker_id').prop('disabled',true);
-    $('#expire_account').prop('disabled', true);
-    $('#status_account').prop('disabled', true);
+    $('#locationcustomer').prop('disabled', true);
 
 });

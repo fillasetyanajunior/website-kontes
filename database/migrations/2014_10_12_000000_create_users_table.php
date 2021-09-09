@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('messenger_color');
             $table->integer('dark_mode')->default(0);
             $table->integer('active_status')->default(0);
+            $table->timestamp('last_seen')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

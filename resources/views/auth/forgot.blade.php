@@ -1,47 +1,38 @@
 @extends('layouts.appauth')
+@section('title','Forget Password')
 @section('content')
-<section class="h-100">
-    <div class="container h-100">
-        <div class="row justify-content-md-center align-items-center h-100">
-            <div class="card-wrapper">
-                <div class="brand">
-                    <img src="img/logo.jpg" alt="bootstrap 4 login page">
+<div class="page-single">
+    <div class="container">
+        <div class="row">
+            <div class="col col-login mx-auto">
+                <div class="text-center mb-6">
+                    <img src="{{url('assets/auth/img/logo.jpg')}}" class="h-6" alt="">
                 </div>
-                <div class="card fat">
-                    <div class="card-body">
-                        <h4 class="card-title">Forgot Password</h4>
-                        <form method="POST" class="my-login-validation" novalidate="" action="{{route('password.email')}}">
-                            @csrf
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-                            <div class="form-group">
-                                <label for="email">E-Mail Address</label>
-                                <input id="email" type="email" class="form-control" name="email" value="">
-                                <div class="form-text text-muted">
-                                    By clicking "Reset Password" we will send a password reset link
-                                </div>
-                            </div>
-
-                            <div class="form-group m-0">
-                                <button type="submit" class="btn btn-primary btn-block">
-                                    Reset Password
-                                </button>
-                            </div>
-                        </form>
+                <form class="card" action="{{route('password.email')}}" method="post">
+                    @csrf
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
-                </div>
-                <div class="footer">
-                    Copyright &copy; 2017 &mdash; Your Company
-                </div>
+                    @endif
+                    <div class="card-body p-6">
+                        <div class="card-title">Forgot Password</div>
+                        <div class="form-group">
+                            <label class="form-label">Email address</label>
+                            <input type="email" class="form-control" name="email" value="" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" placeholder="Enter email">
+                        </div>
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-primary btn-block">Reset Password</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</section>
+</div>
 @endsection

@@ -10,14 +10,15 @@
                         style="background-image: url({{url('assets/dashboard/images/thumbnail.jpg')}});">
                     </div>
                     <div class="card-body text-center">
+                        @if ($customer->avatar != 'default.jpg')
                         <img class="card-profile-img" src="{{asset('/storage/profile/' . $customer->avatar)}}">
+                        @else
+                        <img class="card-profile-img" src="{{url('assets/dashboard/images/default.jpg')}}">
+                        @endif
                         <h3 class="mb-3">{{$customer->name}}</h3>
                         <p class="mb-4">
                             {{$customer->tagline}}
                         </p>
-                        <button class="btn btn-outline-primary btn-sm">
-                            <span class="fa fa-twitter"></span> Follow
-                        </button>
                     </div>
                 </div>
             </div>
@@ -59,6 +60,12 @@
                                 <div class="form-group">
                                     <label for="avatar">Foto Profile</label>
                                     <input type="file" class="form-control-file" id="avatar" name="avatar">
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-12">
+                                <div class="form-group">
+                                    <label for="avatar">Location</label>
+                                    <input type="text" class="form-control-file" id="locationcustomer" value="{{$customer->location}}">
                                 </div>
                             </div>
                             <div class="col-md-12">

@@ -21,10 +21,13 @@ class CreateProjectsTable extends Migration
             $table->enum('catagories_project',['contest','direct']);
             $table->string('catagories');
             $table->enum('is_active', ['waitting payment', 'running', 'choose winner', 'handover', 'close', 'cancel', 'mediation']);
-            $table->date('deadline')->nullable();
             $table->integer('harga');
+            $table->text('shouldhave')->nullable();
+            $table->text('shouldnothave')->nullable();
+            $table->date('deadline')->nullable();
             $table->integer('nilai')->nullable();
             $table->date('submit')->nullable();
+            $table->enum('guarded', ['active', 'not active'])->default('not active');
             $table->timestamps();
         });
     }

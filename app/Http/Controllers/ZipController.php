@@ -11,10 +11,27 @@ class ZipController extends Controller
     {
         $zip = new ZipArchive;
 
-        $fileName = 'storage/zip/AllFile' . $request->id .'.Zip';
+        $fileName = 'storage/fileuploads/AllFile' . $request->id .'.Zip';
         if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
 
             $files = File::files(public_path('storage/fileuploads/AllFile' . $request->id));
+            foreach ($files as $value) {
+                $file = basename($value);
+                $zip->addFile($value, $file);
+            }
+
+            $zip->close();
+        }
+        return response()->download(public_path($fileName));
+    }
+    public function CreateZipProject(Request $request)
+    {
+        $zip = new ZipArchive;
+
+        $fileName = 'storage/fileproject/AllFileProject' . $request->id .'.Zip';
+        if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
+
+            $files = File::files(public_path('storage/fileproject/AllFileProject' . $request->id));
             foreach ($files as $value) {
                 $file = basename($value);
                 $zip->addFile($value, $file);

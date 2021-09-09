@@ -103,7 +103,8 @@ class CreateNewUser implements CreatesNewUsers
                 'customer_id'   => $idcustomer,
                 'name'          => $input['name'],
                 'email'         => $input['email'],
-                'avatar'            => 'default.jpg',
+                'avatar'        => 'default.jpg',
+                'location'      => $location->country . ',' . $location->city . ',' . $location->state_name,
             ]);
         }
         return $id;

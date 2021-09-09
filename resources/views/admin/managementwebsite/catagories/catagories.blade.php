@@ -12,14 +12,16 @@
             Catagories</button>
         <button type="button" class="btn btn-primary mb-5" data-toggle="modal" data-target="#SubCatagoriesModal" id="addsubcatagories">Add Sub
             Catagories</button>
-        <div class="form-group col-3">
-            <label for="pilihantable">Pilihan Data</label>
-            <select class="form-control" id="pilihantable">
-                <option disabled value="">-- Pilih --</option>
-                <option selected value="1">Catagories</option>
-                <option value="2">Sort Catagories</option>
-                <option value="3">Sub Catagories</option>
-            </select>
+        <div class="form-group row">
+            <div class="col-lg-3">
+                <label for="pilihantable">Pilihan Data</label>
+                <select class="form-control" id="pilihantable">
+                    <option disabled value="">-- Pilih --</option>
+                    <option selected value="1">Catagories</option>
+                    <option value="2">Sort Catagories</option>
+                    <option value="3">Sub Catagories</option>
+                </select>
+            </div>
         </div>
         <div class="row row-cards row-deck">
             <div class="col-12" id="catagories_table">
@@ -214,9 +216,9 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="pilihaninput">Pilihan Input</label>
+                            <label for="pilihaninput">Choice Input</label>
                             <select class="form-control" id="pilihaninput" name="pilihaninput">
-                                <option value="">-- Pilih --</option>
+                                <option value="">-- Choose --</option>
                                 <option value="1">Catagories</option>
                                 <option value="2">Sort Catagories</option>
                             </select>
@@ -268,9 +270,9 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="catagories">Pilihan Catagories</label>
+                            <label for="catagories">Choice Catagories</label>
                             <select class="form-control" id="catagories" name="catagories">
-                                <option value="">-- Pilih --</option>
+                                <option value="">-- Choose --</option>
                                 @foreach ($catagories as $itemcatagories)
                                 <option value="{{$itemcatagories->id}}">{{$itemcatagories->name}}</option>
                                 @endforeach

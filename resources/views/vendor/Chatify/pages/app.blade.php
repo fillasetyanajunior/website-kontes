@@ -18,8 +18,8 @@
             <div class="messenger-listView-tabs">
                 <a href="#" @if($route == 'user') class="active-tab" @endif data-view="users">
                     <span class="far fa-user"></span> People</a>
-                <a href="#" @if($route == 'group') class="active-tab" @endif data-view="groups">
-                    <span class="fas fa-users"></span> Groups</a>
+                {{-- <a href="#" @if($route == 'group') class="active-tab" @endif data-view="groups">
+                    <span class="fas fa-users"></span> Groups</a> --}}
             </div>
         </div>
         {{-- tabs and lists --}}
@@ -42,15 +42,15 @@
 
            </div>
 
-           {{-- ---------------- [ Group Tab ] ---------------- --}}
+           <!-- ---------------- [ Group Tab ] ---------------- -->
            <div class="@if($route == 'group') show @endif messenger-tab app-scroll" data-view="groups">
-                {{-- items --}}
+                <!-- items -->
                 <p style="text-align: center;color:grey;">Soon will be available</p>
              </div>
 
-             {{-- ---------------- [ Search Tab ] ---------------- --}}
+             <!-- ---------------- [ Search Tab ] ---------------- -->
            <div class="messenger-tab app-scroll" data-view="search">
-                {{-- items --}}
+                <!-- items -->
                 <p class="messenger-title">Search</p>
                 <div class="search-records">
                     <p class="message-hint center-el"><span>Type to search..</span></p>

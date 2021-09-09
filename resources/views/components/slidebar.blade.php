@@ -38,6 +38,10 @@
                             <span class="float-right"></span>
                             <i class="dropdown-icon fe fe-mail"></i> Inbox
                         </a>
+                        <a class="dropdown-item" href="{{route('accounting')}}">
+                            <span class="float-right"></span>
+                            <i class="dropdown-icon fe fe-mail"></i> Accounting
+                        </a>
                         @elseif (request()->user()->role == 'customer')
                         <a class="dropdown-item" href="{{route('profileCustomers')}}">
                             <i class="dropdown-icon fe fe-user"></i> Profile
@@ -55,12 +59,12 @@
                             <i class="dropdown-icon fa fa-heart"></i> Favourites
                         </a>
                         @else
+                        <a class="dropdown-item" href="{{route('newsfeed')}}">
+                            <span class="float-right"></span>
+                            <i class="dropdown-icon fe fe-bell"></i> News Feed
+                        </a>
                         <a class="dropdown-item" href="{{route('profileWorker')}}">
                             <i class="dropdown-icon fe fe-user"></i> Profile
-                        </a>
-                        <a class="dropdown-item" href="/messenger">
-                            <span class="float-right"></span>
-                            <i class="dropdown-icon fe fe-mail"></i> Inbox
                         </a>
                         @endif
                         <a class="dropdown-item" href="{{ route('logout') }} " content="{{'logout'}}" onclick="event.preventDefault();

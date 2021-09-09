@@ -17,10 +17,13 @@ class CreateProjectPaymentsTable extends Migration
             $table->id();
             $table->integer('user_id');
             $table->string('id_project');
+            $table->string('payment_id_transaksi');
             $table->integer('project_id');
             $table->string('invoicepayment');
+            $table->string('name_transaksi');
+            $table->string('email_transaksi');
             $table->string('name');
-            $table->string('nomerpayment');
+            $table->string('email');
             $table->timestamps();
         });
     }

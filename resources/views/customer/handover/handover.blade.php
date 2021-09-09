@@ -45,9 +45,29 @@
                             <div class="mr-auto bd-highlight">
                                 <h4 class="text-capitalize">uploade files</h4>
                             </div>
+                            @php
+                                //Deskripsi Variabel
+                                $strstart       = Str::substr($project->catagories, 0, 4);
+                                $strend1        = Str::substr($project->catagories, 7,11);
+                                $strend1        = Str::substr($project->catagories, 8,12);
+
+                                //Deskripsi Capitalize
+                                $capitalize1    = Str::ucfirst($strstart);
+                                $capitalize2    = Str::ucfirst($strend1);
+                                $capitalize3    = Str::ucfirst($strend1);
+
+                                //Deskripsi Lowercase
+                                $lower1         = Str::lower($strstart);
+                                $lower2         = Str::lower($strend1);
+                                $lower3         = Str::lower($strend1);
+                            @endphp
+                            @if ($lower1 == 'logo' || $capitalize1 == 'Logo' || $lower2 == 'logo' || $capitalize2 == 'Logo' ||$lower3 == 'logo' || $capitalize3 == 'Logo')
                             <div class="bd-highlight">
-                                <a href="" class="btn btn-primary">Download Certificate</a>
+                                <a href="/convertpdf/{{$handover->id}}" class="btn btn-primary">Download Certificate</a>
                             </div>
+                            @else
+
+                            @endif
                             <div class="bd-highlight ml-3">
                                 <a href="{{'/convertzip/' . $handover->id}}" class="btn btn-primary">Download All
                                     Files</a>
@@ -74,21 +94,70 @@
                     <div class="card-body">
                         <form method="post" action="/updatefiles/{{$handover->id}}">
                             @csrf
-                            <div class="form-group">
-                                <label for="font">Font Used</label>
-                                <input type="text" class="form-control" name="font" id="font"
-                                    value="{{$handover->font}}">
+                            <div class="form-group field_font">
+                                <div class="d-flex bd-highlight">
+                                    <div class="flex-grow-1 bd-highlight ">
+                                        @php
+                                            $font = explode(',',$handover->font);
+                                        @endphp
+                                        @for ($i = 0; $i < count( $font); $i++)
+
+                                        <label for="font">Font Used</label>
+                                        <input type="text" class="form-control mb-3" name="font[]" id="font"
+                                            value="{{$font[$i]}}">
+                                        @endfor
+                                    </div>
+                                    <div class="bd-highlight">
+                                        <a href="javascript:void(0);" class="add_button_font" title="Add field"><i class="fe fe-plus"></i></a>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group field_hexa">
+                                <div class="d-flex bd-highlight">
+                                    <div class="flex-grow-1 bd-highlight ">
+                                        @php
+                                            $hexa_color = explode(',',$handover->hexa_color);
+                                        @endphp
+                                        @for ($i = 0; $i < count( $hexa_color); $i++)
+
+                                        <label for="hexa_color">Hexa Color Used</label>
+                                        <input type="text" class="form-control mb-3" name="hexa_color[]" id="hexa_color"
+                                            value="{{$hexa_color[$i]}}">
+                                        @endfor
+                                    </div>
+                                    <div class="bd-highlight">
+                                        <a href="javascript:void(0);" class="add_button_hexa" title="Add field"><i class="fe fe-plus"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group field_rgb">
+                                <div class="d-flex bd-highlight">
+                                    <div class="flex-grow-1 bd-highlight ">
+                                        @php
+                                            $rgb_color = explode(',',$handover->rgb_color);
+                                        @endphp
+                                        @for ($i = 0; $i < count( $rgb_color); $i++)
+
+                                        <label for="rgb_color">RGB Color Used</label>
+                                        <input type="text" class="form-control mb-3" name="rgb_color[]" id="rgb_color"
+                                            value="{{$rgb_color[$i]}}">
+                                        @endfor
+                                    </div>
+                                    <div class="bd-highlight">
+                                        <a href="javascript:void(0);" class="add_button_rgb" title="Add field"><i class="fe fe-plus"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <div class="form-group">
                                 <label for="hexa_color">Hexa Color Used</label>
-                                <input type="text" class="form-control" name="hexa_color" id="hexa_color"
+                                <input type="text" class="form-control" name="hexa_color[]" id="hexa_color"
                                     value="{{$handover->hexa_color}}">
                             </div>
                             <div class="form-group">
                                 <label for="rgb_color">RGB Color Used</label>
-                                <input type="text" class="form-control" name="rgb_color" id="rgb_color"
+                                <input type="text" class="form-control" name="rgb_color[]" id="rgb_color"
                                     value="{{$handover->rgb_color}}">
-                            </div>
+                            </div> --}}
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
@@ -141,78 +210,98 @@
                             </div>
                         </div>
                     </div>
-                    @if (request()->user()->role == 'worker' && $project->is_active == 'handover')
-                    <div class="col-md-6 col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex bd-highlight">
-                                    <div class="flex-fill bd-highlight">
-                                        <h5>Upload Logo + Text</h5>
+                    @php
+                        //Deskripsi Variabel
+                        $strstart       = Str::substr($project->catagories, 0, 4);
+                        $strend1        = Str::substr($project->catagories, 7,11);
+                        $strend1        = Str::substr($project->catagories, 8,12);
+
+                        //Deskripsi Capitalize
+                        $capitalize1    = Str::ucfirst($strstart);
+                        $capitalize2    = Str::ucfirst($strend1);
+                        $capitalize3    = Str::ucfirst($strend1);
+
+                        //Deskripsi Lowercase
+                        $lower1         = Str::lower($strstart);
+                        $lower2         = Str::lower($strend1);
+                        $lower3         = Str::lower($strend1);
+                    @endphp
+                    @if ($lower1 == 'logo' || $capitalize1 == 'Logo' || $lower2 == 'logo' || $capitalize2 == 'Logo' ||$lower3 == 'logo' || $capitalize3 == 'Logo')
+                        @if (request()->user()->role == 'worker' && $project->is_active == 'handover')
+                        <div class="col-md-6 col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex bd-highlight">
+                                        <div class="flex-fill bd-highlight">
+                                            <h5>Upload Logo + Text</h5>
+                                        </div>
+                                        <div class="flex-fill bd-highlight">
+                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#UploadFilesLogo"
+                                                id="uploadfilelogotext" data-id="{{$handover->id}}"
+                                                class="btn btn-primary btn-sm">Upload Files</a>
+                                        </div>
                                     </div>
-                                    <div class="flex-fill bd-highlight">
-                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#UploadFilesLogo"
-                                            id="uploadfilelogotext" data-id="{{$handover->id}}"
-                                            class="btn btn-primary btn-sm">Upload Files</a>
-                                    </div>
+                                    <a href="">See details and guidelines</a>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        @endif
+                        <div class="col-md-6 col-lg-12">
+                            <div class="card">
+                                @if ($handover->logotext != null)
+                                <div class="card-body">
+                                    <div class="mb-4 text-center">
+                                        <img src="{{asset('storage/logotext/' . $handover->logotext)}}" class="img-fluid">
+                                    </div>
+                                    <div class="mt-5 d-flex align-items-center">
+                                        <div class="ml-auto">
+                                            <a href="javascript:void(0)"
+                                                data-url="{{'https://images.google.com/searchbyimage?image_url=' . asset('/storage/logotext/' . $handover->logotext)}}"
+                                                id="buttonlogotext" class="btn btn-primary btn-sm">Google Reverse Cek </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                        @if (request()->user()->role == 'worker' && $project->is_active == 'handover')
+                        <div class="col-md-6 col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex bd-highlight">
+                                        <div class="p-2 flex-fill bd-highlight">
+                                            <h5>Upload Logo</h5>
+                                        </div>
+                                        <div class="p-2 flex-fill bd-highlight">
+                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#UploadFilesLogo"
+                                                id="uploadfilelogo" data-id="{{$handover->id}}"
+                                                class="btn btn-primary btn-sm">Upload Files</a>
+                                        </div>
+                                    </div>
+                                    <a href="">See details and guidelines</a>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                        <div class="col-md-6 col-lg-12">
+                            <div class="card">
+                                @if ($handover->logo != null)
+                                <div class="card-body">
+                                    <div class="mb-4 text-center">
+                                        <img src="{{asset('storage/logo/' . $handover->logo)}}" class="img-fluid">
+                                    </div>
+                                    <div class="mt-5 d-flex align-items-center">
+                                        <div class="ml-auto">'
+                                            <a href="javascript:void(0)"
+                                                data-url="{{'https://images.google.com/searchbyimage?image_url=' . asset('/storage/logo/' . $handover->logotext)}}"
+                                                id="buttonlogo" class="btn btn-primary btn-sm">Google Reverse Cek </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
                     @endif
-                    <div class="col-md-6 col-lg-12">
-                        <div class="card">
-                            @if ($handover->logotext != null)
-                            <div class="card-body">
-                                <div class="mb-4 text-center">
-                                    <img src="{{asset('storage/logotext/' . $handover->logotext)}}" class="img-fluid">
-                                </div>
-                                <div class="mt-5 d-flex align-items-center">
-                                    <div class="ml-auto">
-                                        <a href="javascript:void(0)"
-                                            data-url="{{'https://images.google.com/searchbyimage?image_url=' . asset('/storage/logotext/' . $handover->logotext)}}"
-                                            id="buttonlogotext" class="btn btn-primary btn-sm">Google Reverse Cek </a>
-                                    </div>
-                                </div>
-                            </div>
-                            @endif
-                        </div>
-                    </div>
-                    @if (request()->user()->role == 'worker' && $project->is_active == 'handover')
-                    <div class="col-md-6 col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex bd-highlight">
-                                    <div class="p-2 flex-fill bd-highlight">
-                                        <h5>Upload Logo</h5>
-                                    </div>
-                                    <div class="p-2 flex-fill bd-highlight">
-                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#UploadFilesLogo"
-                                            id="uploadfilelogo" data-id="{{$handover->id}}"
-                                            class="btn btn-primary btn-sm">Upload Files</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-                    <div class="col-md-6 col-lg-12">
-                        <div class="card">
-                            @if ($handover->logo != null)
-                            <div class="card-body">
-                                <div class="mb-4 text-center">
-                                    <img src="{{asset('storage/logo/' . $handover->logo)}}" class="img-fluid">
-                                </div>
-                                <div class="mt-5 d-flex align-items-center">
-                                    <div class="ml-auto">'
-                                        <a href="javascript:void(0)"
-                                            data-url="{{'https://images.google.com/searchbyimage?image_url=' . asset('/storage/logo/' . $handover->logotext)}}"
-                                            id="buttonlogo" class="btn btn-primary btn-sm">Google Reverse Cek </a>
-                                    </div>
-                                </div>
-                            </div>
-                            @endif
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

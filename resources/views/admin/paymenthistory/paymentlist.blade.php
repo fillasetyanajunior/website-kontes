@@ -10,9 +10,14 @@
         </div>
         <div class="row row-cards row-deck">
             <div class="col-12">
+                <div class="d-flex mb-3">
+                    <div class="ml-auto">
+                        <input type="text" id="searchpaymentlist" class="form-control" placeholder="Search">
+                    </div>
+                </div>
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Project Running</h3>
+                        <h3 class="card-title">Payment List</h3>
                     </div>
                     <div class="table-responsive">
                         <table class="table card-table table-vcenter text-nowrap">
@@ -21,11 +26,11 @@
                                     <th class="w-1">No.</th>
                                     <th>Invoice Payment</th>
                                     <th>Name</th>
-                                    <th>Nomer Payment</th>
+                                    <th>Email</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="resultpaymentlist">
                                 @php
                                     $i=1;
                                 @endphp
@@ -34,7 +39,7 @@
                                     <td><span class="text-muted">{{$i}}</span></td>
                                     <td>{{$itempaymentlist->invoicepayment}}</td>
                                     <td>{{$itempaymentlist->name}}</td>
-                                    <td>{{$itempaymentlist->nomerpayment}}</td>
+                                    <td>{{$itempaymentlist->email}}</td>
                                     <td>
                                         @if ($itempaymentlist->is_active == 'waitting payment')
                                         <form action="/waittingpayment/confirm/{{$itempaymentlist->project_id}}" method="post">

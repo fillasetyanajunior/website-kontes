@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\NewsFeed;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -9,7 +10,7 @@ class NewsFeedController extends Controller
 {
     public function NewsFeed()
     {
-        $data['newsfeed'] = Project::orderBy('created_at','desc')->where('user_id',request()->user()->id)->paginate(10);
+        $data['newsfeed'] = NewsFeed::orderBy('created_at','DESC')->where('user_id_to',request()->user()->id)->paginate(20);
         return view('customer.newsfeed.newsfeed',$data);
     }
     public function Favourites()

@@ -23,25 +23,20 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <!-- Your application script -->
     {{-- <script src="https://js.pusher.com/7.0/pusher.min.js"></script> --}}
     {{-- <link rel="stylesheet" href="{{url('assets/dashboard/css/fontawesome.css')}}"> --}}
     {{-- <script src="{{url('assets/dashboard/js/jquery3.6.0.js')}}"></script> --}}
     <script src="{{url('assets/dashboard/js/add.js')}}"></script>
-    <link rel="stylesheet" href="{{url('assets/dashboard/css/select.css')}}">
-    <script src="{{url('assets/dashboard/js/select.js')}}"></script>
+    {{-- <link rel="stylesheet" href="{{url('assets/dashboard/css/select.css')}}"> --}}
+    {{-- <script src="{{url('assets/dashboard/js/select.js')}}"></script> --}}
     {{-- <script src="{{url('assets/dashboard/js/pusher.js')}}"></script> --}}
-    <link rel="stylesheet" href="{{url('assets/dashboard/formwizard/css/bootstrap.css')}}">
-    <!-- Include SmartWizard CSS -->
-    <link href="{{url('assets/dashboard/formwizard/css/smart_wizard.css')}}" rel="stylesheet" type="text/css" />
-    <!-- Optional SmartWizard theme -->
-    <link href="{{url('assets/dashboard/formwizard/css/smart_wizard_theme_dots.css')}}" rel="stylesheet"
-        type="text/css" />
+    {{-- Paypal --}}
+    <script src="https://www.paypal.com/sdk/js?client-id={{env('PAYPAL_SANDBOX_CLIENT_ID')}}"></script>
     <!-- Include jQuery Validator plugin -->
-    <script src="{{url('assets/dashboard/formwizard/js/bootstrap.js')}}"></script>
-    <script src="{{url('assets/dashboard/formwizard/js/jquery.smartWizard.js')}}"></script>
     <script src="{{url('assets/dashboard/formwizard/js/addcost.js')}}"></script>
-
-    <script type="text/javascript">
+    {{-- <script type="text/javascript">
         $(document).ready(function () {
 
             // Toolbar extra buttons
@@ -87,7 +82,6 @@
                     $("#btn-finish").addClass('disabled');
                 } else if (stepPosition == 'final') {
                     $("#next-btn").addClass('disabled');
-                    $("#btn-finish").removeClass('disabled');
                 } else {
                     $("#prev-btn").removeClass('disabled');
                     $("#next-btn").removeClass('disabled');
@@ -97,7 +91,7 @@
 
         });
 
-    </script>
+    </script> --}}
     <script src="{{url('assets/dashboard/js/require.min.js')}}"></script>
     <script>
         requirejs.config({
@@ -108,6 +102,8 @@
     <!-- Dashboard Core -->
     <link href="{{url('assets/dashboard/css/dashboard.css')}}" rel="stylesheet" />
     <script src="{{url('assets/dashboard/js/dashboard.js')}}"></script>
+    <link rel="stylesheet" href="{{url('assets/dashboard/formwizard/css/bootstrap.css')}}">
+    <script src="{{url('assets/dashboard/formwizard/js/bootstrap.js')}}"></script>
     <!-- c3.js Charts Plugin -->
     <link href="{{url('assets/dashboard/plugins/charts-c3/plugin.css')}}" rel="stylesheet" />
     <script src="{{url('assets/dashboard/plugins/charts-c3/plugin.js')}}"></script>

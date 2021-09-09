@@ -2,17 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Catagories;
-use App\Models\DetailContest;
-use App\Models\DetailProject;
-use App\Models\JobCatagories;
-use App\Models\OpsiPackage;
-use App\Models\OpsiPackageUpgrade;
 use App\Models\Project;
+use App\Models\Report;
 use App\Models\ResultContest;
 use App\Models\ResultProject;
 use App\Models\SortCatagories;
-use App\Models\SubCatagories;
 use Illuminate\Http\Request;
 
 class BrowseProjectController extends Controller
@@ -32,6 +26,8 @@ class BrowseProjectController extends Controller
                 $data['project']    = Project::orderBy('nilai','desc')->where('is_active', 'running')->paginate(20);
             }elseif ($request->id == 7) {
                 $data['project']    = Project::where('is_active', 'close')->paginate(20);
+            }else{
+                $data['project']    = Project::where('guarded', 'avtive')->paginate(20);
             }
         } else {
             $data['project']        = Project::where('is_active', 'running')->paginate(20);
@@ -42,54 +38,16 @@ class BrowseProjectController extends Controller
         $data['sortcatagories']     = SortCatagories::all();
         return view('home.browseproject',$data);
     }
-
-    public function GalleryContestProject(Project $project)
-    {
-        if (request()->user()->role == 'customer' || request()->user()->role == 'admin') {
-            $data['resultcontest'] = ResultContest::where('contest_id',$project->id)->get();
-        } else {
-            if($project->is_active == 'running'){
-                $data['resultcontest'] = ResultContest::where('contest_id',$project->id)->where('user_id_worker',request()->user()->id)->get();
-            }else {
-                $data['resultcontest'] = ResultContest::where('contest_id',$project->id)->get();
-            }
-        }
-
-        return view('customer.projectstatus.gallerycontestproject',$data,compact('project'));
-    }
-
     public function BriefContestProject(Project $project)
     {
-        $detail = DetailContest::where('project_id',$project->id)->first();
-        $data['detailcontest'] = DetailContest::where('project_id',$project->id)->first();
-        $data['catagories'] = Catagories::where('id',$detail->catagories)->first();
-        $data['subcatagories'] = SubCatagories::where('id',$detail->subcatagories)->first();
-        $data['opsi'] = OpsiPackage::where('id',$detail->package)->first();
-        if ($detail->packageupgrade != null) {
-            $data['opsiupgrade'] = OpsiPackageUpgrade::where('id', $detail->packageupgrade)->first();
-        }
+        $data['winner']  = ResultContest::where('contest_id',$project->id)->where('is_active','winner')->first();
+        $data['report']  = Report::where('contest_id',$project)->count();
         return view('customer.projectstatus.briefcontest',compact('project'),$data);
     }
     public function BriefDirectProject(Project $project)
     {
-        $detail = DetailProject::where('project_id',$project->id)->first();
-        $data['detaildirect'] = DetailProject::where('project_id',$project->id)->first();
-        $data['jobdescription'] = JobCatagories::where('id',$detail->job_description)->first();
+        $data['winner']  = ResultProject::where('contest_id',$project->id)->where('is_active','winner')->first();
+        $data['report']  = Report::where('contest_id',$project)->count();
         return view('customer.projectstatus.briefdirect',compact('project'),$data);
     }
-
-    public function GalleryDirectProject(Project $project)
-    {
-        if (request()->user()->role == 'customer' || request()->user()->role == 'admin') {
-            $data['resultdirect'] = ResultProject::where('contest_id',$project->id)->get();
-        } else {
-            if ($project->is_active == 'running') {
-                $data['resultdirect'] = ResultProject::where('contest_id',$project->id)->where('user_id_worker', request()->user()->id)->get();
-            } else {
-                $data['resultdirect'] = ResultProject::where('contest_id',$project->id)->get();
-            }
-        }
-        return view('customer.projectstatus.gallerydirectproject',$data, compact('project'));
-    }
-
 }

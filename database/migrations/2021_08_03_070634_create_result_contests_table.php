@@ -17,11 +17,12 @@ class CreateResultContestsTable extends Migration
             $table->id();
             $table->integer('contest_id');
             $table->integer('user_id_worker');
-            $table->string('title');
+            $table->text('title');
             $table->string('filecontest');
             $table->integer('nilai')->nullable();
             $table->integer('harga')->nullable();
-            $table->enum('is_active', ['active', 'eliminasi']);
+            $table->enum('is_active', ['active', 'eliminasi','winner']);
+            $table->enum('portfolio', ['show', 'hide']);
             $table->timestamps();
         });
     }

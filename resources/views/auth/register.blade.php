@@ -1,83 +1,68 @@
 @extends('layouts.appauth')
+@section('title','Create Account')
 @section('content')
-<section class="h-100">
-    <div class="container h-100">
-        <div class="row justify-content-md-center h-100">
-            <div class="card-wrapper">
-                <div class="brand">
-                    <img src="{{url('assets/auth/img/logo.jpg')}}" alt="bootstrap 4 login page">
+<div class="page-single">
+    <div class="container">
+        <div class="row">
+            <div class="col col-login mx-auto">
+                <div class="text-center mb-6">
+                    <img src="{{url('assets/auth/img/logo.jpg')}}" class="h-6" alt="">
                 </div>
-                <div class="card fat">
-                    <div class="card-body">
-                        <h4 class="card-title">Register</h4>
-                        <form method="POST" class="my-login-validation" novalidate="" action="{{route('register')}}">
-                            @csrf
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{old('name')}}">
-                                <div class="invalid-feedback">
-                                    Your name is invalid
-                                </div>
+                <form class="card" action="{{route('register')}}" method="post">
+                    @csrf
+                    <div class="card-body p-6">
+                        <div class="card-title">Create new account</div>
+                        <div class="form-group">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
+                                value="{{old('name')}}" placeholder="Enter name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email address</label>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
+                                value="{{old('email')}}" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                name="password" placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">New Password Confirm</label>
+                            <input type="password"
+                                class="form-control @error('password_confirmation') is-invalid @enderror"
+                                name="password_confirmation" placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <div class="selectgroup w-100">
+                                <label class="selectgroup-item">
+                                    <input type="radio" name="role" value="1" class="selectgroup-input">
+                                    <span class="selectgroup-button text-capitalize">i'm a worker</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input type="radio" name="role" value="2" class="selectgroup-input">
+                                    <span class="selectgroup-button text-capitalize">i'm a customer</span>
+                                </label>
                             </div>
-
-                            <div class="form-group">
-                                <label for="email">E-Mail Address</label>
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{old('email')}}">
-                                <div class="invalid-feedback">
-                                    Your email is invalid
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" >
-                                <div class="invalid-feedback">
-                                    Password is required
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="password_confirmation">Password Confirm</label>
-                                <input id="password_confirmation" type="password" class="form-control @error('password') is-invalid @enderror" name="password_confirmation" >
-                                <div class="invalid-feedback">
-                                    Password Confirm is required
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="role">Peranan</label>
-                                <select class="form-control" id="role" name="role">
-                                <option value="">-- Pilih Role --</option>
-                                <option value="1">Worker</option>
-                                <option value="2">Customer</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="custom-checkbox custom-control">
-                                    <input type="checkbox" name="agree" id="agree" class="custom-control-input">
-                                    <label for="agree" class="custom-control-label">I agree to the <a href="#">Terms and Conditions</a></label>
-                                    <div class="invalid-feedback">
-                                        You must agree with our Terms and Conditions
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group m-0">
-                                <button type="submit" class="btn btn-primary btn-block " id="register">
-                                    Register
-                                </button>
-                            </div>
-                            <div class="mt-4 text-center">
-                                Already have an account? <a href="{{route('login')}}">Login</a>
-                            </div>
-                        </form>
+                        </div>
+                        <div class="form-group">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="agree" />
+                                <span class="custom-control-label">Agree the <a href="terms.html">terms and
+                                        policy</a></span>
+                            </label>
+                        </div>
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-primary btn-block" id="register">Create new
+                                account</button>
+                        </div>
                     </div>
-                </div>
-                <div class="footer">
-                    Copyright &copy; 2017 &mdash; Your Company
+                </form>
+                <div class="text-center text-muted">
+                    Already have account? <a href="{{route('login')}}">Sign in</a>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</div>
 @endsection
-

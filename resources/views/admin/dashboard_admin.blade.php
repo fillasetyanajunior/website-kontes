@@ -9,122 +9,122 @@
             </h1>
         </div>
         <div class="row row-cards">
-            <div class="col-sm-6 col-lg-3">
-                <div class="card p-3">
+            <div class="col-sm-6 col-lg-20">
+                <div class="card p-3 bg-primary">
                     <div class="d-flex align-items-center">
-                        <span class="stamp stamp-md bg-red mr-3">
+                        <span class="stamp stamp-md bg-white text-dark mr-3">
+                            <i class="fa fa-hourglass-start"></i>
+                        </span>
+                        <div>
+                            <h4 class="m-0 text-white">{{$waittingpayment}}<small class="text-white"> Waitting Payment</small></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-20">
+                <div class="card p-3 bg-success">
+                    <div class="d-flex align-items-center">
+                        <span class="stamp stamp-md bg-white text-dark mr-3">
+                            <i class="fa fa-refresh"></i>
+                        </span>
+                        <div>
+                            <h4 class="m-0 text-white">{{$projectrunning}}<small class="text-white"> Project Running</small></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-20">
+                <div class="card p-3 bg-info">
+                    <div class="d-flex align-items-center">
+                        <span class="stamp stamp-md bg-white text-dark mr-3">
+                            <i class="fa fa-bullhorn"></i>
+                        </span>
+                        <div>
+                            <h4 class="m-0 text-white">{{$choosewinner}}<small class="text-white"> Choose Winner</small></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-20">
+                <div class="card p-3 bg-warning">
+                    <div class="d-flex align-items-center">
+                        <span class="stamp stamp-md bg-white text-dark mr-3">
+                            <i class="fa fa-handshake-o"></i>
+                        </span>
+                        <div>
+                            <h4 class="m-0 text-white">{{$projecthandover}}<small class="text-white"> Project Handover</small></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-20">
+                <div class="card p-3 bg-orange">
+                    <div class="d-flex align-items-center">
+                        <span class="stamp stamp-md bg-white text-dark mr-3">
+                            <i class="fa fa-unlock-alt"></i>
+                        </span>
+                        <div>
+                            <h4 class="m-0 text-white">{{$projectlocked}}<small class="text-white"> Project Locked</small></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-20">
+                <div class="card p-3 bg-cyan">
+                    <div class="d-flex align-items-center">
+                        <span class="stamp stamp-md bg-white text-dark mr-3">
+                            <i class="fa fa-users"></i>
+                        </span>
+                        <div>
+                            <h4 class="m-0 text-white">{{$mediation}}<small class="text-white"> Case/Mediation</small></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-20">
+                <div class="card p-3 bg-red">
+                    <div class="d-flex align-items-center">
+                        <span class="stamp stamp-md bg-white text-dark mr-3">
+                            <i class="fa fa-times-circle"></i>
+                        </span>
+                        <div>
+                            <h4 class="m-0 text-white">{{$projectcancel}}<small class="text-white"> Project Cancel</small></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-20">
+                <div class="card p-3 bg-indigo">
+                    <div class="d-flex align-items-center">
+                        <span class="stamp stamp-md bg-white text-dark mr-3">
                             <i class="fe fe-users"></i>
                         </span>
                         <div>
-                            <h4 class="m-0">{{$waittingpayment}}<small> Waitting Payment</small></h4>
+                            <h4 class="m-0 text-white">{{$accountworker}}<small class="text-white"> Account Worker</small></h4>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="card p-3">
+            <div class="col-sm-6 col-lg-20">
+                <div class="card p-3 bg-teal">
                     <div class="d-flex align-items-center">
-                        <span class="stamp stamp-md bg-green mr-3">
-                            <i class="fe fe-shopping-cart"></i>
-                        </span>
-                        <div>
-                            <h4 class="m-0">{{$projectrunning}}<small> Project Running</small></h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <span class="stamp stamp-md bg-red mr-3">
+                        <span class="stamp stamp-md bg-white text-dark mr-3">
                             <i class="fe fe-users"></i>
                         </span>
                         <div>
-                            <h4 class="m-0">{{$choosewinner}}<small> Choose Winner</small></h4>
+                            <h4 class="m-0 text-white">{{$accountworker}}<small class="text-white"> Account Client</small></h4>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="card p-3">
+            <div class="col-sm-6 col-lg-20">
+                <div class="card p-3 bg-lime">
                     <div class="d-flex align-items-center">
-                        <span class="stamp stamp-md bg-green mr-3">
-                            <i class="fe fe-shopping-cart"></i>
+                        <span class="stamp stamp-md bg-white text-dark mr-3">
+                            <i class="fa fa-check"></i>
                         </span>
                         <div>
-                            <h4 class="m-0">{{$projecthandover}}<small> Project Handover</small></h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <span class="stamp stamp-md bg-red mr-3">
-                            <i class="fe fe-users"></i>
-                        </span>
-                        <div>
-                            <h4 class="m-0">{{$projectlocked}}<small> Project Locked</small></h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <span class="stamp stamp-md bg-green mr-3">
-                            <i class="fe fe-shopping-cart"></i>
-                        </span>
-                        <div>
-                            <h4 class="m-0">{{$mediation}}<small> Case/Mediation</small></h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <span class="stamp stamp-md bg-red mr-3">
-                            <i class="fe fe-users"></i>
-                        </span>
-                        <div>
-                            <h4 class="m-0">{{$projectcancel}}<small> Project Cancel</small></h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <span class="stamp stamp-md bg-green mr-3">
-                            <i class="fe fe-shopping-cart"></i>
-                        </span>
-                        <div>
-                            <h4 class="m-0">{{$accountworker}}<small> Account Worker</small></h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <span class="stamp stamp-md bg-red mr-3">
-                            <i class="fe fe-users"></i>
-                        </span>
-                        <div>
-                            <h4 class="m-0">{{$accountworker}}<small> Account Client</small></h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                        <span class="stamp stamp-md bg-green mr-3">
-                            <i class="fe fe-shopping-cart"></i>
-                        </span>
-                        <div>
-                            <h4 class="m-0">{{$projectclose}}<small> Project Close</small></h4>
+                            <h4 class="m-0 text-white">{{$projectclose}}<small class="text-white"> Project Close</small></h4>
                         </div>
                     </div>
                 </div>
@@ -132,12 +132,15 @@
         </div>
         <div class="row row-cards row-deck">
             <div class="col-12">
-                <div class="d-flex flex-row bd-highlight mb-3">
-                    <div class="p-2 bd-highlight">
+                <div class="d-flex flex-row bd-highlight my-4">
+                    <div class="bd-highlight">
                         <a href="{{route('contestproject')}}" class="btn btn-orange">Add Fake Project Contest</a>
                     </div>
-                    <div class="p-2 bd-highlight">
+                    <div class="ml-4 bd-highlight">
                         <a href="{{route('directproject')}}" class="btn btn-lime">Add Fake Direct Contest</a>
+                    </div>
+                    <div class="ml-auto">
+                        <input type="text" id="searchprojectrunningadmin" class="form-control" placeholder="Search">
                     </div>
                 </div>
                 <div class="card">
@@ -159,7 +162,7 @@
                                     <th>Status/Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="resultprojectrunningadmin">
                                 @php
                                     $i=1;
                                     foreach($project as $itemproject) :
@@ -169,11 +172,6 @@
                                     } else {
                                         $desainers    = DB::table('result_projects')->where('contest_id',$itemproject->id)->distinct()->count('user_id_worker');
                                         $desains      = DB::table('result_projects')->where('contest_id',$itemproject->id)->count();
-                                    }
-                                    if ($itemproject->deadline <= date('Y-m-d')) {
-                                        if ($itemproject->is_active == 'running') {
-                                            DB::table('projects')->where('id',$itemproject->id)->update(['is_active' =>'choose winner']);
-                                        }
                                     }
                                 @endphp
                                 <tr>

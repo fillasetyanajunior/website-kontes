@@ -11,32 +11,300 @@
                     </div>
                     <table class="table card-table table-vcenter">
                         @foreach ($newsfeed as $itemnewsfeed)
-                            @php
-                            if ($itemnewsfeed->catagories_project == 'contest') {
-                                $data   = DB::table('result_contests')->where('contest_id',$itemnewsfeed->id)->first();
-                                $role   = 'contest';
-                            } else {
-                                $data   = DB::table('result_projects')->where('contest_id',$itemnewsfeed->id)->first();
-                                $role   = 'direct';
-                            }
-                            if ($data != null) :
-                            $user       = DB::table('workers')->where('user_id',$data->user_id_worker)->first();
-                            @endphp
+                        @php
+                        $user = DB::table('users')->where('id',$itemnewsfeed->user_id_from)->first();
+                        $project = DB::table('projects')->where('id',$itemnewsfeed->contest_id)->first();
+                        @endphp
+
+                        @if ($itemnewsfeed->choices == 'eliminasi')
                         <tr>
                             <td>
-                                <div class="d-flex flex-column bd-highlight mb-3">
+                                <div class="d-flex flex-column mb-3">
                                     <div class="d-flex align-items-center">
-                                        <div class="avatar avatar-md mr-3"
-                                        style="background-image: url(demo/faces/female/1.jpg)"></div>
                                         <div>
                                             <div>
-                                                <a href="/profileworker/{{$data->user_id_worker}}">{{$user->name}}</a> rated your entries for<a href="{{'/gallery' . $role . '/' . $itemnewsfeed->id}}"> {{$itemnewsfeed->title}}</a>
+                                                <a href="javascript:void(0)">
+                                                    {{$user->name}}
+                                                </a>
+                                                You have been eliminated for
+                                                <a
+                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    {{$project->title}}
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="p-2 bd-highlight">
-                                        @if ($itemnewsfeed->catagories_project == 'contest')
-                                        <img src="{{asset('/storage/resultcontest/' . $data->filecontest)}}" width="200px">
+                                    <div class="p-2">
+                                        @if ($itemnewsfeed->filecontest != '')
+                                        <img src="{{asset('/storage/resultcontest/' . $itemnewsfeed->filecontest)}}"
+                                            width="200px">
+                                        @else
+                                        <img src="{{asset('assets/dashboard/images/bid.png')}}" width="200px">
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @elseif ($itemnewsfeed->choices == 'feedback')
+                        <tr>
+                            <td>
+                                <div class="d-flex flex-column mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <div>
+                                                <a href="javascript:void(0)">
+                                                    {{$user->name}}
+                                                </a>
+                                                Your got feedback for
+                                                <a
+                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    {{$project->title}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+                                        <p class="text-justify">
+                                            {{$itemnewsfeed->feedback}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @elseif ($itemnewsfeed->choices == 'winner choose')
+                        <tr>
+                            <td>
+                                <div class="d-flex flex-column mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <div>
+                                                <a href="javascript:void(0)">
+                                                    {{$user->name}}
+                                                </a>
+                                                {{$project->catagories_project}} project you have passed the time
+                                                limit, choose a winner immediately for
+                                                <a
+                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    {{$project->title}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @elseif ($itemnewsfeed->choices == 'rating')
+                        <tr>
+                            <td>
+                                <div class="d-flex flex-column mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <div>
+                                                <a href="javascript:void(0)">
+                                                    {{$user->name}}
+                                                </a>
+                                                Congrats you got the rating for
+                                                <a
+                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    {{$project->title}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+                                        <div class="d-flex flex-column mb-3">
+                                            <div class="mt-3">
+                                                @if ($itemnewsfeed->filecontest != '')
+                                                <img src="{{asset('/storage/resultcontest/' . $itemnewsfeed->filecontest)}}"
+                                                    width="200px">
+                                                @else
+                                                <img src="{{asset('assets/dashboard/images/bid.png')}}" width="200px">
+                                                @endif
+                                            </div>
+                                            <div class="mt-3">
+
+                                                @if ($itemnewsfeed->rating == 1)
+                                                <a href="javascript:void(0)" data-nilai="1"><i
+                                                        class="fa fa-star text-yellow"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="2"><i class="fa fa-star-o"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="3"><i class="fa fa-star-o"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="4"><i class="fa fa-star-o"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="5"><i class="fa fa-star-o"></i></a>
+                                                @elseif ($itemnewsfeed->rating == 2)
+                                                <a href="javascript:void(0)" data-nilai="1"><i
+                                                        class="fa fa-star text-yellow"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="2"><i
+                                                        class="fa fa-star text-yellow"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="3"><i class="fa fa-star-o"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="4"><i class="fa fa-star-o"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="5"><i class="fa fa-star-o"></i></a>
+                                                @elseif ($itemnewsfeed->rating == 3)
+                                                <a href="javascript:void(0)" data-nilai="1"><i
+                                                        class="fa fa-star text-yellow"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="2"><i
+                                                        class="fa fa-star text-yellow"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="3"><i
+                                                        class="fa fa-star text-yellow"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="4"><i class="fa fa-star-o"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="5"><i class="fa fa-star-o"></i></a>
+                                                @elseif ($itemnewsfeed->rating == 4)
+                                                <a href="javascript:void(0)" data-nilai="1"><i
+                                                        class="fa fa-star text-yellow"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="2"><i
+                                                        class="fa fa-star text-yellow"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="3"><i
+                                                        class="fa fa-star text-yellow"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="4"><i
+                                                        class="fa fa-star text-yellow"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="5"><i class="fa fa-star-o"></i></a>
+                                                @elseif ($itemnewsfeed->rating == 5)
+                                                <a href="javascript:void(0)" data-nilai="1"><i
+                                                        class="fa fa-star text-yellow"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="2"><i
+                                                        class="fa fa-star text-yellow"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="3"><i
+                                                        class="fa fa-star text-yellow"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="4"><i
+                                                        class="fa fa-star text-yellow"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="5"><i
+                                                        class="fa fa-star text-yellow"></i></a>
+                                                @else
+                                                <a href="javascript:void(0)" data-nilai="1"><i class="fa fa-star-o"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="2"><i class="fa fa-star-o"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="3"><i class="fa fa-star-o"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="4"><i class="fa fa-star-o"></i></a>
+                                                <a href="javascript:void(0)" data-nilai="5"><i class="fa fa-star-o"></i></a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @elseif ($itemnewsfeed->choices == 'comment public')
+                        <tr>
+                            <td>
+                                <div class="d-flex flex-column mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <div>
+                                                <a href="javascript:void(0)">
+                                                    {{$user->name}}
+                                                </a>
+                                                Your got comment public for
+                                                <a
+                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    {{$project->title}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+                                        <p class="text-justify">
+                                            {{$itemnewsfeed->feedback}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @elseif ($itemnewsfeed->choices == 'handover')
+                        <tr>
+                            <td>
+                                <div class="d-flex flex-column mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <div>
+                                                <a href="javascript:void(0)">
+                                                    {{$user->name}}
+                                                </a>
+                                                {{$itemnewsfeed->feedback}} for
+                                                <a
+                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    {{$project->title}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @elseif ($itemnewsfeed->choices == 'pick winner')
+                        <tr>
+                            <td>
+                                <div class="d-flex flex-column mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <div>
+                                                <a href="javascript:void(0)">
+                                                    {{$user->name}}
+                                                </a>
+                                                Congratulations you are the winner of the contest for
+                                                <a
+                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    {{$project->title}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+                                        @if ($itemnewsfeed->filecontest != '')
+                                        <img src="{{asset('/storage/resultcontest/' . $itemnewsfeed->filecontest)}}"
+                                            width="200px">
+                                        @else
+                                        <img src="{{asset('assets/dashboard/images/bid.png')}}" width="200px">
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @elseif ($itemnewsfeed->choices == 'handover command')
+                        <tr>
+                            <td>
+                                <div class="d-flex flex-column mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <div>
+                                                <a href="javascript:void(0)">
+                                                    {{$user->name}}
+                                                </a>
+                                                Your got handover command for
+                                                <a
+                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    {{$project->title}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+                                        <p class="text-justify">
+                                            {{$itemnewsfeed->feedback}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @else
+                        <tr>
+                            <td>
+                                <div class="d-flex flex-column mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <div>
+                                                <a href="javascript:void(0)">
+                                                    {{$user->name}}
+                                                </a>
+                                                submit your contest for
+                                                <a
+                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    {{$project->title}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+                                        @if ($itemnewsfeed->filecontest != '')
+                                        <img src="{{asset('/storage/resultcontest/' . $itemnewsfeed->filecontest)}}"
+                                            width="200px">
                                         @else
                                         <img src="{{asset('assets/dashboard/images/bid.png')}}" width="200px">
                                         @endif

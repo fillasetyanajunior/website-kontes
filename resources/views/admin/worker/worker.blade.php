@@ -10,6 +10,11 @@
         </div>
         <div class="row row-cards row-deck">
             <div class="col-12">
+                <div class="d-flex mb-4">
+                    <div class="ml-auto">
+                        <input type="text" id="searchworker" class="form-control" placeholder="Search">
+                    </div>
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">List Worker</h3>
@@ -27,7 +32,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="resulttabelworker">
                                 @php
                                 $i=1;
                                 @endphp
@@ -100,7 +105,7 @@
                         <div class="form-group">
                             <label for="suspend">Suspend</label>
                             <select class="form-control" id="suspend" name="suspend">
-                                <option value="">-- Pilih Suspend --</option>
+                                <option value="">-- Choose Suspend --</option>
                                 <option value="1">Bulan 1</option>
                                 <option value="2">Bulan 3</option>
                             </select>
@@ -129,23 +134,35 @@
                                 <img class="card-profile-img " id="workerprofile"  src="">
                                 <h3 class="mb-3"></h3>
                                 <div class="d-flex flex-wrap">
-                                    <div class="form-group mr-5">
+                                    <div class="form-group mr-3">
                                         <label class="form-label">Location</label>
                                         <div class="form-control-plaintext" id="location"></div>
                                     </div>
-                                    <div class="form-group mx-5">
+                                    <div class="form-group mx-3">
                                         <label class="form-label">Rangked</label>
                                         <div class="form-control-plaintext" id="rangking"></div>
                                     </div>
-                                    <div class="form-group mx-5">
+                                    <div class="form-group mx-3">
                                         <label class="form-label">Earnings</label>
                                         <div class="form-control-plaintext" id="earnings">
                                         </div>
                                     </div>
-                                    <div class="form-group mx-5">
+                                    <div class="form-group mx-3">
                                         <label class="form-label">Rating</label>
                                         <div class="form-control-plaintext" id="rating">
                                         </div>
+                                    </div>
+                                    <div class="form-group mx-3">
+                                        <label class="form-label">Status Online</label>
+                                        <div class="form-control-plaintext" id="status"></div>
+                                    </div>
+                                    <div class="form-group mx-3">
+                                        <label class="form-label">Status Account</label>
+                                        <div class="form-control-plaintext text-capitalize" id="statusaccount"></div>
+                                    </div>
+                                    <div class="form-group mx-3">
+                                        <label class="form-label">Once Suspend</label>
+                                        <div class="form-control-plaintext" id="oncesuspend"></div>
                                     </div>
                                 </div>
                             </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PembayaranProjectMail;
 use App\Models\Catagories;
 use App\Models\DetailContest;
 use App\Models\DetailProject;
@@ -11,7 +12,9 @@ use App\Models\OpsiPackageUpgrade;
 use App\Models\Project;
 use App\Models\ProjectPayment;
 use App\Models\SubCatagories;
+use App\Models\UploadFileProject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ProjectController extends Controller
 {
@@ -21,6 +24,10 @@ class ProjectController extends Controller
         return response()->json([
             'subcatagories' => $subcata,
         ]);
+    }
+    public function GetCodeDiscount(Request $request)
+    {
+        # code...
     }
     public function IndexContestProject()
     {
@@ -39,12 +46,9 @@ class ProjectController extends Controller
             'subcatagories'         => 'required',
             'addpackage'            => 'required',
             'totalcost'             => 'required',
-            'namepengirimpayment'   => 'required',
-            'nomerpayment'          => ['required','numeric'],
         ]);
 
         $catagories     = Catagories::where('id', $request->catagories)->first();
-
 
         if ($request->addprojectupgrades != null) {
             $opsiupgrade    = OpsiPackageUpgrade::where('id',$request->addprojectupgrades) ->first();
@@ -79,45 +83,43 @@ class ProjectController extends Controller
                     'is_active'             => 'waitting payment',
                     'deadline'              => date('Y-m-d',strtotime('+' . $waktu . ' days')),
                     'harga'                 => $request->totalcost,
+                    'shouldhave'            => $request->shouldhave,
+                    'shouldnothave'         => $request->shouldnothave,
                 ]);
+        // Mail::to(request()->user()->email)->send(new PembayaranProjectMail($id->id));
         if ($request->hasFile('file')) {
 
-            $file = $request->file('file');
-            $name = time() . rand(1, 100) . '.' . $file->extension();
-            $file->storeAs('contest', $name);
+            foreach ($request->file('file') as $file) {
+                $name = $file->getClientOriginalName();
+                $file->storeAs('fileproject/AllFileProject' . $id->id, $name);
 
-            DetailContest::create([
-                'project_id'        => $id->id,
-                'title'             => $request->title,
-                'description'       => $request->description,
-                'title_logo'        => $request->logo_text,
-                'catagories'        => $request->catagories,
-                'subcatagories'     => $request->subcatagories,
-                'package'           => $request->addpackage,
-                'packageupgrade'    => $request->addprojectupgrades,
-                'thumnail'          => $name,
-                'harga'             => $request->totalcost,
-            ]);
-        } else {
-            DetailContest::create([
-                'project_id'        => $id->id,
-                'title'             => $request->title,
-                'description'       => $request->description,
-                'title_logo'        => $request->logo_text,
-                'catagories'        => $request->catagories,
-                'subcatagories'     => $request->subcatagories,
-                'package'           => $request->addpackage,
-                'packageupgrade'    => $request->addprojectupgrades,
-                'harga'             => $request->totalcost,
-            ]);
+                UploadFileProject::create([
+                    'contest_id'    => $id->id,
+                    'name'          => $name
+                ]);
+            }
         }
-        ProjectPayment::create([
-            'user_id'           => request()->user()->id,
-            'id_project'        => $idproject,
+        DetailContest::create([
             'project_id'        => $id->id,
-            'invoicepayment'    => $request->title,
-            'name'              => $request->namepengirimpayment,
-            'nomerpayment'      => $request->nomerpayment,
+            'title'             => $request->title,
+            'description'       => $request->description,
+            'title_logo'        => $request->logo_text,
+            'catagories'        => $request->catagories,
+            'subcatagories'     => $request->subcatagories,
+            'package'           => $request->addpackage,
+            'packageupgrade'    => $request->addprojectupgrades,
+            'harga'             => $request->totalcost,
+        ]);
+        ProjectPayment::create([
+            'user_id'               => request()->user()->id,
+            'id_project'            => $idproject,
+            'project_id'            => $id->id,
+            'payment_id_transaksi'  => $request->id_transaksi,
+            'invoicepayment'        => $request->title,
+            'name_transaksi'        => $request->name_transaksi,
+            'email_transaksi'       => $request->email_transaksi,
+            'name'                  => request()->user()->name,
+            'email'                 => request()->user()->email,
         ]);
         return redirect('/home')->with('status','Add contest project success');
     }
@@ -134,8 +136,6 @@ class ProjectController extends Controller
             'job_description'       => 'required',
             'budget'                => 'required',
             'timeline'              => 'required',
-            'namepengirimpayment'   => 'required',
-            'nomerpayment'          => ['required', 'numeric'],
         ]);
 
         $no = Project::orderBy('id_project', 'DESC')->first();
@@ -154,7 +154,6 @@ class ProjectController extends Controller
                 $idproject = 'PRJT' . $tambah;
             }
         }
-
         $id =   Project::create([
                     'user_id'               => request()->user()->id,
                     'id_project'            => $idproject,
@@ -164,37 +163,41 @@ class ProjectController extends Controller
                     'is_active'             => 'waitting payment',
                     'deadline'              => date('Y-m-d',strtotime('+' . $request->timeline . 'days')),
                     'harga'                 => $request->budget,
+                    'shouldhave'            => $request->shouldhave,
+                    'shouldnothave'         => $request->shouldnothave,
                 ]);
+        // Mail::to(request()->user()->email)->send(new PembayaranProjectMail($id->id));
         if ($request->hasFile('file')) {
 
-            $file = $request->file('file');
-            $name = time() . rand(1, 100) . '.' . $file->extension();
-            $file->storeAs('direct', $name);
+            foreach ($request->file('file') as $file) {
+                $name = $file->getClientOriginalName();
+                $file->storeAs('fileproject/AllFileProject' . $id->id, $name);
 
-            DetailProject::create([
-                'project_id'        => $id->id,
-                'title'             => $request->title,
-                'description'       => $request->description,
-                'job_description'   => $request->job_description,
-                'thumnail'          => $name,
-                'harga'             => $request->budget,
-            ]);
-        } else {
-            DetailProject::create([
-                'project_id'        => $id->id,
-                'title'             => $request->title,
-                'description'       => $request->description,
-                'job_description'   => $request->job_description,
-                'harga'             => $request->budget,
-            ]);
+                UploadFileProject::create([
+                    'contest_id'    => $id->id,
+                    'name'          => $name
+                ]);
+            }
+
         }
-        ProjectPayment::create([
-            'user_id'           => request()->user()->id,
-            'id_project'            => $idproject,
+        DetailProject::create([
             'project_id'        => $id->id,
-            'invoicepayment'    => $request->title,
-            'name'              => $request->namepengirimpayment,
-            'nomerpayment'      => $request->nomerpayment,
+            'title'             => $request->title,
+            'description'       => $request->description,
+            'job_description'   => $request->job_description,
+            'harga'             => $request->budget,
+            'is_active'         => 'active',
+        ]);
+        ProjectPayment::create([
+            'user_id'               => request()->user()->id,
+            'id_project'            => $idproject,
+            'project_id'            => $id->id,
+            'payment_id_transaksi'  => $request->id_transaksi,
+            'invoicepayment'        => $request->title,
+            'name_transaksi'        => $request->name_transaksi,
+            'email_transaksi'       => $request->email_transaksi,
+            'name'                  => request()->user()->name,
+            'email'                 => request()->user()->email,
         ]);
         return redirect('/home')->with('status','Add direct project success');
     }

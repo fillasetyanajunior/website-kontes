@@ -6,8 +6,11 @@ use App\Models\Project;
 use App\Models\Rating;
 use App\Models\ResultContest;
 use App\Models\ResultProject;
+use App\Models\SuspendAccount;
 use App\Models\User;
 use App\Models\Worker;
+use Carbon\Carbon;
+use Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -41,9 +44,13 @@ class ManagementWorkerController extends Controller
         }
         Worker::where('id',$worker->id)
             ->update([
-                'suspend' => date('Y-m-d', strtotime('+' . $status . ' month')),
+                'status_account'    => 'suspend',
+                'suspend'           => date('Y-m-d', strtotime('+' . $status . ' month')),
             ]);
-
+        SuspendAccount::create([
+            'user_id'       => $worker->user_id,
+            'suspendtime'   => $status . 'month'
+        ]);
         return redirect()->back()->with('status','Account' . $worker->name . 'Berhsil Di Suspend' . $status . 'Bulan');
     }
     public function DeleteAccount(Worker $worker)
@@ -57,28 +64,32 @@ class ManagementWorkerController extends Controller
         $project    = Project::all();
         $projects   = Project::first();
         $rating     = Rating::where('user_id_worker', $worker->user_id)->count();
+        $user       = User::where('id',$worker->user_id)->first();
+        $suspend    = SuspendAccount::where('user_id',$worker->user_id)->count();
+        if (Cache::has('user-is-online-' . $user->id)){
+            $status =  "Online. Last seen: " . Carbon::parse($user->last_seen)->diffForHumans() ;
+        }else{
+            $status = "Offline. Last seen: " . Carbon::parse($user->last_seen)->diffForHumans() ;
+        }
         return response()->json([
-            'worker' => $worker,
-            'project' => $project,
-            'projects' => $projects,
-            'rating' => $rating,
+            'worker'    => $worker,
+            'project'   => $project,
+            'projects'  => $projects,
+            'rating'    => $rating,
+            'status'    => $status,
+            'user'      => $user,
+            'suspend'   => $suspend,
         ]);
     }
     public function ViewProject(Project $project,Request $request)
     {
         if ($project->catagories_project == 'contest') {
-            $resultproject  = ResultContest::where('contest_id', $project->id)->where('user_id_worker', $request->user_id)->get();
+            $resultproject  = ResultContest::where('contest_id', $project->id)->where('portfolio','show')->where('user_id_worker', $request->user_id)->get();
         } else {
-            $resultproject  = ResultProject::where('contest_id', $project->id)->where('user_id_worker', $request->user_id)->get();
+            $resultproject  = ResultProject::where('contest_id', $project->id)->where('portfolio','show')->where('user_id_worker', $request->user_id)->get();
         }
-            $earning        = DB::table('winner_contests')
-                            ->join('projects', 'winner_contests.contest_id','=','projects.id')
-                            ->where('user_id_worker',$request->user_id)
-                            ->sum('projects.harga');
-
         return response()->json([
             'resultproject' => $resultproject,
-            'earning' => $earning,
         ]);
     }
 }

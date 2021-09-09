@@ -10,16 +10,15 @@
         </div>
         @php
         foreach ($project as $item) {
-
             $totalprojectsuccesscontest     = DB::table('result_contests')
                                             ->join('projects','result_contests.contest_id','=','projects.id')
-                                            ->where('projects.is_active', 'close')
+                                            ->where('projects.is_active', 'close')->OrWhere('projects.is_active', 'choose winner')
                                             ->distinct('contest_id')
                                             ->where('user_id_worker',request()->user()->id)
                                             ->count();
-            $totalprojectcancelcontest      = DB::table('result_contests')
+            $totalprojecthandovercontest    = DB::table('result_contests')
                                             ->join('projects','result_contests.contest_id','=','projects.id')
-                                            ->where('projects.is_active', 'cancel')
+                                            ->where('projects.is_active', 'handover')
                                             ->distinct('contest_id')
                                             ->where('user_id_worker',request()->user()->id)
                                             ->count();
@@ -31,13 +30,13 @@
                                             ->count();
             $totalprojectsuccessdirect      = DB::table('result_projects')
                                             ->join('projects','result_projects.contest_id','=','projects.id')
-                                            ->where('projects.is_active', 'close')
+                                            ->where('projects.is_active', 'close')->OrWhere('projects.is_active', 'choose winner')
                                             ->distinct('contest_id')
                                             ->where('user_id_worker',request()->user()->id)
                                             ->count();
-            $totalprojectcanceldirect       = DB::table('result_projects')
+            $totalprojecthandoverdirect     = DB::table('result_projects')
                                             ->join('projects','result_projects.contest_id','=','projects.id')
-                                            ->where('projects.is_active', 'cancel')
+                                            ->where('projects.is_active', 'handover')
                                             ->where('user_id_worker',request()->user()->id)
                                             ->distinct('contest_id')
                                             ->count();
@@ -51,44 +50,58 @@
         @endphp
         <div class="row row-cards">
             <div class="col-sm-6 col-lg-3">
-                <div class="card p-3">
+                <div class="card p-3 bg-azure">
                     <div class="d-flex align-items-center">
-                        <span class="stamp stamp-md bg-red mr-3">
-                            <i class="fe fe-users"></i>
+                        <span class="stamp stamp-md bg-white text-dark mr-3">
+                            <i class="fa fa-refresh"></i>
                         </span>
                         <div>
-                            <h4 class="m-0">
+                            <h4 class="m-0 text-white">
                                 @if ($projects != null)
                                 {{$totalprojectrunningcontest + $totalprojectrunningdirect}}
                                 @else
                                 0
                                 @endif
-                                <small>Project Running</small></h4>
+                                <small class="text-white">Project Running</small>
+                            </h4>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-lg-3">
-                <div class="card p-3">
+                <div class="card p-3 bg-green">
                     <div class="d-flex align-items-center">
-                        <span class="stamp stamp-md bg-green mr-3">
-                            <i class="fe fe-shopping-cart"></i>
+                        <span class="stamp stamp-md bg-white text-dark mr-3">
+                            <i class="fa fa-check"></i>
                         </span>
                         <div>
-                            <h4 class="m-0">
-                                @if ($projects != null)
-                                {{$totalprojectcanceldirect + $totalprojectcancelcontest}}
-                                @else
-                                0
-                                @endif
-                                <small>Project Cancel</small></h4>
-                            <small class="text-muted">
+                            <h4 class="m-0 text-white">
                                 @if ($projects != null)
                                 {{$totalprojectsuccessdirect + $totalprojectsuccesscontest}}
                                 @else
                                 0
                                 @endif
-                                Project Success</small>
+                                <small class="text-white">Project Success</small>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="card p-3 bg-primary">
+                    <div class="d-flex align-items-center">
+                        <span class="stamp stamp-md bg-white text-dark mr-3">
+                            <i class="fa fa-handshake-o"></i>
+                        </span>
+                        <div>
+                            <h4 class="m-0 text-white">
+                                @if ($projects != null)
+                                {{$totalprojecthandovercontest + $totalprojecthandoverdirect}}
+                                @else
+                                0
+                                @endif
+                                <small class="text-white">Project Handover</small>
+                            </h4>
                         </div>
                     </div>
                 </div>
@@ -96,6 +109,11 @@
         </div>
         <div class="row row-cards row-deck">
             <div class="col-12">
+                <div class="d-flex mb-3">
+                    <div class="ml-auto">
+                        <input type="text" id="searchprojectrunningworker" class="form-control" placeholder="Search">
+                    </div>
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Project Running</h3>
@@ -114,7 +132,7 @@
                                     <th>Status/Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="resultprojectrunningworker">
                                 @php
                                 $i=1;
                                     foreach($project as $itemproject) :
@@ -172,15 +190,23 @@
                                             <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-success btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                             @endif
                                         @elseif ($itemmyproject->is_active == 'choose winner')
-                                        <a class="btn btn-azure btn-sm text-white text-uppercase">{{$itemmyproject->is_active}}</a>
+                                            @if ($itemproject->catagories_project == 'contest')
+                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-azure btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @else
+                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-azure btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @endif
                                         @elseif ($itemmyproject->is_active == 'handover')
-                                        @if ($handover->user_id_worker == request()->user()->id)
-                                        <a href="/handoverproject/{{$itemmyproject->id}}" class="btn btn-primary btn-sm text-white text-uppercase">{{$itemmyproject->is_active}}</a>
-                                        @else
-                                        <a href="" class="btn btn-primary btn-sm text-white text-uppercase">{{$itemmyproject->is_active}}</a>
-                                        @endif
+                                            @if ($itemproject->catagories_project == 'contest')
+                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-primary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @else
+                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-primary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @endif
                                         @elseif ($itemmyproject->is_active == 'close')
-                                        <a href="/handoverproject/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-uppercase">{{$itemmyproject->is_active}}</a>
+                                            @if ($itemproject->catagories_project == 'contest')
+                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @else
+                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @endif
                                         @elseif ($itemmyproject->is_active == 'cancel')
                                         <a class="btn btn-danger btn-sm text-white text-uppercase">{{$itemmyproject->is_active}}</a>
                                         @else

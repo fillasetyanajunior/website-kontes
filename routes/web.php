@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountingController;
 use App\Http\Controllers\BriefProjectController;
 use App\Http\Controllers\BrowseProjectController;
 use App\Http\Controllers\CatagoriesController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\ManagementCustomerController;
 use App\Http\Controllers\ManagementWebsiteController;
 use App\Http\Controllers\ManagementWorkerController;
+use App\Http\Controllers\MessageComentarController;
 use App\Http\Controllers\NewsFeedController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ResultProjectController;
@@ -19,9 +21,13 @@ use App\Http\Controllers\UploadFileController;
 use App\Http\Controllers\ZipController;
 use App\Http\Controllers\MessageHandoverController;
 use App\Http\Controllers\OpsiContestController;
+use App\Http\Controllers\PaypalController;
+use App\Http\Controllers\PDFController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SubCatagoriesController;
 use App\Http\Controllers\WaittingpaymentController;
 use App\Http\Controllers\WorkerController;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,10 +46,17 @@ Route::get('/', function () {
 });
 
 //Coba Cek
-Route::get('/coba', function () {
-    $location = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
-    return $location->toArray();
-});
+
+Route::get('/coba',
+function () {
+    // [PaypalController::class, 'Cheackout']
+    // \Illuminate\Support\Facades\Mail::to('customer@customer.com')->send(new \App\Mail\PembayaranProjectMail(3));
+
+    return view('coba');
+    // $location = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+    // return $location->toArray();
+}
+);
 
 Route::get('/home', [HomeController::class,'index']);
 
@@ -61,6 +74,15 @@ Route::middleware('verified')->group(function () {
     Route::get('/gallerydirect/{project}', [BrowseProjectController::class,'GalleryDirectProject']);
     //Handover
     Route::get('/handoverproject/{project}', [HandoverController::class, 'HandoverIndex']);
+    //Convert ZIP
+    Route::get('/convertzip/{id}', [ZipController::class, 'CreateZip']);
+    Route::get('/convertzipproject/{id}', [ZipController::class, 'CreateZipProject']);
+    //Convert PDF
+    Route::get('/convertpdf/{winnercontest}', [PDFController::class, 'PDFConvert']);
+    //Comentar
+    Route::post('/comentar', [MessageComentarController::class, 'MessageComentar'])->name('comentar');
+    //Report Result Project
+    Route::post('/report', [ReportController::class,'ReportCreate'])->name('reportcreate');
 
     Route::middleware('admin')->group(function () {
         //Admin
@@ -109,6 +131,12 @@ Route::middleware('verified')->group(function () {
         Route::delete('/deletedirect/{project}', [BriefProjectController::class,'DeleteDirect']);
         Route::put('/lockeddirect/{project}', [BriefProjectController::class,'LockedDirect']);
         Route::put('/extendeddeadlinedirect/{project}', [BriefProjectController::class,'ExtendedDirect']);
+        //Accounting
+        Route::get('/acconting/data', [AccountingController::class, 'GetData'])->name('accounting');
+        Route::get('/acconting/data/project/{pilihanproject}', [AccountingController::class, 'GetData']);
+        Route::get('/acconting/data/income/{pilihanincome}', [AccountingController::class, 'GetData']);
+        Route::get('/acconting/data/worker/{pilihanworker}', [AccountingController::class, 'GetData']);
+        Route::get('/acconting/data/customer/{pilihancustomer}', [AccountingController::class, 'GetData']);
     });
 
     Route::middleware('admincustomer')->group(function () {
@@ -118,11 +146,14 @@ Route::middleware('verified')->group(function () {
         //Direct
         Route::get('/directproject', [ProjectController::class, 'IndexDirectProject'])->name('directproject');
         Route::post('/directproject/store', [ProjectController::class, 'StoreDirectProject']);
+        //Get Data
+        Route::post('/getcubcatagories/{catagories}',[ProjectController::class,'GetCatagories']);
+        //Get Discount Code
+        Route::post('/discountcode', [ProjectController::class,'GetCodeDiscount']);
     });
 
     Route::middleware('customer')->group(function () {
         //Customer
-        Route::post('/getcubcatagories/{catagories}',[ProjectController::class,'GetCatagories']);
         //Nilai Rating
         Route::post('/feedback/show/nilaicontest/{resultcontest}', [FeedbackController::class, 'NilaiContest']);
         Route::post('/feedbackbid/show/nilaicontest/{resultproject}', [FeedbackBidController::class, 'NilaiContest']);
@@ -130,19 +161,15 @@ Route::middleware('verified')->group(function () {
         Route::put('/feedback/eliminasi/{resultcontest}', [FeedbackController::class, 'EliminasiPeserta']);
         Route::put('/feedbackbid/eliminasi/{resultproject}', [FeedbackBidController::class, 'EliminasiPeserta']);
         //Pick Winner
-        Route::post('/feedback/choosewinner/pickwinner/{resultcontest}', [FeedbackController::class, 'StoreWinner']);
-        Route::post('/feedbackbid/choosewinner/pickwinner/{resultproject}', [FeedbackBidController::class, 'StoreWinner']);
+        Route::put('/feedback/choosewinner/pickwinner/{resultcontest}', [FeedbackController::class, 'StoreWinner']);
+        Route::put('/feedbackbid/choosewinner/pickwinner/{resultproject}', [FeedbackBidController::class, 'StoreWinner']);
         //Profile
         Route::get('/customer/profile', [CustomerController::class, 'profileCustomers'])->name('profileCustomers');
         Route::put('/customer/profile/update/{customer}', [CustomerController::class, 'profileUpdate']);
-        //NewsFeed
-        Route::get('/newsfeed', [NewsFeedController::class,'NewsFeed'])->name('newsfeed');
         //Favourites
         Route::get('/favourites', [NewsFeedController::class,'Favourites'])->name('favourites');
         //Api Deadline
         Route::get('/deadline/{project}', [HomeController::class,'Deadline']);
-        //Convert PDF
-        Route::get('/convertzip/{id}', [ZipController::class,'CreateZip']);
         //HandoverConfirm
         Route::put('/handoverproject/confirm/{project}', [HandoverController::class,'HandoverConfirm']);
     });
@@ -159,6 +186,8 @@ Route::middleware('verified')->group(function () {
         Route::post('/feedbackbid/{resultproject}', [FeedbackBidController::class, 'GetData']);
         Route::post('/feedbackbid/kirim/{resultproject}', [FeedbackBidController::class, 'KirimFeedback']);
         Route::post('/feedbackbid/users/{resultproject}', [FeedbackBidController::class, 'UserFeedback']);
+        //NewsFeed
+        Route::get('/newsfeed', [NewsFeedController::class, 'NewsFeed'])->name('newsfeed');
     });
 
     Route::middleware('worker')->group(function () {
@@ -174,6 +203,8 @@ Route::middleware('verified')->group(function () {
         Route::post('/updatefiles/{winnercontest}', [HandoverController::class,'UpdateFontColor']);
         //Profile
         Route::get('/worker/profile', [WorkerController::class,'profileWorker'])->name('profileWorker');
+        Route::put('/worker/profile/showportfolio/{id}', [WorkerController::class,'showPortFolio']);
+        Route::put('/worker/profile/hideportfolio/{id}', [WorkerController::class, 'hidePortFolio']);
     });
 });
 

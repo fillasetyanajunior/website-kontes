@@ -8,15 +8,16 @@
                 Opsi Package
             </h1>
         </div>
-        <button type="button" class="btn btn-primary mb-5" data-toggle="modal" data-target="#OpsiModal" id="opsicontest">Add
-            Opsi Package</button>
-        <div class="form-group col-3">
-            <label for="paketopsicontest">Pilihan Data</label>
-            <select class="form-control" id="paketopsicontest">
-                <option disabled value="">-- Pilih --</option>
-                <option selected value="1">Opsi Utama</option>
-                <option value="2">Opsi Upgrade</option>
-            </select>
+        <button type="button" class="btn btn-primary mb-5" data-toggle="modal" data-target="#OpsiModal" id="opsicontest">Add Opsi Package</button>
+        <div class="form-group row">
+            <div class="col-lg-3">
+                <label for="paketopsicontest">Pilihan Data</label>
+                <select class="form-control" id="paketopsicontest">
+                    <option disabled value="">-- Pilih --</option>
+                    <option selected value="1">Opsi Utama</option>
+                    <option value="2">Opsi Upgrade</option>
+                </select>
+            </div>
         </div>
         <div class="row row-cards row-deck">
             <div class="col-12" id="opsiutama">
@@ -45,16 +46,18 @@
                                     <td>{{$itemopsi->name}}</td>
                                     <td>
                                         @if ($itemopsi->icon != null)
-                                            {{$itemopsi->icon}}
+                                        {{$itemopsi->icon}}
                                         @else
-                                            -
+                                        -
                                         @endif
                                     </td>
                                     <td>{{$itemopsi->harga}}</td>
                                     <td>
-                                        <button type="button" class="btn btn-warning btn-sm text-white" id="editopsicontest" data-id="{{$itemopsi->id}}"data-toggle="modal" data-target="#OpsiModal">Edit</button>
-                                        <form action="/managementwebsite/opsicontest/delete"
-                                            method="post" class="d-inline">
+                                        <button type="button" class="btn btn-warning btn-sm text-white"
+                                            id="editopsicontest" data-id="{{$itemopsi->id}}" data-toggle="modal"
+                                            data-target="#OpsiModal">Edit</button>
+                                        <form action="/managementwebsite/opsicontest/delete" method="post"
+                                            class="d-inline">
                                             @csrf
                                             @method('delete')
                                             <input type="hidden" name="id" value="{{$itemopsi->id}}">
@@ -101,30 +104,32 @@
                                     <td>{{$itemopsiupgrade->name}}</td>
                                     <td>
                                         @if ($itemopsiupgrade->icon != null)
-                                            {{$itemopsiupgrade->icon}}
+                                        {{$itemopsiupgrade->icon}}
                                         @else
-                                            -
+                                        -
                                         @endif
                                     </td>
                                     <td>{{$itemopsiupgrade->description}}</td>
                                     <td>
                                         @if ($itemopsiupgrade->hari != null)
-                                            {{$itemopsiupgrade->hari}}
+                                        {{$itemopsiupgrade->hari}}
                                         @else
-                                            -
+                                        -
                                         @endif
                                     </td>
                                     <td>{{$itemopsiupgrade->harga}}</td>
                                     <td>
-                                        <button type="button" class="btn btn-warning btn-sm text-white" id="editopsiupgradecontest" data-id="{{$itemopsiupgrade->id}}"data-toggle="modal" data-target="#OpsiModal">Edit</button>
-                                        <form action="/managementwebsite/opsicontest/delete"
-                                            method="post" class="d-inline">
+                                        <button type="button" class="btn btn-warning btn-sm text-white"
+                                            id="editopsiupgradecontest" data-id="{{$itemopsiupgrade->id}}"
+                                            data-toggle="modal" data-target="#OpsiModal">Edit</button>
+                                        <form action="/managementwebsite/opsicontest/delete" method="post"
+                                            class="d-inline">
                                             @csrf
                                             @method('delete')
                                             <input type="hidden" name="id" value="{{$itemopsiupgrade->id}}">
                                             <input type="hidden" name="pilihaninput" value="opsiupgrade">
                                             <button type="submit"
-                                            class="btn btn-danger btn-sm text-white">Delete</button>
+                                                class="btn btn-danger btn-sm text-white">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -172,16 +177,17 @@
                         <div class="form-group">
                             <label for="icon">Icon</label>
                             <select class="form-control fa" id="iconopsi" name="icon">
-                                <option value="">-- Pilih --</option>
+                                <option value="">-- Choose --</option>
                                 @foreach ($icon as $itemicon)
-                                <option value="{{$itemicon->name}}">&#x{{$itemicon->cheatsheet}}&nbsp;{{$itemicon->name}}</option>
+                                <option value="{{$itemicon->name}}">
+                                    &#x{{$itemicon->cheatsheet}}&nbsp;{{$itemicon->name}}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="pilihaninput">Pilihan Input</label>
+                            <label for="pilihaninput">Choice Input</label>
                             <select class="form-control" id="pilihaninput" name="pilihaninput">
-                                <option value="">-- Pilih --</option>
+                                <option value="">-- Choose --</option>
                                 <option value="1">Opsi Utama</option>
                                 <option value="2">Opsi Upgrade</option>
                             </select>

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Feedback;
+use App\Models\NewsFeed;
 use App\Models\Project;
 use App\Models\ResultContest;
 use App\Models\User;
 use App\Models\WinnerContest;
+use App\Models\Worker;
 use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
@@ -26,19 +28,35 @@ class FeedbackController extends Controller
     public function KirimFeedback(Request $request, ResultContest $resultcontest)
     {
         if (request()->user()->role == 'customer') {
-            Feedback::create([
+            $feedback = Feedback::create([
                 'result_id'         => $resultcontest->id,
                 'worker_id'         => $resultcontest->user_id_worker,
                 'customer_id'       => request()->user()->id,
                 'feedback_customer' => $request->feedback,
             ]);
+
+            NewsFeed::create([
+                'contest_id'    => $resultcontest->contest_id,
+                'user_id_from'  => request()->user()->id,
+                'user_id_to'    => $feedback->worker_id,
+                'feedback'      => $request->feedback,
+                'choices'       => 'feedback',
+            ]);
         } else {
             $project = Project::where('id', $resultcontest->contest_id)->first();
-            Feedback::create([
+            $feedback = Feedback::create([
                 'result_id'         => $resultcontest->id,
                 'worker_id'         => request()->user()->id,
                 'customer_id'       => $project->user_id,
                 'feedback_worker'   => $request->feedback,
+            ]);
+
+            NewsFeed::create([
+                'contest_id'    => $resultcontest->contest_id,
+                'user_id_from'  => request()->user()->id,
+                'user_id_to'    => $feedback->customer_id,
+                'feedback'      => $request->feedback,
+                'choices'       => 'feedback',
             ]);
         }
         return redirect()->back()->with('status','Feedback Berhasil di kirim');
@@ -63,7 +81,26 @@ class FeedbackController extends Controller
                     ->update([
                         'nilai' => $request->nilai
                     ]);
+
+        NewsFeed::create([
+            'contest_id'    => $resultcontest->contest_id,
+            'user_id_from'  => request()->user()->id,
+            'user_id_to'    => $resultcontest->user_id_worker,
+            'filecontest'   => $resultcontest->filecontest,
+            'rating'        => $request->nilai,
+            'choices'       => 'rating',
+        ]);
+
         $nilai = ResultContest::groupBy('contest_id')->sum('nilai');
+
+        $guarded = ResultContest::where('nilai',5)->count('nilai');
+
+        if ($guarded == 3 || $guarded >= 3) {
+            Project::where('id', $resultcontest->contest_id)
+                ->update([
+                    'guarded' => 'active'
+                ]);
+        }
 
         Project::where('id',$resultcontest->contest_id)
                 ->update([
@@ -71,7 +108,7 @@ class FeedbackController extends Controller
                 ]);
         return response()->json([
             'status' => 200,
-            'nilai'  => $nilai,
+            'nilai'  => $guarded,
         ]);
     }
     public function EliminasiPeserta(ResultContest $resultcontest)
@@ -80,17 +117,51 @@ class FeedbackController extends Controller
             ->update([
                 'is_active'     => 'eliminasi',
             ]);
+        NewsFeed::create([
+            'contest_id'    => $resultcontest->contest_id,
+            'user_id_from'  => request()->user()->id,
+            'user_id_to'    => $resultcontest->user_id_worker,
+            'filecontest'   => $resultcontest->filecontest,
+            'choices'       => 'eliminasi',
+        ]);
         return redirect()->back()->with('status', 'Update Contest Success');
     }
     public function StoreWinner(ResultContest $resultcontest)
     {
+        $project = Project::where('id', $resultcontest->contest_id)->first();
+
+        $worker = Worker::where('user_id', $resultcontest->user_id_worker)->first();
+        if ($worker->earning == 0) {
+            $earning = $project->harga;
+        } else {
+            $earning = $project->harga + $worker->earning;
+        }
+
+        NewsFeed::create([
+            'contest_id'    => $resultcontest->contest_id,
+            'user_id_from'  => request()->user()->id,
+            'user_id_to'    => $resultcontest->user_id_worker,
+            'filecontest'   => $resultcontest->filecontest,
+            'choices'       => 'pick winner',
+        ]);
+
         WinnerContest::create([
             'contest_id'        => $resultcontest->contest_id,
             'user_id'           => request()->user()->id,
             'user_id_worker'    => $resultcontest->user_id_worker,
-            'title'             => $resultcontest->title,
+            'title'             => $project->title,
             'filecontest'       => $resultcontest->filecontest,
         ]);
+
+        ResultContest::where('id', $resultcontest->id)
+            ->update([
+                'is_active'     => 'winner',
+            ]);
+
+        Worker::where('user_id', $resultcontest->user_id_worker)
+            ->update([
+                'earning' => $earning,
+            ]);
 
         Project::where('id', $resultcontest->contest_id)
             ->update([

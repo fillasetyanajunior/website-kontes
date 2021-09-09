@@ -43,7 +43,7 @@
             <div id="show_fillters" class="col-12">
                 <div class="d-flex justify-content-start bd-highlight mt-3">
                     <select class="form-control" id="search_by">
-                        <option value="">-- Pilih --</option>
+                        <option value="">-- Pilih Search By --</option>
                         <option value="1">Most Recent</option>
                         <option value="2">Closing Soon</option>
                         <option value="3">Needs Submissions</option>
@@ -51,8 +51,9 @@
                         <option value="5">Design Quality</option>
                     </select>
                     <select class="form-control mx-5" id="search_payment">
-                        <option value="1">Any</option>
-                        <option value="2">Guaranteed Only</option>
+                        <option value="">-- Pilih Search Payment --</option>
+                        <option value="8">Any</option>
+                        <option value="9">Guaranteed Only</option>
                     </select>
                     <div>
                         <button type="button" class="btn btn-secondary" id="reset_fillter">Reset Fillters</button>
@@ -89,11 +90,7 @@
                         @endphp
                         <tr id="browsetable" data-url="{{'/brief' . $role . '/' . $itemproject->id}}">
                             <td width="200px">
-                                @if ($data->thumbnail)
-                                <img src="{{asset('/storage/' . $itemproject->catagories_project  . '/' . $data->thumnail)}}" alt="" >
-                                @else
                                 <img src="{{asset('assets/dashboard/images/defaultopen.jpg')}}" alt="">
-                                @endif
                             </td>
                             <td width="750px">
                                 <div class="d-flex flex-column bd-highlight mt-4">
@@ -101,19 +98,26 @@
                                         <h3>{{$itemproject->title}}</h3>
                                     </div>
                                     <div class="bd-highlight">
-                                        <p class="text-justify">{{$data->description}}</p>
+                                        <p class="text-justify">{{Str::limit($data->description,670)}}</p>
                                     </div>
                                     @if ($itemproject->catagories_project == 'contest')
                                     <div class="bd-highlight">
                                         <p class="text-justify  btn btn-outline-danger">{{$itemproject->catagories}}</p>
                                         <p class="text-justify  btn btn-outline-info">{{$sub->name}}</p>
+                                        @if ($itemproject->guarded == 'active')
+                                            <p class="text-justify btn btn-outline-secondary">Guaranteed Only</p>
+                                        @endif
                                     </div>
                                     @else
                                     <div class="bd-highlight">
-                                        <p class="text-justify btn btn-outline-secondary">{{$itemproject->catagories}}</p>
+                                        <p class="text-justify btn btn-outline-info">{{$itemproject->catagories}}</p>
                                         <p class="text-justify btn btn-outline-primary">{{$job->name}}</p>
+                                        @if ($itemproject->guarded == 'active')
+                                            <p class="text-justify btn btn-outline-secondary">Guaranteed Only</p>
+                                        @endif
                                     </div>
                                     @endif
+
                                 </div>
                             </td>
                             <td>

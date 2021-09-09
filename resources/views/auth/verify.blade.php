@@ -1,14 +1,15 @@
 @extends('layouts.appauth')
+@section('title','Verify Email')
 @section('content')
-<section class="h-100">
-    <div class="container h-100">
-        <div class="row justify-content-md-center align-items-center h-100">
-            <div class="card-wrapper">
-                <div class="brand">
-                    <img src="img/logo.jpg" alt="bootstrap 4 login page">
+<div class="page-single">
+    <div class="container">
+        <div class="row">
+            <div class="col col-login mx-auto">
+                <div class="text-center mb-6">
+                    <img src="{{url('assets/auth/img/logo.jpg')}}" class="h-6" alt="">
                 </div>
-                <div class="card fat">
-                    <div class="card-body">
+                <div class="card">
+                    <div class="card-body p-6">
                         <span class="login100-form-title p-b-70">
                             Verification Your Email Address
                         </span>
@@ -26,11 +27,8 @@
                         @endif
                     </div>
                 </div>
-                <div class="footer">
-                    Copyright &copy; 2017 &mdash; Your Company
-                </div>
             </div>
         </div>
     </div>
-</section>
+</div>
 @endsection
