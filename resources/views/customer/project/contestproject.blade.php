@@ -58,7 +58,7 @@
                             <div class="form-group mt-3">
                                 <div class="row gutters-sm">
                                     @foreach ($catagories as $itemcatagories)
-                                    <div class="col-lg-6 col-sm-4">
+                                    <div class="col-lg-3 col-sm-3">
                                         <label class="imagecheck mb-4">
                                             <input type="radio" value="{{$itemcatagories->id}}"
                                                 class="imagecheck-input" name="catagories" id="catagories"
@@ -68,7 +68,7 @@
                                                 <div class="card-body imagecheck-image">
                                                     <div class="d-flex flex-row bd-highlight">
                                                         <div class="p-2 bd-highlight align-self-center">
-                                                            <i class="{{$itemcatagories->icon}}"></i>
+                                                            <i class="fa {{$itemcatagories->icon}}" style="font-size: 50pt"></i>
                                                         </div>
                                                         <div class="p-2 bd-highlight align-self-center">
                                                             <div class="d-flex flex-column bd-highlight">
@@ -231,7 +231,7 @@
                                         <table class="table card-table table-vcenter">
                                             @foreach ($opsipackageupgrade as $itemopsipackageupgrade)
                                             <tr>
-                                                <td><i class="{{$itemopsipackageupgrade->icon}}"></i></td>
+                                                <td><i class="fa {{$itemopsipackageupgrade->icon}}" style="font-size: 50pt"></i></td>
                                                 <td class="text-justify">
                                                     <div class="d-flex flex-column bd-highlight mb-3">
                                                         <div class="bd-highlight">
@@ -268,7 +268,7 @@
                                                             <label for="coupon">Discount Code</label>
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control"id="coupon">
+                                                            <input type="text" class="form-control"id="coupon" name="coupon">
                                                         </td>
                                                     </tr>
                                                 </tbody>

@@ -5,55 +5,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Certificate</title>
 </head>
 
 <body>
-
-    <div class="container">
-        <img src="{{url('storage/logotext/'. $winnercontest->logotext)}}" alt="" width="550px">
-
-        <div class="card mt-5">
+    <div class="">
+        <table class="table table-borderless mb-5">
+            <tbody>
+                <tr>
+                    <td>
+                        <h6 class="mb-3">Brand Guideliness</h6>
+                        <hr width="99%">
+                    </td>
+                    <td width="100px">
+                        <img src="{{url('storage/logotext/'. $winnercontest->logotext)}}" class="rounded-circle" width="75px" height="75px">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <center>
+            <img src="{{url('storage/logotext/'. $winnercontest->logotext)}}" alt="" width="200px">
+        </center>
+       <div class="card mt-2">
             <div class="card-body">
-                <div class="form-group">
-                     @php
-                        $font = explode(',',$winnercontest->font);
-                    @endphp
-                    @for ($i = 0; $i < count( $font); $i++)
-                    <label for="font">Font Used</label>
-                    <div class="form-control-plaintext">{{$font[$i]}}</div>
-                    @endfor
-                </div>
-                <div class="form-group">
-                    @php
-                        $hexa_color = explode(',',$winnercontest->hexa_color);
-                    @endphp
-                    @for ($i = 0; $i < count( $hexa_color); $i++)
-                    <label for="hexa_color">Hexa Color Used</label>
-                    <div class="form-control-plaintext">{{$hexa_color[$i]}}</div>
-                    @endfor
-                </div>
-                <div class="form-group">
-                    @php
-                        $rgb_color = explode(',',$winnercontest->rgb_color);
-                    @endphp
-                    @for ($i = 0; $i < count( $rgb_color); $i++)
-                    <label for="rgb_color">RGB Color Used</label>
-                    <div class="form-control-plaintext">{{$rgb_color[$i]}}</div>
-                    @endfor
-                </div>
+                <table class="table table-borderless">
+                    <tbody>
+                        @php
+                        $font = DB::table('fonts')->where('contest_id',$winnercontest->contest_id)->get();
+                        @endphp
+                        <tr>
+                            <td>Font Used</td>
+                            @foreach ($font as $itemfont)
+                            <td>
+                                {{$itemfont->name}}
+                            </td>
+                            @endforeach
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th scope="col">Hexa Color Used</th>
+                            <th scope="col">RGB Color Used</th>
+                            <th scope="col">Color</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                        $color = DB::table('colors')->where('contest_id',$winnercontest->contest_id)->get();
+                        $j = 1;
+                        @endphp
+                        @foreach ($color as $itemcolor)
+                        <tr>
+                            <td>{{$itemcolor->hexa}}</td>
+                            <td>{{$itemcolor->rgb}}</td>
+                            <td>
+                                <div style="width:40px;height:40px;background:{{$itemcolor->hexa}};"></div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
+        <table class="table table-borderless mb-5">
+            <tbody>
+                <tr>
+                    <td>
+                        <h6 class="text-white mb-3">...</h6>
+                        <hr width="99%">
+                        <table class="table table-borderless mb-5">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <img src="{{url('storage/logotext/'. $winnercontest->logotext)}}" class="rounded-circle" width="75px" height="75px">
+                                    </td>
+                                <td>
+                                    <p>this brand design guideline is held through www.domainkita.com</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </td>
+                    <td width="100px">
+                        <img src="{{url('storage/logotext/'. $winnercontest->logotext)}}" class="rounded-circle" width="75px" height="75px">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous">
-    </script>
 </body>
 
 </html>

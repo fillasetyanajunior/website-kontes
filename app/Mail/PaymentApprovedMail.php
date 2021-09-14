@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class PaymentApprovedMail extends Mailable
+class PaymentApprovedMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -16,9 +16,11 @@ class PaymentApprovedMail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public $project,$harga;
+    public function __construct($project,$harga)
     {
-        //
+        $this->project = $project;
+        $this->harga = $harga;
     }
 
     /**
@@ -28,6 +30,6 @@ class PaymentApprovedMail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->view('mail.paymentapproved');
     }
 }

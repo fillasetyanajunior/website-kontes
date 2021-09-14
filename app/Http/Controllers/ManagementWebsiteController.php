@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Catagories;
+use App\Models\Code;
 use App\Models\Icon;
 use App\Models\JobCatagories;
 use App\Models\OpsiPackage;
@@ -32,5 +33,10 @@ class ManagementWebsiteController extends Controller
     {
         $data['jobdescription'] = JobCatagories::all();
         return view('admin.managementwebsite.job.job',$data);
+    }
+    public function Code()
+    {
+       $data['code'] = Code::all();
+       return view('admin.managementwebsite.code.code',$data);
     }
 }

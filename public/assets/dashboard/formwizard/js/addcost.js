@@ -72,9 +72,9 @@ $(document).ready(function () {
             success: function (hasil) {
                 $.each(hasil.subcatagories,function (index,sub) {
                     $('#subcata').append('<div class="col-6 col-sm-4"> <label class="imagecheck mb-4" ><input type="radio" value="' + sub.id + '" data-harga="'
-                    + sub.harga + '" class="imagecheck-input" name="subcatagories" id="subcatagories"><figure class="imagecheck-figure" ><div class="card-body imagecheck-image" ><div class="d-flex flex-row bd-highlight" ><div class="p-2 bd-highlight align-self-center" ><i class="'
-                    + sub.icon + '"></i></div> <div class="p-2 bd-highlight align-self-center" ><div class="d-flex flex-column bd-highlight" ><div class="bd-highlight" >' + sub.name + '</div> <div class="bd-highlight" >from $'
-                    + sub.harga + '</div> <div class="bd-highlight" >' + sub.description + '</div> </div> </div> </div> </div> </figure> </label> </div>')
+                    + sub.harga + '" class="imagecheck-input" name="subcatagories" id="subcatagories"><figure class="imagecheck-figure" ><div class="card-body imagecheck-image" ><div class="d-flex flex-row bd-highlight" ><div class="p-2 bd-highlight align-self-center" ><i class="fa '
+                    + sub.icon + '" style="font-size: 50pt"></i></div> <div class="p-2 bd-highlight align-self-center" ><div class="d-flex flex-column bd-highlight" ><div class="bd-highlight" >' + sub.name + '</div> <div class="bd-highlight" >from $'
+                    +sub.harga + '</div> <div class="bd-highlight" ></div></div></div></div><p class="text-justify">' + sub.description + '</p></div> </figure> </label> </div>')
 
                     // $('#subcata input[name="subcatagories"]*').on('change', function () {
                     //     var catagories = $('#subcata input[name="subcatagories"]:checked').data('harga')
@@ -101,8 +101,10 @@ $(document).ready(function () {
             totals = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100));
         }
 
-        var discon = (10 / 100) * totals
-        $('#transaction').html('$ ' + discon)
+        if ($('#coupon').val() == '') {
+            var discon = (15 / 100) * totals
+            $('#transaction').html('$ ' + discon)
+        }
         transaction = $('#transaction').html()
 
         if (projectupgrade == '') {
@@ -144,8 +146,10 @@ $(document).ready(function () {
             totals = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100));
         }
 
-        var discon = (10 / 100) * totals
-        $('#transaction').html('$ ' + discon)
+        if ($('#coupon').val() == '') {
+            var discon = (15 / 100) * totals
+            $('#transaction').html('$ ' + discon)
+        }
         transaction = $('#transaction').html()
 
         total = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100)) + parseFloat(transaction.substring(2, 100));
@@ -165,7 +169,7 @@ $(document).ready(function () {
     });
 
     $('#coupon').keyup(function () {
-        var _url    = '/discountcode'
+        var _url    = '/code/getdata'
         let _token  = $('meta[name="csrf-token"]').attr('content')
         var codes   = $(this).val()
 
@@ -178,8 +182,71 @@ $(document).ready(function () {
             },
             success: function (hasil) {
                 var total   = $('#total').html()
-                var dic = parseFloat(hasil.discon.potongan) + parseFloat(total.substring(2, 100))
-                $('#total').html('$' + dic)
+                var dic = 0
+                if (hasil.discount.choices == '$10') {
+                    selectedpackageprice = $('#selectedpackageprice').html()
+                    projectupgrade = $('#projectupgrade').html()
+                    if (projectupgrade == '') {
+                        var  totals = parseFloat(selectedpackageprice.substring(2, 100));
+                    } else {
+                        var totals = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100));
+                    }
+                    var discon = (15 / 100) * totals
+                    $('#transaction').html('$ ' + discon)
+                    transaction = $('#transaction').html()
+                    if (projectupgrade == '') {
+                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(transaction.substring(2, 100)) - 10;
+                    } else {
+                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100)) + parseFloat(transaction.substring(2, 100)) - 10;
+                    }
+                } else if (hasil.discount.choices == '$20') {
+                    var discon = (15 / 100) * totals
+                    $('#transaction').html('$ ' + discon)
+                    transaction = $('#transaction').html()
+                    selectedpackageprice = $('#selectedpackageprice').html()
+                    projectupgrade = $('#projectupgrade').html()
+                    if (projectupgrade == '') {
+                        var totals = parseFloat(selectedpackageprice.substring(2, 100));
+                    } else {
+                        var totals = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100));
+                    }
+                    var discon = (15 / 100) * totals
+                    $('#transaction').html('$ ' + discon)
+                    transaction = $('#transaction').html()
+                    if (projectupgrade == '') {
+                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(transaction.substring(2, 100)) - 20;
+                    } else {
+                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100)) + parseFloat(transaction.substring(2, 100)) - 20;
+                    }
+                } else if (hasil.discount.choices == '$50') {
+                    transaction = $('#transaction').html()
+                    selectedpackageprice = $('#selectedpackageprice').html()
+                    projectupgrade = $('#projectupgrade').html()
+                    if (projectupgrade == '') {
+                        var totals = parseFloat(selectedpackageprice.substring(2, 100));
+                    } else {
+                        var totals = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100));
+                    }
+                    var discon = (15 / 100) * totals
+                    $('#transaction').html('$ ' + discon)
+                    transaction = $('#transaction').html()
+                    if (projectupgrade == '') {
+                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(transaction.substring(2, 100)) - 50;
+                    } else {
+                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100)) + parseFloat(transaction.substring(2, 100)) - 50;
+                    }
+                }else {
+                    $('#transaction').html('$ 0')
+                    transaction = $('#transaction').html()
+                    selectedpackageprice = $('#selectedpackageprice').html()
+                    projectupgrade = $('#projectupgrade').html()
+                    if (projectupgrade == '') {
+                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(transaction.substring(2, 100));
+                    } else {
+                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100)) + parseFloat(transaction.substring(2, 100));
+                    }
+                }
+                $('#total').html('$ ' + dic)
             }
         })
     });
@@ -197,10 +264,10 @@ $(document).ready(function () {
 
         $('#total').html('$ ' + total)
 
-        $('#totalcost').html($(this).val())
+        $('input[name="totalcost"]').val(total)
+        $('#totalcost').html('$ ' + total)
         $('#paypal-button-container').empty()
-        var payment = $(this).val()
-        initPayPalButton(payment)
+        initPayPalButton(total)
     })
     $('select[name="job_description"]').on('change',function () {
         // console.log($('select[name="job_description"] option:selected').data('name'))

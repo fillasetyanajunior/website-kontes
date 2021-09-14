@@ -166,14 +166,14 @@ $(document).ready(function () {
                 $('#profileworker').css('background-image', 'url(' + _urlasset + '/profile/' + hasil.user.avatar + ')')
                 $('#name_worker').html(hasil.user.name)
                 $('#description').html(hasil.resultcontest.title)
-                $('#btneliminasicontest').click(function () {
+                $('#btneliminasicontest*').click(function () {
                    $('#ActionModalLabel').html('Eliminasi')
                    $('.footer_contest').html('Eliminasi')
                    $('#captions_contest').html('Are you sure you chose this design as the eliminasi?')
                    $('#gambarAction').attr('src', $(this).data('url') + '/gembok.png')
                     $('.body_contest form').attr('action', '/feedback/eliminasi/' + _id)
                 })
-                $('#btnpickwinnercontest').click(function () {
+                $('#btnpickwinnercontest*').click(function () {
                      $('#ActionModalLabel').html('Pick Winner')
                      $('.footer_contest').html('Pick Winner')
                      $('#gambarAction').attr('src', $(this).data('url') + '/piala.png')
@@ -287,14 +287,14 @@ $(document).ready(function () {
         });
     });
 
-    $('#btneliminasicontests').click(function () {
+    $('#btneliminasicontests*').click(function () {
         $('#ActionModalLabel').html('Eliminasi')
         $('.footer_contest').html('Eliminasi')
         $('#captions_contest').html('Are you sure you chose this design as the eliminasi?')
         $('#gambarAction').attr('src', $(this).data('url') + '/gembok.png')
         $('.body_contest form').attr('action', '/feedback/eliminasi/' + $(this).data('id'))
     })
-    $('#btnpickwinnercontests').click(function () {
+    $('#btnpickwinnercontests*').click(function () {
         $('#ActionModalLabel').html('Pick Winner')
         $('.footer_contest').html('Pick Winner')
         $('#gambarAction').attr('src', $(this).data('url') + '/piala.png')
@@ -336,14 +336,14 @@ $(document).ready(function () {
                 $('#profileworker').css('background-image', 'url(' + _urlasset + '/profile/' + hasil.user.avatar + ')')
                 $('#name_worker').html(hasil.user.name)
                 $('#descriptions').text(hasil.resultproject.description)
-                $('#btneliminasidirect').click(function () {
+                $('#btneliminasidirect*').click(function () {
                     $('#ActionDirectModalLabel').html('Eliminasi')
                     $('.footer_direct').html('Eliminasi')
                     $('#captions_direct').html('Are you sure you chose this design as the eliminasi?')
                     $('#gambarAction').attr('src', $(this).data('url') + '/gembok.png')
                     $('#body_direct form').attr('action', '/feedbackbid/eliminasi/' + _id)
                 })
-                $('#btnpickwinnerdirect').click(function () {
+                $('#btnpickwinnerdirect*').click(function () {
                     $('#ActionDirectModalLabel').html('Pick Winner')
                     $('.footer_direct').html('Pick Winner')
                     $('#gambarAction').attr('src', $(this).data('url') + '/piala.png')
@@ -457,14 +457,14 @@ $(document).ready(function () {
         });
     });
 
-    $('#btneliminasidirects').click(function () {
+    $('#btneliminasidirects*').click(function () {
         $('#ActionDirectModalLabel').html('Eliminasi')
         $('.footer_direct').html('Eliminasi')
         $('#captions_direct').html('Are you sure you chose this design as the eliminasi?')
         $('#gambarAction').attr('src', $(this).data('url') + '/gembok.png')
         $('.body_direct form').attr('action', '/feedback/eliminasi/' + $(this).data('id'))
     })
-    $('#btnpickwinnerdirects').click(function () {
+    $('#btnpickwinnerdirects*').click(function () {
         $('#ActionDirectModalLabel').html('Pick Winner')
         $('.footer_direct').html('Pick Winner')
         $('#gambarAction').attr('src', $(this).data('url') + '/piala.png')
@@ -530,10 +530,11 @@ $(document).ready(function () {
         $('#name').val('')
         $('#harga').attr('disabled', false).val('')
         $("#icon").attr('disabled', false).val('')
+        $("input[name='pilihaninputs']").val('');
         $('#pilihaninput').attr('disabled', false).val('')
     });
     $('#editcatagories*').on('click', function () {
-        $('.footer_catagories button[type=submit]').html('Add');
+        $('.footer_catagories button[type=submit]').html('Edit');
         $('#CatagoriesModalLabel').html('Edit Catagories');
         $('.body_catagories form').attr('action', '/managementwebsite/catagories/update');
         $('.body_catagories form').attr('method', 'post');
@@ -553,18 +554,20 @@ $(document).ready(function () {
             data: {
                 _token: _token,
                 id: _id,
-                pilihaninput: 'catagories'
+                pilihaninputs: 'catagories'
             },
             success: function (hasil) {
                 $('#name').val(hasil.catagories.name)
                 $('#harga').val(hasil.catagories.harga)
                 $("#icon option[value='" + hasil.catagories.icon + "']").attr('selected', true);
+                $("input[name='pilihaninputs']").val('1');
+                $("input[name='id']").val(_id);
                 $('#pilihaninput').attr('disabled', true)
             }
         });
     });
     $('#editsortcatagories*').on('click', function () {
-        $('.footer_catagories button[type=submit]').html('Add');
+        $('.footer_catagories button[type=submit]').html('Edit');
         $('#CatagoriesModalLabel').html('Edit Catagories');
         $('.body_catagories form').attr('action', '/managementwebsite/catagories/update');
         $('.body_catagories form').attr('method', 'post');
@@ -580,13 +583,15 @@ $(document).ready(function () {
             data: {
                 _token: _token,
                 id: _id,
-                pilihaninput: 'sort catagories'
+                pilihaninputs: 'sort catagories'
             },
             success: function (hasil) {
-                $('#pilihaninput').attr('disabled', true).val('')
-                $('#harga').attr('disabled', true).val('')
-                $("#icon").attr('disabled', true).val('')
                 $('#name').val(hasil.catagories.name)
+                $("#icon").attr('disabled', true).val('')
+                $('#harga').attr('disabled', true).val('')
+                $("input[name='id']").val(_id);
+                $("input[name='pilihaninputs']").val('2');
+                $('#pilihaninput').attr('disabled', true).val('')
             }
         });
     });
@@ -605,8 +610,8 @@ $(document).ready(function () {
     });
     $('#editsubcatagories*').on('click', function () {
         var _id = $(this).data('id');
-        $('.footer_sub_catagories button[type=submit]').html('Add');
-        $('#SubCatagoriesModalLabel').html('Add Sub Catagories');
+        $('.footer_sub_catagories button[type=submit]').html('Edit');
+        $('#SubCatagoriesModalLabel').html('Edit Sub Catagories');
         $('.body_sub_catagories form').attr('action', '/managementwebsite/subcatagories/update/' + _id);
         $('.body_sub_catagories form').attr('method', 'post');
 
@@ -701,6 +706,9 @@ $(document).ready(function () {
                 $('#description').val(hasil.opsi.description)
                 $('#harga').val(hasil.opsi.harga)
                 $("#pilihaninput").attr('disabled', true)
+                $("input[name='id']").val(id);
+                $("input[name='pilihaninputs']").val('1')
+                $("#pilihaninput option[value='" + 1 + "']").attr('selected', true);
                 $("#iconopsi option[value='" + hasil.opsi.icon + "']").attr('selected', true);
             }
         });
@@ -733,7 +741,9 @@ $(document).ready(function () {
                 $('#hari').val(hasil.opsi.hari).attr('disabled', false)
                 $("#iconopsi option[value='" + hasil.opsi.icon + "']").attr('selected', true);
                 $("#pilihaninput").attr('disabled', true)
-            }
+                $("input[name='id']").val(id);
+                $("input[name='pilihaninputs']").val('2')
+                }
         });
     });
 
@@ -1024,7 +1034,7 @@ $(document).ready(function () {
         x--; //Decrement field counter
     });
     //RGB Color Used
-    var addButtonrgb = $('.add_button_rgb'); //Add button selector
+    var addButtonrgb = $('.add_button_hexa'); //Add button selector
     var rgb = $('.field_rgb'); //Input field rgb
     var fieldHTMLrgb = '<div class="mb-2 d-flex data"><div class="flex-grow-1 bd-highlight field_rgb"><label for="rgb_color">RGB Color Used</label><input type="text" class="form-control" name="rgb_color[]" id="rgb_color"value=""></div><a href="javascript:void(0);" class="remove_button_rgb" title="Remove field"><i class="fe fe-minus"></i></a></div>'; //New input field html
     var x = 1; //Initial field counter is 1
@@ -1036,7 +1046,7 @@ $(document).ready(function () {
     });
     $(rgb).on('click', '.remove_button_rgb', function (e) { //Once remove button is clicked
         e.preventDefault();
-        $(this).parent('div').remove(); //Remove field html
+        $(this).parent('div').remove();
         x--; //Decrement field counter
     });
 

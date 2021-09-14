@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\UploadFileHandoverMail;
 use App\Models\NewsFeed;
+use App\Models\Project;
 use App\Models\UploadFile;
+use App\Models\User;
 use App\Models\WinnerContest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class UploadFileController extends Controller
 {
@@ -31,6 +35,18 @@ class UploadFileController extends Controller
             'feedback'      => 'Upload File Handover Success By' . $winnercontest->user_id_worker,
             'choices'       => 'Handover',
         ]);
+
+        $user = User::where('id', $winnercontest->user_id)->first();
+
+        $project = Project::where('id',$winnercontest->contest_id)->first();
+
+        Mail::to($user->email)->send(new UploadFileHandoverMail($request->id,$project->title));
+
         return redirect()->back();
+    }
+    public function DeleteFileUpload(UploadFile $uploadfile)
+    {
+        UploadFile::destroy($uploadfile->id);
+        return redirect()->back()->with('status','File Delete Success');
     }
 }

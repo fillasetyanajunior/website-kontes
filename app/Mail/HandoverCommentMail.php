@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class HandoverCommentMail extends Mailable
+class HandoverCommentMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -16,9 +16,11 @@ class HandoverCommentMail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public $feedback, $project;
+    public function __construct($feedback, $project)
     {
-        //
+        $this->feedback = $feedback;
+        $this->project  = $project;
     }
 
     /**
@@ -28,6 +30,6 @@ class HandoverCommentMail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->view('mail.handovercommand');
     }
 }

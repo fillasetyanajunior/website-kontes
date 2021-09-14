@@ -168,6 +168,7 @@ return [
         App\Providers\FortifyServiceProvider::class,
         \Chatify\ChatifyServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+
         // Srmklive\PayPal\Providers\PayPalServiceProvider::class,
         /*
          * Application Service Providers...

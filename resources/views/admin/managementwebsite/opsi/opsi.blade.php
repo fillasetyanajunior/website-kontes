@@ -31,7 +31,6 @@
                                 <tr>
                                     <th class="w-1">No.</th>
                                     <th>Name</th>
-                                    <th>Icon</th>
                                     <th>Harga</th>
                                     <th>Action</th>
                                 </tr>
@@ -44,13 +43,6 @@
                                 <tr>
                                     <td><span class="text-muted">{{$i}}</span></td>
                                     <td>{{$itemopsi->name}}</td>
-                                    <td>
-                                        @if ($itemopsi->icon != null)
-                                        {{$itemopsi->icon}}
-                                        @else
-                                        -
-                                        @endif
-                                    </td>
                                     <td>{{$itemopsi->harga}}</td>
                                     <td>
                                         <button type="button" class="btn btn-warning btn-sm text-white"
@@ -158,6 +150,8 @@
                 <form action="" method="POST">
                     @csrf
                     <div class="modal-body">
+                        <input type="hidden" name="pilihaninputs">
+                        <input type="hidden" name="id">
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" class="form-control" id="name" name="name">

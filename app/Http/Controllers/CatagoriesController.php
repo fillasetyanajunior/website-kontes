@@ -53,7 +53,7 @@ class CatagoriesController extends Controller
     }
     public function EditCatagories(Request $request)
     {
-        if ($request->pilihaninput == 'catagories') {
+        if ($request->pilihaninputs == 'catagories') {
             $catagories = Catagories::where('id',$request->id)->first();
         } else {
             $catagories = SortCatagories::where('id',$request->id)->first();
@@ -65,24 +65,28 @@ class CatagoriesController extends Controller
     }
     public function UpdateCatagories(Request $request)
     {
-        if ($request->pilihaninput == 'catagories') {
+        if ($request->pilihaninputs == 1) {
             if ($request->icon != '') {
-                Catagories::create([
+                Catagories::where('id',$request->id)
+                    ->update([
                     'name' => $request->name,
                     'icon' => $request->icon,
                     'harga' => $request->harga,
                 ]);
             } else {
-                Catagories::create([
+                Catagories::where('id',$request->id)
+                    ->update([
                     'name' => $request->name,
                     'harga' => $request->harga,
                 ]);
             }
-            SortCatagories::create([
+            SortCatagories::where('id',$request->id)
+                ->update([
                 'name' => $request->name
             ]);
         } else {
-            SortCatagories::create([
+            SortCatagories::where('id',$request->id)
+                ->update([
                 'name' => $request->name
             ]);
         }

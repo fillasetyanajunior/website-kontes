@@ -31,7 +31,7 @@
                     <div class="d-flex align-items-center px-2">
                         <div class="avatar avatar-md mr-3" style="background-image: url({{asset('/storage/profile/' . $user->avatar)}})"></div>
                         <div>
-                            <div>{{$user->name}}</div>
+                            <div><a href="/profileworker/{{$data->user_id_worker}}">{{$user->name}}</a></div>
                             <small class="d-block text-muted">{{$itemfavourites->catagories_project}}</small>
                         </div>
                     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\PembayaranProjectMail;
 use App\Models\Catagories;
+use App\Models\Code;
 use App\Models\DetailContest;
 use App\Models\DetailProject;
 use App\Models\JobCatagories;
@@ -24,10 +25,6 @@ class ProjectController extends Controller
         return response()->json([
             'subcatagories' => $subcata,
         ]);
-    }
-    public function GetCodeDiscount(Request $request)
-    {
-        # code...
     }
     public function IndexContestProject()
     {
@@ -55,6 +52,10 @@ class ProjectController extends Controller
             $waktu          = 6 + $opsiupgrade->hari;
         }else {
             $waktu          = 6;
+        }
+
+        if ($request->coupon != null) {
+            $opsiupgrade    = Code::where('code',$request->coupon)->delete();
         }
 
         $no = Project::orderBy('id_project', 'DESC')->first();

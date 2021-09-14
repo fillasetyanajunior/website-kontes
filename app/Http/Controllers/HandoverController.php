@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PaymentApprovedMail;
+use App\Mail\ProjectDoneMail;
+use App\Models\Color;
+use App\Models\Font;
 use App\Models\MessageHandover;
 use App\Models\NewsFeed;
 use App\Models\Project;
@@ -11,6 +15,7 @@ use App\Models\ResultProject;
 use App\Models\User;
 use App\Models\WinnerContest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class HandoverController extends Controller
 {
@@ -35,13 +40,17 @@ class HandoverController extends Controller
             $idworker = ResultProject::where('contest_id',$project->id)->first();
         }
 
-        $user = User::where('id',$project->user_id)->first();
+        $user   = User::where('id',$project->user_id)->first();
+        $worker = User::where('id', $idworker->user_id_worker)->first();
 
         Rating::create([
             'contest_id'        => $project->id,
             'user_id'           => $project->user_id,
             'user_id_worker'    => $idworker->user_id_worker,
         ]);
+
+        Mail::to($user->email)->send(new ProjectDoneMail());
+        Mail::to($worker->email)->send(new PaymentApprovedMail($project->name,$project->harga));
 
         Project::where('id',$project->id)
                 ->update([
@@ -96,46 +105,24 @@ class HandoverController extends Controller
     public function UpdateFontColor(WinnerContest $winnercontest,Request $request)
     {
         //Font
-        $countfont = $request->font;
-        $font = null;
-        for ($i=0; $i < count($countfont); $i++) {
-            if ($font == null) {
-                $font = $countfont[$i]  ;
-            } else {
-                $font = $font . ',' . $countfont[$i]  ;
-            }
-
+        $font = $request->font;
+        for ($i = 0; $i < count($font); $i++) {
+            Font::create([
+                'contest_id'    => $winnercontest->contest_id,
+                'name'          => $font[$i],
+            ]);
         }
 
-        //Hexa
-        $counthexa_color = $request->hexa_color;
-        $hexa_color = null;
-        for ($i=0; $i < count($counthexa_color); $i++) {
-            if ($hexa_color == null) {
-                $hexa_color = $counthexa_color[$i]  ;
-            } else {
-                $hexa_color = $hexa_color . ',' . $counthexa_color[$i]  ;
-            }
-
+        //Color
+        $hexa = $request->hexa_color;
+        $rgb = $request->rgb_color;
+        for ($i = 0; $i < count($hexa); $i++) {
+            Color::create([
+                'contest_id'    => $winnercontest->contest_id,
+                'hexa'          => $hexa[$i],
+                'rgb'           => $rgb[$i],
+            ]);
         }
-
-        //RGB
-        $countrgb_color = $request->rgb_color;
-        $rgb_color = null;
-        for ($i=0; $i < count($countrgb_color); $i++) {
-            if ($rgb_color == null) {
-                $rgb_color = $countrgb_color[$i]  ;
-            } else {
-                $rgb_color = $rgb_color . ',' . $countrgb_color[$i]  ;
-            }
-
-        }
-        WinnerContest::where('id',$winnercontest->id)
-                    ->update([
-                        'hexa_color'    => $hexa_color,
-                        'rgb_color'     => $rgb_color,
-                        'font'          => $font,
-                    ]);
 
         NewsFeed::create([
             'contest_id'    => $winnercontest->contest_id,
@@ -145,5 +132,15 @@ class HandoverController extends Controller
             'choices'       => 'handover',
         ]);
         return redirect()->back()->with('status','Color & Font Berhasil di Tambah');
+    }
+    public function DeleteColor(Color $color)
+    {
+        Color::destroy($color->id);
+        return redirect()->back()->with('status','Delete Color Berhasil di Delete');
+    }
+    public function DeleteFont(Font $font)
+    {
+        Font::destroy($font->id);
+        return redirect()->back()->with('status','Delete Font Berhasil di Delete');
     }
 }

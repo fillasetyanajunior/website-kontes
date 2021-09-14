@@ -198,6 +198,8 @@
                 <form action="" method="POST">
                     @csrf
                     <div class="modal-body">
+                        <input type="hidden" name="pilihaninputs">
+                        <input type="hidden" name="id">
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" class="form-control" id="name" name="name">

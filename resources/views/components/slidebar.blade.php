@@ -110,6 +110,7 @@
                             <a href="{{route('catagories')}}" class="dropdown-item ">Catagories</a>
                             <a href="{{route('opsipackage')}}" class="dropdown-item ">Opsi Paket Contest</a>
                             <a href="{{route('jobcatagories')}}" class="dropdown-item ">Job Description</a>
+                            <a href="{{route('code')}}" class="dropdown-item ">Code Discount</a>
                         </div>
                     </li>
                 </ul>

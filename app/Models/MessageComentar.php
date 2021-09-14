@@ -9,10 +9,8 @@ class MessageComentar extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'customer_id',
-        'worker_id',
+        'user_id',
         'result_id',
-        'feedback_customer',
-        'feedback_worker',
+        'feedback',
     ];
 }

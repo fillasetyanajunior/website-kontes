@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountingController;
 use App\Http\Controllers\BriefProjectController;
 use App\Http\Controllers\BrowseProjectController;
 use App\Http\Controllers\CatagoriesController;
+use App\Http\Controllers\CodeController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FeedbackBidController;
 use App\Http\Controllers\FeedbackController;
@@ -83,6 +84,8 @@ Route::middleware('verified')->group(function () {
     Route::post('/comentar', [MessageComentarController::class, 'MessageComentar'])->name('comentar');
     //Report Result Project
     Route::post('/report', [ReportController::class,'ReportCreate'])->name('reportcreate');
+    //Profile Worker Public
+    Route::get('/profileworker/{id}', [WorkerController::class, 'ProfileWorkerPublic']);
 
     Route::middleware('admin')->group(function () {
         //Admin
@@ -103,6 +106,7 @@ Route::middleware('verified')->group(function () {
         Route::get('/managementwebsite/catagories', [ManagementWebsiteController::class,'Catagories'])->name('catagories');
         Route::get('/managementwebsite/opsipackage', [ManagementWebsiteController::class,'OpsiPackage'])->name('opsipackage');
         Route::get('/managementwebsite/jobcatagories', [ManagementWebsiteController::class,'JobCatagories'])->name('jobcatagories');
+        Route::get('/managementwebsite/code', [ManagementWebsiteController::class,'Code'])->name('code');
         //Catagories
         Route::post('/managementwebsite/catagories/create', [CatagoriesController::class,'StoreCatagories']);
         Route::post('/managementwebsite/catagories/edit', [CatagoriesController::class,'EditCatagories']);
@@ -137,6 +141,8 @@ Route::middleware('verified')->group(function () {
         Route::get('/acconting/data/income/{pilihanincome}', [AccountingController::class, 'GetData']);
         Route::get('/acconting/data/worker/{pilihanworker}', [AccountingController::class, 'GetData']);
         Route::get('/acconting/data/customer/{pilihancustomer}', [AccountingController::class, 'GetData']);
+        //Code Create
+        Route::post('/code', [CodeController::class,'StoreCode'])->name('codeStore');
     });
 
     Route::middleware('admincustomer')->group(function () {
@@ -149,7 +155,7 @@ Route::middleware('verified')->group(function () {
         //Get Data
         Route::post('/getcubcatagories/{catagories}',[ProjectController::class,'GetCatagories']);
         //Get Discount Code
-        Route::post('/discountcode', [ProjectController::class,'GetCodeDiscount']);
+        Route::post('/code/getdata', [CodeController::class, 'GetDataCode']);
     });
 
     Route::middleware('customer')->group(function () {
@@ -199,8 +205,11 @@ Route::middleware('verified')->group(function () {
         Route::post('/fileupload/store', [UploadFileController::class,'Uploadfile']);
         Route::post('/fileupload/store/logotext/{winnercontest}', [HandoverController::class,'UploadLogoText']);
         Route::post('/fileupload/store/logo/{winnercontest}', [HandoverController::class,'UploadLogo']);
+        Route::delete('/deletefileupload/{uploadfile}', [UploadFileController::class,'DeleteFileUpload']);
         //Update Font & Color
         Route::post('/updatefiles/{winnercontest}', [HandoverController::class,'UpdateFontColor']);
+        Route::delete('/updatefiles/delete/color/{color}', [HandoverController::class,'DeleteColor']);
+        Route::delete('/updatefiles/delete/font/{font}', [HandoverController::class,'DeleteFont']);
         //Profile
         Route::get('/worker/profile', [WorkerController::class,'profileWorker'])->name('profileWorker');
         Route::put('/worker/profile/showportfolio/{id}', [WorkerController::class,'showPortFolio']);

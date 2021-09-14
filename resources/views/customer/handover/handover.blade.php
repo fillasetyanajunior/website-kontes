@@ -11,11 +11,11 @@
         @if (request()->user()->role == 'customer' && $project->is_active == 'handover')
         <div class="card">
             <div class="card-body">
-                <div class="d-flex bd-highlight">
-                    <div class="flex-grow-1 bd-highlight">
+                <div class="d-flex ">
+                    <div class="flex-grow-1 ">
                         <div class="alert alert-success">Make sure you have download all files</div>
                     </div>
-                    <div class="bd-highlight ml-5">
+                    <div class=" ml-5">
                         <form action="/handoverproject/confirm/{{$project->id}}" method="post">
                             @csrf
                             @method('put')
@@ -29,20 +29,20 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="card-body mb-4">
-                    <div class="d-flex bd-highlight">
-                        <div class="bd-highlight align-self-center">
+                    <div class="d-flex ">
+                        <div class=" align-self-center">
                             <h4 class="text-capitalize ">transfer copyright - <span style="color: grey">signed</span>
                             </h4>
                         </div>
-                        <div class="ml-auto bd-highlight">
+                        <div class="ml-auto ">
                             <a href="" class="btn btn-primary">Download Contract</a>
                         </div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <div class="d-flex bd-highlight">
-                            <div class="mr-auto bd-highlight">
+                        <div class="d-flex ">
+                            <div class="mr-auto ">
                                 <h4 class="text-capitalize">uploade files</h4>
                             </div>
                             @php
@@ -62,13 +62,13 @@
                                 $lower3         = Str::lower($strend1);
                             @endphp
                             @if ($lower1 == 'logo' || $capitalize1 == 'Logo' || $lower2 == 'logo' || $capitalize2 == 'Logo' ||$lower3 == 'logo' || $capitalize3 == 'Logo')
-                            <div class="bd-highlight">
+                            <div class="">
                                 <a href="/convertpdf/{{$handover->id}}" class="btn btn-primary">Download Certificate</a>
                             </div>
                             @else
 
                             @endif
-                            <div class="bd-highlight ml-3">
+                            <div class=" ml-3">
                                 <a href="{{'/convertzip/' . $handover->id}}" class="btn btn-primary">Download All
                                     Files</a>
                             </div>
@@ -83,6 +83,15 @@
                             <td width="60px"><i class="fa fa-file" style="font-size: 20pt"></i></td>
                             <td width="">{{$itemfileupload->name}}</td>
                             <td class="text-right">{{number_format($itemfileupload->kapasitas)}} KB</td>
+                            @if (request()->user()->role == 'worker' && request()->user()->id == $handover->user_id_worker)
+                            <td class="text-right" width="50px">
+                                <form action="/deletefileupload/{{$itemfileupload->id}}" method="post">
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit" class="btn btn-sm" style="background-color: Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;"><i class="fa fa-times-circle"></i></button>
+                                </form>
+                            </td>
+                            @endif
                         </tr>
                         @endforeach
                     </table>
@@ -95,56 +104,100 @@
                         <form method="post" action="/updatefiles/{{$handover->id}}">
                             @csrf
                             <div class="form-group field_font">
-                                <div class="d-flex bd-highlight">
-                                    <div class="flex-grow-1 bd-highlight ">
+                                <div class="d-flex ">
+                                    <div class="flex-grow-1  ">
                                         @php
-                                            $font = explode(',',$handover->font);
+                                            $font = DB::table('fonts')->where('contest_id',$handover->contest_id)->get();
                                         @endphp
-                                        @for ($i = 0; $i < count( $font); $i++)
-
+                                        @foreach ($font as $itemfont)
+                                        @if ($itemfont->name == null)
                                         <label for="font">Font Used</label>
                                         <input type="text" class="form-control mb-3" name="font[]" id="font"
-                                            value="{{$font[$i]}}">
-                                        @endfor
+                                            value="">
+                                        @else
+                                        <div class="d-flex">
+                                            <div class="flex-grow-1">
+                                                <label for="font">Font Used</label>
+                                                <input type="text" class="form-control mb-3" name="font[]" id="font"
+                                                    value="{{$itemfont->name}}">
+                                            </div>
+                                            <div class="align-self-center mt-3">
+                                                <form action="/updatefiles/delete/font/{{$itemfont->id}}" method="post">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit" class="btn btn-sm" style="background-color: Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;"><i class="fa fa-times-circle"></i></button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        @endif
+                                        @endforeach
                                     </div>
-                                    <div class="bd-highlight">
+                                    <div class="">
                                         <a href="javascript:void(0);" class="add_button_font" title="Add field"><i class="fe fe-plus"></i></a>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group field_hexa">
-                                <div class="d-flex bd-highlight">
-                                    <div class="flex-grow-1 bd-highlight ">
+                                <div class="d-flex ">
+                                    <div class="flex-grow-1  ">
                                         @php
-                                            $hexa_color = explode(',',$handover->hexa_color);
+                                            $hexa = DB::table('colors')->where('contest_id',$handover->contest_id)->get();
                                         @endphp
-                                        @for ($i = 0; $i < count( $hexa_color); $i++)
-
+                                        @foreach ($hexa as $itemhexa)
+                                        @if ($itemhexa->hexa == null)
                                         <label for="hexa_color">Hexa Color Used</label>
                                         <input type="text" class="form-control mb-3" name="hexa_color[]" id="hexa_color"
-                                            value="{{$hexa_color[$i]}}">
-                                        @endfor
+                                            value="">
+                                        @else
+                                        <div class="d-flex">
+                                            <div class="flex-grow-1">
+                                                <label for="hexa_color">Hexa Color Used</label>
+                                                <input type="text" class="form-control mb-3" name="hexa_color[]" id="hexa_color"
+                                                    value="{{$itemhexa->hexa}}">
+                                            </div>
+                                            <div class="align-self-center mt-3">
+                                                <form action="/updatefiles/delete/color/{{$itemhexa->id}}" method="post">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit" class="btn btn-sm" style="background-color: Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;"><i class="fa fa-times-circle"></i></button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        @endif
+                                        @endforeach
                                     </div>
-                                    <div class="bd-highlight">
+                                    <div class="">
                                         <a href="javascript:void(0);" class="add_button_hexa" title="Add field"><i class="fe fe-plus"></i></a>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group field_rgb">
-                                <div class="d-flex bd-highlight">
-                                    <div class="flex-grow-1 bd-highlight ">
+                                <div class="d-flex ">
+                                    <div class="flex-grow-1">
                                         @php
-                                            $rgb_color = explode(',',$handover->rgb_color);
+                                            $rgb = DB::table('colors')->where('contest_id',$handover->contest_id)->get();
                                         @endphp
-                                        @for ($i = 0; $i < count( $rgb_color); $i++)
-
+                                        @foreach ($rgb as $itemrgb)
+                                        @if ($itemrgb->rgb == null)
                                         <label for="rgb_color">RGB Color Used</label>
                                         <input type="text" class="form-control mb-3" name="rgb_color[]" id="rgb_color"
-                                            value="{{$rgb_color[$i]}}">
-                                        @endfor
+                                            value="">
+                                        @else
+                                         <div class="d-flex">
+                                            <div class="flex-grow-1">
+                                                <label for="rgb_color">RGB Color Used</label>
+                                                <input type="text" class="form-control mb-3" name="rgb_color[]" id="rgb_color"
+                                            value="{{$itemrgb->rgb}}">
+                                            </div>
+                                            <div class="align-self-center mt-3 ">
+                                                <button type="button" class="btn btn-sm text-white" disabled style="background-color: Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;"><i class="fa fa-times-circle"></i></button>
+                                            </div>
+                                        </div>
+                                        @endif
+                                        @endforeach
                                     </div>
-                                    <div class="bd-highlight">
-                                        <a href="javascript:void(0);" class="add_button_rgb" title="Add field"><i class="fe fe-plus"></i></a>
+                                    <div>
+                                        <a href="javascript:void(0);" class="remove_button_rgb text-white" title="Remove field"><i class="fe fe-minus"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -167,15 +220,30 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="font">Font Used</label>
-                            <div class="form-control-plaintext">{{$handover->font}}</div>
+                            @php
+                                $font = DB::table('fonts')->where('contest_id',$handover->contest_id)->get();
+                            @endphp
+                            @foreach ($font as $itemfont)
+                            <div class="form-control-plaintext">{{$itemfont->name}}</div>
+                            @endforeach
                         </div>
                         <div class="form-group">
                             <label for="hexa_color">Hexa Color Used</label>
-                            <div class="form-control-plaintext">{{$handover->hexa_color}}</div>
+                            @php
+                                $hexa = DB::table('colors')->where('contest_id',$handover->contest_id)->get();
+                            @endphp
+                            @foreach ($hexa as $itemhexa)
+                            <div class="form-control-plaintext">{{$itemhexa->hexa}}</div>
+                            @endforeach
                         </div>
                         <div class="form-group">
                             <label for="rgb_color">RGB Color Used</label>
-                            <div class="form-control-plaintext">{{$handover->rgb_color}}</div>
+                            @php
+                                $rgb = DB::table('colors')->where('contest_id',$handover->contest_id)->get();
+                            @endphp
+                            @foreach ($rgb as $itemrgb)
+                            <div class="form-control-plaintext">{{$itemrgb->rgb}}</div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -231,11 +299,11 @@
                         <div class="col-md-6 col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="d-flex bd-highlight">
-                                        <div class="flex-fill bd-highlight">
+                                    <div class="d-flex ">
+                                        <div class="flex-fill ">
                                             <h5>Upload Logo + Text</h5>
                                         </div>
-                                        <div class="flex-fill bd-highlight">
+                                        <div class="flex-fill ">
                                             <a href="javascript:void(0)" data-toggle="modal" data-target="#UploadFilesLogo"
                                                 id="uploadfilelogotext" data-id="{{$handover->id}}"
                                                 class="btn btn-primary btn-sm">Upload Files</a>
@@ -268,11 +336,11 @@
                         <div class="col-md-6 col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="d-flex bd-highlight">
-                                        <div class="p-2 flex-fill bd-highlight">
+                                    <div class="d-flex ">
+                                        <div class="p-2 flex-fill ">
                                             <h5>Upload Logo</h5>
                                         </div>
-                                        <div class="p-2 flex-fill bd-highlight">
+                                        <div class="p-2 flex-fill ">
                                             <a href="javascript:void(0)" data-toggle="modal" data-target="#UploadFilesLogo"
                                                 id="uploadfilelogo" data-id="{{$handover->id}}"
                                                 class="btn btn-primary btn-sm">Upload Files</a>
@@ -305,7 +373,7 @@
                 </div>
             </div>
         </div>
-        <div class="card">
+        <div class="card ">
             <div class="card-header">
                 <h3 class="card-title">Message</h3>
             </div>
@@ -336,14 +404,7 @@
                     <div class="card-body">
                         <input type="hidden" name="id" value="{{$project->id}}">
                         @if (request()->user()->role == 'customer')
-                        @php
-                            if($project->catagories_project == 'contest'){
-                                $user = DB::table('result_contests')->where('contest_id',$project->id)->first();
-                            }else{
-                                $user = DB::table('result_projects')->where('contest_id',$project->id)->first();
-                            }
-                        @endphp
-                        <input type="hidden" name="user_id_worker" value="{{$user->user_id_worker}}">
+                        <input type="hidden" name="user_id_worker" value="{{$handover->user_id_worker}}">
                         @else
                         <input type="hidden" name="user_id" value="{{$project->user_id}}">
                         @endif

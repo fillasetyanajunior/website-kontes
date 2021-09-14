@@ -11,7 +11,7 @@
                         $desainers  = DB::table('result_contests')->where('contest_id',$project->id)->distinct()->count('user_id_worker');
                         $desains    = DB::table('result_contests')->where('contest_id',$project->id)->count();
                         $file       = DB::table('upload_file_projects')->where('contest_id',$project->id)->get();
-                        $fee        = ((10/100) * $project->harga);
+                        $fee        = ((15/100) * $project->harga);
                         $harga      = $project->harga - $fee - 40;
                     @endphp
                     <div class="">

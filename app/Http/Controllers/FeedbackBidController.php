@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EliminasiMail;
+use App\Mail\FeedbackMail;
+use App\Mail\WinnerChooseMail;
 use App\Models\FeedbackBid;
 use App\Models\NewsFeed;
 use App\Models\Project;
@@ -10,6 +13,7 @@ use App\Models\User;
 use App\Models\WinnerContest;
 use App\Models\Worker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class FeedbackBidController extends Controller
 {
@@ -27,6 +31,7 @@ class FeedbackBidController extends Controller
     }
     public function KirimFeedback(Request $request, ResultProject $resultproject)
     {
+        $project = Project::where('id', $resultproject->contest_id)->first();
         if (request()->user()->role == 'customer') {
             $feedbackbis = FeedbackBid::create([
                 'result_id'         => $resultproject->id,
@@ -42,8 +47,11 @@ class FeedbackBidController extends Controller
                 'feedback'      => $request->feedback,
                 'choices'       => 'feedback',
             ]);
+
+            $worker = User::where('id',$feedbackbis->worker_id)->first();
+            Mail::to($worker->email)->send(new FeedbackMail($request->feedback,$project->title));
+
         } else {
-            $project = Project::where('id',$resultproject->contest_id)->first();
             $feedbackbis = FeedbackBid::create([
                 'result_id'         => $resultproject->id,
                 'worker_id'         => request()->user()->id,
@@ -58,6 +66,9 @@ class FeedbackBidController extends Controller
                 'feedback'      => $request->feedback,
                 'choices'       => 'feedback',
             ]);
+
+            $customer = User::where('id', $feedbackbis->customer_id)->first();
+            Mail::to($customer->email)->send(new FeedbackMail($request->feedback, $project->title));
         }
 
         return redirect()->back()->with('status', 'Feedback Bid Berhasil di kirim');
@@ -121,6 +132,12 @@ class FeedbackBidController extends Controller
             ->update([
                 'is_active'     => 'eliminasi',
             ]);
+
+        $worker = User::where('id', $resultproject->user_id_worker)->first();
+
+        Mail::to($worker->email)->send(new EliminasiMail($resultproject->contest_id, $worker->role));
+        Mail::to(request()->user()->email)->send(new EliminasiMail($resultproject->contest_id, request()->user()->role));
+
         NewsFeed::create([
             'contest_id'    => $resultproject->contest_id,
             'user_id_from'  => request()->user()->id,
@@ -169,6 +186,9 @@ class FeedbackBidController extends Controller
             ->update([
                 'is_active' => 'handover',
             ]);
+
+        Mail::to($worker->email)->send(new WinnerChooseMail($resultproject->contest_id, $worker->role));
+        Mail::to(request()->user()->email)->send(new WinnerChooseMail($resultproject->contest_id, request()->user()->role));
 
         return redirect()->back()->with('status', 'Choose Winner Berhasil');
     }

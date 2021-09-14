@@ -2,12 +2,13 @@
 
 namespace App\Mail;
 
+use App\Models\UploadFile;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class UploadFileHandoverMail extends Mailable
+class UploadFileHandoverMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -16,9 +17,11 @@ class UploadFileHandoverMail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public $uploadfile,$project;
+    public function __construct($id_project,$project)
     {
-        //
+        $this->project = $project;
+        $this->uploadfile = UploadFile::where('contest_id_winner',$id_project)->get();
     }
 
     /**
@@ -28,6 +31,6 @@ class UploadFileHandoverMail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->view('mail.uploadfile');
     }
 }

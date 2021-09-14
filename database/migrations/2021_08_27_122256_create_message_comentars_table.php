@@ -15,10 +15,8 @@ class CreateMessageComentarsTable extends Migration
     {
         Schema::create('message_comentars', function (Blueprint $table) {
             $table->integer('result_id')->nullable();
-            $table->integer('customer_id')->nullable();
-            $table->integer('worker_id')->nullable();
-            $table->text('feedback_customer')->nullable();
-            $table->text('feedback_worker')->nullable();
+            $table->integer('user_id')->nullable();
+            $table->text('feedback')->nullable();
             $table->timestamps();
         });
     }

@@ -36,6 +36,13 @@
     <script src="https://www.paypal.com/sdk/js?client-id={{env('PAYPAL_SANDBOX_CLIENT_ID')}}"></script>
     <!-- Include jQuery Validator plugin -->
     <script src="{{url('assets/dashboard/formwizard/js/addcost.js')}}"></script>
+    <style>
+        div.image span{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+    </style>
     {{-- <script type="text/javascript">
         $(document).ready(function () {
 

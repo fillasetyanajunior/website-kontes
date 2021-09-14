@@ -57,7 +57,7 @@ class OpsiContestController extends Controller
     }
     public function UpdateOpsi(Request $request)
     {
-        if ($request->pilihaninput == 1) {
+        if ($request->pilihaninputs == 1) {
             OpsiPackage::where('id',$request->id)
                         ->update([
                 'name'          => $request->name,
@@ -65,14 +65,24 @@ class OpsiContestController extends Controller
                 'harga'         => $request->harga,
             ]);
         } else {
-            OpsiPackageUpgrade::where('id', $request->id)
-                            ->update([
-                'name'          => $request->name,
-                'icon'          => $request->icon,
-                'description'   => $request->description,
-                'hari'          => $request->hari,
-                'harga'         => $request->harga,
-            ]);
+            if ($request->icon != null) {
+                OpsiPackageUpgrade::where('id', $request->id)
+                                ->update([
+                    'name'          => $request->name,
+                    'icon'          => $request->icon,
+                    'description'   => $request->description,
+                    'hari'          => $request->hari,
+                    'harga'         => $request->harga,
+                ]);
+            }else{
+                OpsiPackageUpgrade::where('id', $request->id)
+                                ->update([
+                    'name'          => $request->name,
+                    'description'   => $request->description,
+                    'hari'          => $request->hari,
+                    'harga'         => $request->harga,
+                ]);
+            }
         }
         return redirect()->back()->with('status', 'Opsi Berhasil Di Update');
     }

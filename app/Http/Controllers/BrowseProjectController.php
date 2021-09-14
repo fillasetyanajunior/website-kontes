@@ -27,7 +27,7 @@ class BrowseProjectController extends Controller
             }elseif ($request->id == 7) {
                 $data['project']    = Project::where('is_active', 'close')->paginate(20);
             }else{
-                $data['project']    = Project::where('guarded', 'avtive')->paginate(20);
+                $data['project']    = Project::where('guarded', 'active')->paginate(20);
             }
         } else {
             $data['project']        = Project::where('is_active', 'running')->paginate(20);

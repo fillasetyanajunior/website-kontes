@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ReportMail extends Mailable
+class ReportMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 

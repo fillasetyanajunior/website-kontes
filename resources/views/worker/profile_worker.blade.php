@@ -3,6 +3,15 @@
 <x-slidebar></x-slidebar>
 <div class="my-3 my-md-5">
     <div class="container">
+        @if ($worker->status_account == 'suspend' || $worker->status_account == 'unverified')
+        <div class="card">
+            <div class="card-body">
+                <h4>Sorry! This designer is not yet verified!</h4>
+                <p>This designer account is awaiting verification. Designs will be visible once the account is verified.</p>
+                <a href="/home" class="btn btn-gray text-uppercase">go back to designer directory</a>
+            </div>
+        </div>
+        @else
         <div class="mt-5">
             <div class="card card-profile">
                 <div class="card-header"
@@ -188,6 +197,7 @@
             @endforeach
             @endforeach
         </div>
+        @endif
     </div>
 </div>
 @endsection
