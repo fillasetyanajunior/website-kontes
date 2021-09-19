@@ -164,7 +164,7 @@ class FeedbackController extends Controller
 
         WinnerContest::create([
             'contest_id'        => $resultcontest->contest_id,
-            'user_id'           => request()->user()->id,
+            'user_id'           => $project->user_id,
             'user_id_worker'    => $resultcontest->user_id_worker,
             'title'             => $project->title,
             'filecontest'       => $resultcontest->filecontest,

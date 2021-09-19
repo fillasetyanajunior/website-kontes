@@ -47,13 +47,6 @@ class ProjectController extends Controller
 
         $catagories     = Catagories::where('id', $request->catagories)->first();
 
-        if ($request->addprojectupgrades != null) {
-            $opsiupgrade    = OpsiPackageUpgrade::where('id',$request->addprojectupgrades) ->first();
-            $waktu          = 6 + $opsiupgrade->hari;
-        }else {
-            $waktu          = 6;
-        }
-
         if ($request->coupon != null) {
             $opsiupgrade    = Code::where('code',$request->coupon)->delete();
         }
@@ -73,6 +66,37 @@ class ProjectController extends Controller
             } else {
                 $idproject = 'PRJT' . $tambah;
             }
+        }
+
+        $requpgrade = $request->addprojectupgrades;
+        $addprojectupgrades = null;
+        $waktu = null;
+        if ($requpgrade != null) {
+            for ($i = 0; $i < count($requpgrade); $i++) {
+                if ($addprojectupgrades == null) {
+                    $addprojectupgrades =  $requpgrade[$i];
+                } else {
+                    $addprojectupgrades =  $addprojectupgrades . '/' . $requpgrade[$i];
+                }
+                $opsiupgrade    = OpsiPackageUpgrade::where('id', $requpgrade[$i])->first();
+                if ($waktu == null) {
+                    $waktu          = 6 + ($opsiupgrade->hari);
+                } else {
+                    $waktu          = $waktu + ($opsiupgrade->hari);
+                }
+                if ($opsiupgrade->name == 'Non Disclosure Agreement (NDA)') {
+                    $request->validate([
+                        'fileperjanjian' => 'required',
+                    ]);
+                }
+                if ($opsiupgrade->name == 'Urgent') {
+                    $request->validate([
+                        'dayUrgent' => 'required',
+                    ]);
+                }
+            }
+        } else {
+            $waktu  = 6;
         }
 
         $id =   Project::create([
@@ -100,6 +124,7 @@ class ProjectController extends Controller
                 ]);
             }
         }
+
         DetailContest::create([
             'project_id'        => $id->id,
             'title'             => $request->title,
@@ -108,7 +133,7 @@ class ProjectController extends Controller
             'catagories'        => $request->catagories,
             'subcatagories'     => $request->subcatagories,
             'package'           => $request->addpackage,
-            'packageupgrade'    => $request->addprojectupgrades,
+            'packageupgrade'    => $addprojectupgrades,
             'harga'             => $request->totalcost,
         ]);
         ProjectPayment::create([

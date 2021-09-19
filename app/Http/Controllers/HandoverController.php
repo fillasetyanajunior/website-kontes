@@ -15,6 +15,7 @@ use App\Models\ResultProject;
 use App\Models\User;
 use App\Models\WinnerContest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 
 class HandoverController extends Controller
@@ -104,24 +105,31 @@ class HandoverController extends Controller
     }
     public function UpdateFontColor(WinnerContest $winnercontest,Request $request)
     {
+        // dd($request);
         //Font
+        Font::where('contest_id',$winnercontest->contest_id)->delete();
         $font = $request->font;
-        for ($i = 0; $i < count($font); $i++) {
-            Font::create([
-                'contest_id'    => $winnercontest->contest_id,
-                'name'          => $font[$i],
-            ]);
+        if ($font != null) {
+            for ($i = 0; $i < 4; $i++) {
+                Font::create([
+                    'contest_id'    => $winnercontest->contest_id,
+                    'name'          => $font[$i],
+                ]);
+            }
         }
 
         //Color
         $hexa = $request->hexa_color;
         $rgb = $request->rgb_color;
-        for ($i = 0; $i < count($hexa); $i++) {
-            Color::create([
-                'contest_id'    => $winnercontest->contest_id,
-                'hexa'          => $hexa[$i],
-                'rgb'           => $rgb[$i],
-            ]);
+        Color::where('contest_id',$winnercontest->contest_id)->delete();
+        for ($i = 0; $i < 4; $i++) {
+            if ($hexa[$i] != null && $rgb[$i] != null) {
+                Color::create([
+                    'contest_id'    => $winnercontest->contest_id,
+                    'hexa'          => $hexa[$i],
+                    'rgb'           => $rgb[$i],
+                ]);
+            }
         }
 
         NewsFeed::create([
@@ -133,14 +141,16 @@ class HandoverController extends Controller
         ]);
         return redirect()->back()->with('status','Color & Font Berhasil di Tambah');
     }
-    public function DeleteColor(Color $color)
+    public function DeleteColor(Request $request)
     {
-        Color::destroy($color->id);
+        $id = Crypt::decrypt($request->id);
+        Color::where('hexa',$id)->delete();
         return redirect()->back()->with('status','Delete Color Berhasil di Delete');
     }
-    public function DeleteFont(Font $font)
+    public function DeleteFont(Request $request)
     {
-        Font::destroy($font->id);
+        $id = Crypt::decrypt($request->id);
+        Font::where('name', $id)->delete();
         return redirect()->back()->with('status','Delete Font Berhasil di Delete');
     }
 }

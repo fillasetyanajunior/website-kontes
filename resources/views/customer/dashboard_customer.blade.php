@@ -16,7 +16,7 @@
                             <i class="fe fe-dollar-sign"></i>
                         </span>
                         <div>
-                            <h4 class="m-0 text-white">{{"$ ". number_format($totalhargaprojectrunning)}}</h4>
+                            <h6 class="m-0 text-white">{{"$ ". number_format($totalhargaprojectrunning)}}</h6>
                         </div>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                             <i class="fa fa-refresh"></i>
                         </span>
                         <div>
-                            <h4 class="m-0 text-white">{{$totalprojectrunning}} <small class="text-white">Project Running</small></h4>
+                            <h6 class="m-0 text-white">{{$totalprojectrunning}} <small class="text-white">Project Running</small></h6>
                         </div>
                     </div>
                 </div>
@@ -40,24 +40,24 @@
                             <i class="fa fa-calendar-check-o"></i>
                         </span>
                         <div>
-                            <h4 class="m-0 text-white">{{$totalprojectcancel}}<small class="text-white"> Project Cancel</small></h4>
-                            <h4 class="m-0 text-white mt-1">{{$totalprojectsuccess}}<small class="text-white"> Project Success</small></h4>
+                            <h6 class="m-0 text-white">{{$totalprojectcancel}}<small class="text-white"> Project Cancel</small></h6>
+                            <h6 class="m-0 text-white mt-1">{{$totalprojectsuccess}}<small class="text-white"> Project Success</small></h6>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row row-cards row-deck">
-            <div class="col-12">
-                <div class="d-flex flex-row bd-highlight my-4">
-                    <div class="bd-highlight">
-                        <a href="{{route('contestproject')}}" class="btn btn-orange">Add Project Contest</a>
+            <div class="col-lg-12">
+                <div class="d-flex flex-row my-4 ">
+                    <div class="">
+                        <a href="{{route('contestproject')}}" class="btn btn-orange col-lg-4">Add Project Contest</a>
                     </div>
-                    <div class="ml-4 bd-highlight">
-                        <a href="{{route('directproject')}}" class="btn btn-lime">Add Direct Contest</a>
+                    <div class="ml-4">
+                        <a href="{{route('directproject')}}" class="btn btn-lime col-lg-4">Add Direct Contest</a>
                     </div>
                     <div class="ml-auto">
-                        <input type="text" id="searchprojectrunningcustomer" class="form-control" placeholder="Search">
+                        <input type="text" id="searchprojectrunningcustomer" class="form-control col-lg-4" placeholder="Search">
                     </div>
                 </div>
                 <div class="card">

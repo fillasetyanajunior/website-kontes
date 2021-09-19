@@ -8,7 +8,7 @@
                 Handover
             </h1>
         </div>
-        @if (request()->user()->role == 'customer' && $project->is_active == 'handover')
+        @if (request()->user()->role == 'customer' || request()->user()->role == 'admin' && $project->is_active == 'handover')
         <div class="card">
             <div class="card-body">
                 <div class="d-flex ">
@@ -105,16 +105,16 @@
                             @csrf
                             <div class="form-group field_font">
                                 <div class="d-flex ">
-                                    <div class="flex-grow-1  ">
+                                    <div class="flex-grow-1">
                                         @php
-                                            $font = DB::table('fonts')->where('contest_id',$handover->contest_id)->get();
+                                            $font = DB::table('fonts')->where('contest_id',$handover->contest_id)->first();
+                                            $fontss = DB::table('fonts')->where('contest_id',$handover->contest_id)->get();
                                         @endphp
-                                        @foreach ($font as $itemfont)
-                                        @if ($itemfont->name == null)
+                                        @if ($font == null)
                                         <label for="font">Font Used</label>
-                                        <input type="text" class="form-control mb-3" name="font[]" id="font"
-                                            value="">
+                                        <input type="text" class="form-control mb-3" name="font[]" id="font"value="">
                                         @else
+                                        @foreach ($fontss as $itemfont)
                                         <div class="d-flex">
                                             <div class="flex-grow-1">
                                                 <label for="font">Font Used</label>
@@ -122,15 +122,13 @@
                                                     value="{{$itemfont->name}}">
                                             </div>
                                             <div class="align-self-center mt-3">
-                                                <form action="/updatefiles/delete/font/{{$itemfont->id}}" method="post">
-                                                @csrf
-                                                @method('delete')
-                                                <button type="submit" class="btn btn-sm" style="background-color: Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;"><i class="fa fa-times-circle"></i></button>
-                                                </form>
+                                                <a href="/updatefiles/delete/font/{{\Crypt::encrypt($itemfont->name)}}"class="btn btn-sm"
+                                                        style="background-color: Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;"><i
+                                                        class="fa fa-times-circle"></i></a>
                                             </div>
                                         </div>
-                                        @endif
                                         @endforeach
+                                        @endif
                                     </div>
                                     <div class="">
                                         <a href="javascript:void(0);" class="add_button_font" title="Add field"><i class="fe fe-plus"></i></a>
@@ -141,14 +139,15 @@
                                 <div class="d-flex ">
                                     <div class="flex-grow-1  ">
                                         @php
-                                            $hexa = DB::table('colors')->where('contest_id',$handover->contest_id)->get();
+                                            $hexa = DB::table('colors')->where('contest_id',$handover->contest_id)->first();
+                                            $hexass = DB::table('colors')->where('contest_id',$handover->contest_id)->get();
                                         @endphp
-                                        @foreach ($hexa as $itemhexa)
-                                        @if ($itemhexa->hexa == null)
+                                        @if ($hexa == null)
                                         <label for="hexa_color">Hexa Color Used</label>
                                         <input type="text" class="form-control mb-3" name="hexa_color[]" id="hexa_color"
-                                            value="">
+                                        value="">
                                         @else
+                                        @foreach ($hexass as $itemhexa)
                                         <div class="d-flex">
                                             <div class="flex-grow-1">
                                                 <label for="hexa_color">Hexa Color Used</label>
@@ -156,15 +155,13 @@
                                                     value="{{$itemhexa->hexa}}">
                                             </div>
                                             <div class="align-self-center mt-3">
-                                                <form action="/updatefiles/delete/color/{{$itemhexa->id}}" method="post">
-                                                @csrf
-                                                @method('delete')
-                                                <button type="submit" class="btn btn-sm" style="background-color: Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;"><i class="fa fa-times-circle"></i></button>
-                                                </form>
+                                                <a href="/updatefiles/delete/color/{{\Crypt::encrypt($itemhexa->hexa)}}"class="btn btn-sm"
+                                                        style="background-color: Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;"><i
+                                                        class="fa fa-times-circle"></i></a>
                                             </div>
                                         </div>
-                                        @endif
                                         @endforeach
+                                        @endif
                                     </div>
                                     <div class="">
                                         <a href="javascript:void(0);" class="add_button_hexa" title="Add field"><i class="fe fe-plus"></i></a>
@@ -175,14 +172,15 @@
                                 <div class="d-flex ">
                                     <div class="flex-grow-1">
                                         @php
-                                            $rgb = DB::table('colors')->where('contest_id',$handover->contest_id)->get();
+                                            $rgb = DB::table('colors')->where('contest_id',$handover->contest_id)->first();
+                                            $rgbss = DB::table('colors')->where('contest_id',$handover->contest_id)->get();
                                         @endphp
-                                        @foreach ($rgb as $itemrgb)
-                                        @if ($itemrgb->rgb == null)
+                                        @if ($rgb == null)
                                         <label for="rgb_color">RGB Color Used</label>
                                         <input type="text" class="form-control mb-3" name="rgb_color[]" id="rgb_color"
-                                            value="">
+                                        value="">
                                         @else
+                                        @foreach ($rgbss as $itemrgb)
                                          <div class="d-flex">
                                             <div class="flex-grow-1">
                                                 <label for="rgb_color">RGB Color Used</label>
@@ -193,24 +191,14 @@
                                                 <button type="button" class="btn btn-sm text-white" disabled style="background-color: Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;"><i class="fa fa-times-circle"></i></button>
                                             </div>
                                         </div>
-                                        @endif
                                         @endforeach
+                                        @endif
                                     </div>
                                     <div>
                                         <a href="javascript:void(0);" class="remove_button_rgb text-white" title="Remove field"><i class="fe fe-minus"></i></a>
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="form-group">
-                                <label for="hexa_color">Hexa Color Used</label>
-                                <input type="text" class="form-control" name="hexa_color[]" id="hexa_color"
-                                    value="{{$handover->hexa_color}}">
-                            </div>
-                            <div class="form-group">
-                                <label for="rgb_color">RGB Color Used</label>
-                                <input type="text" class="form-control" name="rgb_color[]" id="rgb_color"
-                                    value="{{$handover->rgb_color}}">
-                            </div> --}}
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
@@ -221,27 +209,27 @@
                         <div class="form-group">
                             <label for="font">Font Used</label>
                             @php
-                                $font = DB::table('fonts')->where('contest_id',$handover->contest_id)->get();
+                                $fonts = DB::table('fonts')->where('contest_id',$handover->contest_id)->get();
                             @endphp
-                            @foreach ($font as $itemfont)
+                            @foreach ($fonts as $itemfont)
                             <div class="form-control-plaintext">{{$itemfont->name}}</div>
                             @endforeach
                         </div>
                         <div class="form-group">
                             <label for="hexa_color">Hexa Color Used</label>
                             @php
-                                $hexa = DB::table('colors')->where('contest_id',$handover->contest_id)->get();
+                                $hexas = DB::table('colors')->where('contest_id',$handover->contest_id)->get();
                             @endphp
-                            @foreach ($hexa as $itemhexa)
+                            @foreach ($hexas as $itemhexa)
                             <div class="form-control-plaintext">{{$itemhexa->hexa}}</div>
                             @endforeach
                         </div>
                         <div class="form-group">
                             <label for="rgb_color">RGB Color Used</label>
                             @php
-                                $rgb = DB::table('colors')->where('contest_id',$handover->contest_id)->get();
+                                $rgbs = DB::table('colors')->where('contest_id',$handover->contest_id)->get();
                             @endphp
-                            @foreach ($rgb as $itemrgb)
+                            @foreach ($rgbs as $itemrgb)
                             <div class="form-control-plaintext">{{$itemrgb->rgb}}</div>
                             @endforeach
                         </div>

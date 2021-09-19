@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\NewsFeed;
 use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -38,6 +39,13 @@ class ProjectRunJob implements ShouldQueue
             if ($itemproject->deadline <= $timenow || $itemproject->deadline == $timenow) {
                 if ($itemproject->is_active == 'running') {
                     Project::where('id', $itemproject->id)->update(['is_active' => 'choose winner']);
+                    NewsFeed::create([
+                        'contest_id'    => $project->id,
+                        'user_id_from'  => 1,
+                        'user_id_to'    => $project->user_id,
+                        'feedback'      => 'Project ',
+                        'choices'       => 'winner choose',
+                    ]);
                 }
             }
         }

@@ -14,7 +14,6 @@ class CreateFontsTable extends Migration
     public function up()
     {
         Schema::create('fonts', function (Blueprint $table) {
-            $table->id();
             $table->integer('contest_id');
             $table->string('name');
             $table->timestamps();

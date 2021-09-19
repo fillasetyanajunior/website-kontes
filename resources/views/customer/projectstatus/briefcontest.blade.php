@@ -5,7 +5,7 @@
     <div class="bg-blue-dark d-flex align-items-center" style="height: 100px;">
         <div class="container">
             <div class="page-header">
-                <h1 class="page-title text-white">
+                <h1 class="page-title text-white font-weight-bold">
                     Brief Project
                 </h1>
             </div>
@@ -14,11 +14,11 @@
     <div class="container">
         <ul class="nav nav-tabs mb-3 text-capitalize" id="tabs">
             <li class="nav-item">
-                <a class="nav-link active" id="descriptiontoggel" href="javascript:void(0)"
+                <a class="nav-link active font-weight-bold" id="descriptiontoggel" href="javascript:void(0)"
                     data-role="description">Description</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="entriestoggel" href="javascript:void(0)" data-role="entries">entries</a>
+                <a class="nav-link font-weight-bold" id="entriestoggel" href="javascript:void(0)" data-role="entries">entries</a>
             </li>
         </ul>
         <x-brief-contest id="{{$project->id}}"></x-brief-contest>
@@ -131,9 +131,9 @@
             <div class="body_feedback">
                 <div class="modal-body">
                     <div class="text-center">
-                        <img src="" alt="" id="hasilcontest" width="1800px" height="1800px">
+                        <img src="" alt="" id="hasilcontest" class="w-100">
                     </div>
-                    <div class="rating"></div>
+                    <div class="rating mt-3" style="font-size: 20pt"></div>
                     <div class="">
                         <div class="card-body mb-2">
                             <div class="d-flex align-items-center px-2">
@@ -141,21 +141,9 @@
                                 <div>
                                     <div id="name_worker"></div>
                                 </div>
-                                <div class="ml-auto">
-                                    @if (request()->user()->role == 'customer' && request()->user()->id ==
-                                    $project->user_id &&
-                                    $project->is_active == 'running' || $project->is_active == 'choose winner')
-                                    <div class="mb-1" id="eliminasicontest">
-                                        <button type="button" class="btn btn-danger col-12" id="btneliminasicontest"
-                                            data-toggle="modal" data-target="#ActionModal"
-                                            data-url="{{url('assets/dashboard/images')}}">Eliminasi</button>
+                                <div class="ml-auto" id="">
+                                    <div id="buttonresultcontest">
                                     </div>
-                                    <div class="mb-1" id="pickwinnercontest">
-                                        <button type="button" class=" btn btn-azure col-12" id="btnpickwinnercontest"
-                                            data-toggle="modal" data-target="#ActionModal"
-                                            data-url="{{url('assets/dashboard/images')}}">Pick Winner</button>
-                                    </div>
-                                    @endif
                                     @if ($report >= 3)
                                     @else
                                     <div class="mb-1">
@@ -167,22 +155,8 @@
                             </div>
                             <p class="text-justify mt-3" id="description"></p>
                         </div>
-                        <div class="card-body mb-2" id="feedback_card">
-
+                        <div id="feedbackcomment">
                         </div>
-                        @if (request()->user()->role == 'customer' || request()->user()->role == 'worker')
-                        <div class="card-body">
-                            <form action="" method="post">
-                                @csrf
-                                <div class="form-group">
-                                    <textarea class="form-control" rows="5" name="feedback"></textarea>
-                                </div>
-                                <div class="text-right">
-                                    <button type="submit" class="btn-sm btn  btn-primary">Submit</button>
-                                </div>
-                            </form>
-                        </div>
-                        @endif
                     </div>
                 </div>
             </div>

@@ -56,14 +56,14 @@
                             <i class="fa fa-refresh"></i>
                         </span>
                         <div>
-                            <h5 class="m-0 text-white">
+                            <h6 class="m-0 text-white">
                                 @if ($projects != null)
                                 {{$totalprojectrunningcontest + $totalprojectrunningdirect}}
                                 @else
                                 0
                                 @endif
                                 <small class="text-white">Project Running</small>
-                            </h5>
+                            </h6>
                         </div>
                     </div>
                 </div>
@@ -75,14 +75,14 @@
                             <i class="fa fa-check"></i>
                         </span>
                         <div>
-                            <h5 class="m-0 text-white">
+                            <h6 class="m-0 text-white">
                                 @if ($projects != null)
                                 {{$totalprojectsuccessdirect + $totalprojectsuccesscontest}}
                                 @else
                                 0
                                 @endif
                                 <small class="text-white">Project Success</small>
-                            </h5>
+                            </h6>
                         </div>
                     </div>
                 </div>
@@ -94,14 +94,14 @@
                             <i class="fa fa-handshake-o"></i>
                         </span>
                         <div>
-                            <h5 class="m-0 text-white">
+                            <h6 class="m-0 text-white">
                                 @if ($projects != null)
                                 {{$totalprojecthandovercontest + $totalprojecthandoverdirect}}
                                 @else
                                 0
                                 @endif
                                 <small class="text-white">Project Handover</small>
-                            </h5>
+                            </h6>
                         </div>
                     </div>
                 </div>

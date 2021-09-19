@@ -6,6 +6,7 @@ use App\Http\Controllers\BrowseProjectController;
 use App\Http\Controllers\CatagoriesController;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DataTotalCostController;
 use App\Http\Controllers\FeedbackBidController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HandoverController;
@@ -73,6 +74,12 @@ Route::middleware('verified')->group(function () {
     //Gallery Project
     Route::get('/gallerycontest/{project}', [BrowseProjectController::class,'GalleryContestProject']);
     Route::get('/gallerydirect/{project}', [BrowseProjectController::class,'GalleryDirectProject']);
+    //Feedback Contest
+    Route::post('/feedback/{resultcontest}', [FeedbackController::class, 'GetData']);
+    Route::post('/feedback/users/{resultcontest}', [FeedbackController::class, 'UserFeedback']);
+    //Feedback Bid
+    Route::post('/feedbackbid/{resultproject}', [FeedbackBidController::class, 'GetData']);
+    Route::post('/feedbackbid/users/{resultproject}', [FeedbackBidController::class, 'UserFeedback']);
     //Handover
     Route::get('/handoverproject/{project}', [HandoverController::class, 'HandoverIndex']);
     //Convert ZIP
@@ -156,6 +163,16 @@ Route::middleware('verified')->group(function () {
         Route::post('/getcubcatagories/{catagories}',[ProjectController::class,'GetCatagories']);
         //Get Discount Code
         Route::post('/code/getdata', [CodeController::class, 'GetDataCode']);
+        //Eliminasi
+        Route::put('/feedback/eliminasi/{resultcontest}', [FeedbackController::class, 'EliminasiPeserta']);
+        Route::put('/feedbackbid/eliminasi/{resultproject}', [FeedbackBidController::class, 'EliminasiPeserta']);
+        //Pick Winner
+        Route::put('/feedback/choosewinner/pickwinner/{resultcontest}', [FeedbackController::class, 'StoreWinner']);
+        Route::put('/feedbackbid/choosewinner/pickwinner/{resultproject}', [FeedbackBidController::class, 'StoreWinner']);
+        //Get Data TotalCost
+        Route::post('/getdatatotalcostupgrade', [DataTotalCostController::class, 'GetDataTotalCostUpgrade']);
+        Route::post('/getdatatotalcostpack', [DataTotalCostController::class, 'GetDataTotalCostPack']);
+        Route::post('/getdatatotalcostfreefee', [DataTotalCostController::class, 'GetDataTotalCostFreeFee']);
     });
 
     Route::middleware('customer')->group(function () {
@@ -163,12 +180,6 @@ Route::middleware('verified')->group(function () {
         //Nilai Rating
         Route::post('/feedback/show/nilaicontest/{resultcontest}', [FeedbackController::class, 'NilaiContest']);
         Route::post('/feedbackbid/show/nilaicontest/{resultproject}', [FeedbackBidController::class, 'NilaiContest']);
-        //Eliminasi
-        Route::put('/feedback/eliminasi/{resultcontest}', [FeedbackController::class, 'EliminasiPeserta']);
-        Route::put('/feedbackbid/eliminasi/{resultproject}', [FeedbackBidController::class, 'EliminasiPeserta']);
-        //Pick Winner
-        Route::put('/feedback/choosewinner/pickwinner/{resultcontest}', [FeedbackController::class, 'StoreWinner']);
-        Route::put('/feedbackbid/choosewinner/pickwinner/{resultproject}', [FeedbackBidController::class, 'StoreWinner']);
         //Profile
         Route::get('/customer/profile', [CustomerController::class, 'profileCustomers'])->name('profileCustomers');
         Route::put('/customer/profile/update/{customer}', [CustomerController::class, 'profileUpdate']);
@@ -185,13 +196,9 @@ Route::middleware('verified')->group(function () {
         //Message Handover
         Route::post('/kirimessagehandover', [MessageHandoverController::class, 'KirimFeedbackMessage'])->name('messagehandover');
         //Feedback Contest
-        Route::post('/feedback/{resultcontest}', [FeedbackController::class, 'GetData']);
         Route::post('/feedback/kirim/{resultcontest}', [FeedbackController::class, 'KirimFeedback']);
-        Route::post('/feedback/users/{resultcontest}', [FeedbackController::class, 'UserFeedback']);
         //Feedback Bid
-        Route::post('/feedbackbid/{resultproject}', [FeedbackBidController::class, 'GetData']);
         Route::post('/feedbackbid/kirim/{resultproject}', [FeedbackBidController::class, 'KirimFeedback']);
-        Route::post('/feedbackbid/users/{resultproject}', [FeedbackBidController::class, 'UserFeedback']);
         //NewsFeed
         Route::get('/newsfeed', [NewsFeedController::class, 'NewsFeed'])->name('newsfeed');
     });
@@ -208,8 +215,8 @@ Route::middleware('verified')->group(function () {
         Route::delete('/deletefileupload/{uploadfile}', [UploadFileController::class,'DeleteFileUpload']);
         //Update Font & Color
         Route::post('/updatefiles/{winnercontest}', [HandoverController::class,'UpdateFontColor']);
-        Route::delete('/updatefiles/delete/color/{color}', [HandoverController::class,'DeleteColor']);
-        Route::delete('/updatefiles/delete/font/{font}', [HandoverController::class,'DeleteFont']);
+        Route::get('/updatefiles/delete/color/{id}', [HandoverController::class,'DeleteColor']);
+        Route::get('/updatefiles/delete/font/{id}', [HandoverController::class,'DeleteFont']);
         //Profile
         Route::get('/worker/profile', [WorkerController::class,'profileWorker'])->name('profileWorker');
         Route::put('/worker/profile/showportfolio/{id}', [WorkerController::class,'showPortFolio']);

@@ -120,8 +120,8 @@ $(document).ready(function () {
     }
     $('#tambahresultcontest').on('click', function () {
         let idcontest = $(this).attr('idcontest');
-        $('.footer_resultcontest button[type=submit]').html('Add');
-        $('#contestModalLabel').html('Add Contest');
+        $('.footer_resultcontest button[type=submit]').html('Submit Entry');
+        $('#contestModalLabel').html('Submit My Entry');
         $('.body_resultcontest form').attr('action', '/resultcontest/store');
         $('.body_resultcontest form').attr('method', 'post');
 
@@ -147,9 +147,8 @@ $(document).ready(function () {
         var _urlasset = $(this).data('url')
         var _url = '/feedback/' + _id
         let _token = $('meta[name="csrf-token"]').attr('content')
-
-        $('.body_feedback form').attr('action', '/feedback/kirim/' + _id);
-        $('.body_feedback form').attr('method', 'post');
+        var _role = $(this).data('role')
+        var _user_id = $(this).data('user_id')
 
         $.ajax({
             type: 'POST',
@@ -159,24 +158,32 @@ $(document).ready(function () {
             },
             success: function (hasil) {
                 $('#feedback_card').empty()
+                $('#feedbackcomment').empty()
                 $('.rating').empty()
 
                 let url2 = '/feedback/users/' + _id
                 $('#hasilcontest').attr('src', _urlasset + '/resultcontest/' + hasil.resultcontest.filecontest)
-                $('#profileworker').css('background-image', 'url(' + _urlasset + '/profile/' + hasil.user.avatar + ')')
+                if (hasil.user.avatar == 'default.jpg') {
+                    $('#profileworker').css('background-image', 'url("/assets/dashboard/images/default.jpg")')
+                } else {
+                    $('#profileworker').css('background-image', 'url(' + _urlasset + '/profile/' + hasil.user.avatar + ')')
+                }
                 $('#name_worker').html(hasil.user.name)
                 $('#description').html(hasil.resultcontest.title)
+                if (_role == 'customer' && _user_id == hasil.project.user_id || _role == 'admin' && hasil.resultcontest.is_active == 'active' && hasil.project.is_active == 'running' || hasil.project.is_active == 'choose winner') {
+                    $('#buttonresultcontest').append('<div class="mb-1" id="eliminasicontest"> <button type="button" class="btn btn-danger col-12" id="btneliminasicontest" data-toggle="modal" data-target="#ActionModal" > Eliminasi </button> </div> <div class="mb-1" id="pickwinnercontest" ><button type="button" class="btn btn-azure col-12" id="btnpickwinnercontest" data-toggle="modal" data-target="#ActionModal"> Pick Winner </button> </div>')
+                }
                 $('#btneliminasicontest*').click(function () {
                    $('#ActionModalLabel').html('Eliminasi')
-                   $('.footer_contest').html('Eliminasi')
-                   $('#captions_contest').html('Are you sure you chose this design as the eliminasi?')
-                   $('#gambarAction').attr('src', $(this).data('url') + '/gembok.png')
+                   $('.footer_contest').html('Eliminate')
+                   $('#captions_contest').html('Are you sure you want to eliminate this design?')
+                   $('#gambarAction').attr('src', '/assets/dashboard/images/gembok.png')
                     $('.body_contest form').attr('action', '/feedback/eliminasi/' + _id)
                 })
                 $('#btnpickwinnercontest*').click(function () {
                      $('#ActionModalLabel').html('Pick Winner')
                      $('.footer_contest').html('Pick Winner')
-                     $('#gambarAction').attr('src', $(this).data('url') + '/piala.png')
+                     $('#gambarAction').attr('src', '/assets/dashboard/images/piala.png')
                      $('#captions_contest').html('Are you sure you chose this design as the winner?')
                     $('.body_contest form').attr('action', '/feedback/choosewinner/pickwinner/' + _id)
                 })
@@ -232,35 +239,49 @@ $(document).ready(function () {
                         '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
                     )
                 }
-                $.each(hasil.feedback, function (index, feedbackall) {
-                    if (feedbackall.feedback_worker == null) {
-                        $.ajax({
-                            type: 'POST',
-                            url: url2,
-                            data: {
-                                _token: _token,
-                                role_user: 'customer',
-                            },
-                            success: function (hasils) {
-                                $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar +
-                                    ');"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_customer + '</p> </div> </div>')
-                            }
-                        });
-                    } else {
-                        $.ajax({
-                            type: 'POST',
-                            url: url2,
-                            data: {
-                                _token: _token,
-                                role_user: 'worker',
-                            },
-                            success: function (hasils) {
-                                $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar +
-                                    ');"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_worker + '</p> </div> </div>')
-                            }
-                        });
-                    }
-                })
+                if (_user_id == hasil.project.user_id || _user_id == hasil.resultcontest.user_id_worker || _role == 'admin') {
+                    $('#feedbackcomment').append('<div class="card-body mb-2" id="feedback_card"></div> <div class="card-body" ><form action="/feedback/kirim/' + _id
+                    + '" method="post" > <input type="hidden" name="_token" value="' + _token
+                    + '"> <div class = "form-group" ><textarea class="form-control" rows = "5"name="feedback" >'
+                    + '</textarea> </div> <div class="text-right" > <button type="submit" class="btn-sm btn  btn-primary" > Submit </button> </div> </form> </div>')
+                    $.each(hasil.feedback, function (index, feedbackall) {
+                        if (feedbackall.feedback_worker == null) {
+                            $.ajax({
+                                type: 'POST',
+                                url: url2,
+                                data: {
+                                    _token: _token,
+                                    role_user: 'customer',
+                                },
+                                success: function (hasils) {
+                                    if (hasil.user.avatar == 'default.jpg') {
+                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg);"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_customer + '</p> </div> </div>')
+                                    } else {
+                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar +
+                                            ');"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_customer + '</p> </div> </div>')
+                                    }
+                                }
+                            });
+                        } else {
+                            $.ajax({
+                                type: 'POST',
+                                url: url2,
+                                data: {
+                                    _token: _token,
+                                    role_user: 'worker',
+                                },
+                                success: function (hasils) {
+                                    if (hasil.user.avatar == 'default.jpg') {
+                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg);"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_worker + '</p> </div> </div>')
+                                    } else {
+                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar +
+                                            ');"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_worker + '</p> </div> </div>')
+                                    }
+                                }
+                            });
+                        }
+                    })
+                }
             }
         });
     });
@@ -289,8 +310,8 @@ $(document).ready(function () {
 
     $('#btneliminasicontests*').click(function () {
         $('#ActionModalLabel').html('Eliminasi')
-        $('.footer_contest').html('Eliminasi')
-        $('#captions_contest').html('Are you sure you chose this design as the eliminasi?')
+        $('.footer_contest').html('Eliminate')
+        $('#captions_contest').html('Are you sure you want to eliminate this design?')
         $('#gambarAction').attr('src', $(this).data('url') + '/gembok.png')
         $('.body_contest form').attr('action', '/feedback/eliminasi/' + $(this).data('id'))
     })
@@ -305,8 +326,8 @@ $(document).ready(function () {
     //Direct
     $('#tambahresultdirect').on('click', function () {
         let idcontest = $(this).attr('idcontest');
-        $('.footer_resultdirect button[type=submit]').html('Add');
-        $('#directModalLabel').html('Add Contest');
+        $('.footer_resultdirect button[type=submit]').html('Submit Entry');
+        $('#directModalLabel').html('Submit My Entry');
         $('.body_resultdirect form').attr('action', '/resultdirect/store');
         $('.body_resultdirect form').attr('method', 'post');
 
@@ -319,9 +340,8 @@ $(document).ready(function () {
         var _urlasset = $(this).data('url')
         var _url = '/feedbackbid/' + _id
         let _token = $('meta[name="csrf-token"]').attr('content')
-
-        $('.body_feedback form').attr('action', '/feedbackbid/kirim/' + _id);
-        $('.body_feedback form').attr('method', 'post');
+        var _role = $(this).data('role')
+        var _user_id = $(this).data('user_id')
 
         $.ajax({
             type: 'POST',
@@ -333,20 +353,27 @@ $(document).ready(function () {
                 $('#feedback_card').empty()
                 $('.rating').empty()
                 let url2 = '/feedbackbid/users/' + _id
-                $('#profileworker').css('background-image', 'url(' + _urlasset + '/profile/' + hasil.user.avatar + ')')
+                if (hasil.user.avatar == 'default.jpg') {
+                    $('#profileworker').css('background-image', 'url("/assets/dashboard/images/default.jpg")')
+                } else {
+                    $('#profileworker').css('background-image', 'url(' + _urlasset + '/profile/' + hasil.user.avatar + ')')
+                }
                 $('#name_worker').html(hasil.user.name)
                 $('#descriptions').text(hasil.resultproject.description)
+                if (_role == 'customer' && _user_id == hasil.project.user_id || _role == 'admin' && hasil.resultproject.is_active == 'active' && hasil.project.is_active == 'running' || hasil.project.is_active == 'choose winner') {
+                    $('#buttonresultdirect').append('<div class="mb-1" id="eliminasidirect"> <button type = "button" class=" btn btn-danger col-12" id="btneliminasidirect" data-toggle="modal" data-target="#ActionDirectModal" > Eliminasi </button> </div> <div class="mb-1" id="pickwinnerdirect" ><button type="button" class=" btn btn-azure col-12" id="btnpickwinnerdirect" data-toggle="modal" data-target="#ActionDirectModal" > Pick Winner </button> </div>')
+                }
                 $('#btneliminasidirect*').click(function () {
                     $('#ActionDirectModalLabel').html('Eliminasi')
                     $('.footer_direct').html('Eliminasi')
-                    $('#captions_direct').html('Are you sure you chose this design as the eliminasi?')
-                    $('#gambarAction').attr('src', $(this).data('url') + '/gembok.png')
+                    $('#captions_direct').html('Are you sure you want to eliminate this design?')
+                    $('#gambarAction').attr('src', '/assets/dashboard/images/gembok.png')
                     $('#body_direct form').attr('action', '/feedbackbid/eliminasi/' + _id)
                 })
                 $('#btnpickwinnerdirect*').click(function () {
                     $('#ActionDirectModalLabel').html('Pick Winner')
                     $('.footer_direct').html('Pick Winner')
-                    $('#gambarAction').attr('src', $(this).data('url') + '/piala.png')
+                    $('#gambarAction').attr('src', '/assets/dashboard/images/piala.png')
                     $('#captions_direct').html('Are you sure you chose this design as the winner?')
                     $('#body_direct form').attr('action', '/feedbackbid/choosewinner/pickwinner/' + _id)
                 })
@@ -402,36 +429,49 @@ $(document).ready(function () {
                         '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
                     )
                 }
-
-                $.each(hasil.feedback, function (index, feedbackall) {
-                    if (feedbackall.feedback_worker == null) {
-                        $.ajax({
-                            type: 'POST',
-                            url: url2,
-                            data: {
-                                _token: _token,
-                                role_user: 'customer',
-                            },
-                            success: function (hasils) {
-                                $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar +
-                                    ');"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_customer + '</p> </div> </div>')
-                            }
-                        });
-                    } else {
-                        $.ajax({
-                            type: 'POST',
-                            url: url2,
-                            data: {
-                                _token: _token,
-                                role_user: 'worker',
-                            },
-                            success: function (hasils) {
-                                $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar +
-                                    ');"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_worker + '</p> </div> </div>')
-                            }
-                        });
-                    }
-                })
+                if (_user_id == hasil.project.user_id || _user_id == hasil.resultcontest.user_id_worker || _role == 'admin') {
+                    $('#feedbackcommentbid').append('<div class="card-body mb-2" id="feedback_card"></div> <div class="card-body" ><form action="/feedbackbid/kirim/' + _id +
+                        '" method="post" > <input type="hidden" name="_token" value="' + _token +
+                        '"> <div class = "form-group" ><textarea class="form-control" rows = "5"name="feedback" >' +
+                        '</textarea> </div> <div class="text-right" > <button type="submit" class="btn-sm btn  btn-primary" > Submit </button> </div> </form> </div>')
+                    $.each(hasil.feedback, function (index, feedbackall) {
+                        if (feedbackall.feedback_worker == null) {
+                            $.ajax({
+                                type: 'POST',
+                                url: url2,
+                                data: {
+                                    _token: _token,
+                                    role_user: 'customer',
+                                },
+                                success: function (hasils) {
+                                    if (hasil.user.avatar == 'default.jpg') {
+                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg);"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_customer + '</p> </div> </div>')
+                                    } else {
+                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar +
+                                            ');"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_customer + '</p> </div> </div>')
+                                    }
+                                }
+                            });
+                        } else {
+                            $.ajax({
+                                type: 'POST',
+                                url: url2,
+                                data: {
+                                    _token: _token,
+                                    role_user: 'worker',
+                                },
+                                success: function (hasils) {
+                                    if (hasil.user.avatar == 'default.jpg') {
+                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg);"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_worker + '</p> </div> </div>')
+                                    } else {
+                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar +
+                                            ');"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_worker + '</p> </div> </div>')
+                                    }
+                                }
+                            });
+                        }
+                    })
+                }
             }
         });
     });
@@ -460,7 +500,7 @@ $(document).ready(function () {
     $('#btneliminasidirects*').click(function () {
         $('#ActionDirectModalLabel').html('Eliminasi')
         $('.footer_direct').html('Eliminasi')
-        $('#captions_direct').html('Are you sure you chose this design as the eliminasi?')
+        $('#captions_direct').html('Are you sure you want to eliminate this design?')
         $('#gambarAction').attr('src', $(this).data('url') + '/gembok.png')
         $('.body_direct form').attr('action', '/feedback/eliminasi/' + $(this).data('id'))
     })

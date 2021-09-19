@@ -22,7 +22,7 @@ class CreateDetailContestsTable extends Migration
             $table->integer('catagories');
             $table->integer('subcatagories');
             $table->integer('package');
-            $table->integer('packageupgrade')->nullable();
+            $table->string('packageupgrade')->nullable();
             $table->integer('harga');
             $table->timestamps();
         });

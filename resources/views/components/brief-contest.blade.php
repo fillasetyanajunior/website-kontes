@@ -1,5 +1,5 @@
 <div class="row row-cards" id="descri">
-    <div class="col-lg-8">
+    <div class="col-lg-9">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex flex-wrap">
@@ -30,13 +30,26 @@
                         <i class="fa fa-user"></i>&nbsp;
                         {{$desainers}} Desainers
                     </div>
+                    <div class="ml-auto">
+                        @php
+                            $projectupgrade = explode('/',$detailcontest->packageupgrade);
+                        @endphp
+                        @for ($i = 0; $i < count($projectupgrade); $i++)
+                            @php
+                                $rendombtn = array("red",'orange','azure','blue','indigo','purple','pink','yellow','lime','green','teal','cyan','gray','gray-dark');
+                                $rendomkey = array_rand($rendombtn,1);
+                                $nameupgrade = DB::table('opsi_package_upgrades')->where('id',$projectupgrade[$i])->first();
+                            @endphp
+                        <p class="btn btn-sm btn-{{$rendombtn[$rendomkey]}}">{{$nameupgrade->name}}</p>
+                        @endfor
+                    </div>
                 </div>
                 <hr>
                 <div>
                     <h4 class="text-capitalize">logo desain brief</h4>
-                    <div class="text-justify">
+                    <p class="text-justify">
                         {{$detailcontest->description}}
-                    </div>
+                    </p>
                 </div>
                 <hr>
                 <div>
@@ -52,9 +65,13 @@
                 <div>
                     <h4 class="text-capitalize">requirements</h4>
                     <h5 class="text-capitalize">should have</h5>
-                    <p>{{$project->shouldhave}}</p>
+                    <p class="text-justify">
+                        {{$project->shouldhave}}
+                    </p>
                     <h5 class="text-capitalize">should not have</h5>
-                    <p>{{$project->shouldnothave}}</p>
+                    <p class="text-justify">
+                        {{$project->shouldnothave}}
+                    </p>
                 </div>
                 <hr>
                 <div>
@@ -77,16 +94,16 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="row">
             <div class="col-md-6 col-lg-12">
                 @php
                     $worker = DB::table('workers')->where('user_id',request()->user()->id)->first();
                 @endphp
                 @if (request()->user()->role == 'worker' && $project->is_active == 'running' && $worker->status_account != 'suspend')
-                <a href="javascript:void(0)" class="btn btn-primary mb-5 col-lg-12" idcontest="{{$project->id}}" data-catagories="{{$catagories->name}}"
+                <a href="javascript:void(0)" class="btn btn-primary mb-5 col-lg-12 font-weight-bold" idcontest="{{$project->id}}" data-catagories="{{$catagories->name}}"
                     data-toggle="modal" data-target="#contestModal" id="tambahresultcontest">Submit
-                    Contest</a>
+                    Entry</a>
                 @elseif (request()->user()->role == 'admin')
                 <form action="/deletecontest/{{$project->id}}" method="post">
                     @csrf
@@ -102,7 +119,7 @@
                     data-target="#ExtendedDeadline">Extended Deadline</button>
                 @endif
             </div>
-            <div class="col-md-12 col-lg-12">
+            <div class="col-md-6 col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <table class="table card-table table-vcenter">
@@ -110,7 +127,7 @@
                                 <td>
                                     1st place
                                 </td>
-                                <td>
+                                <td width="80px">
                                     {{"$ ". number_format($harga)}}
                                 </td>
                             </tr>

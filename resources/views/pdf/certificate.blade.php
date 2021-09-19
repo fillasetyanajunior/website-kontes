@@ -11,7 +11,7 @@
 
 <body>
     <div class="">
-        <table class="table table-borderless mb-5">
+        <table class="table table-borderless mb-3">
             <tbody>
                 <tr>
                     <td>
@@ -44,7 +44,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <table class="table table-borderless">
+                <table class="table table-borderless" >
                     <thead>
                         <tr>
                             <th scope="col">Hexa Color Used</th>
@@ -70,13 +70,13 @@
                 </table>
             </div>
         </div>
-        <table class="table table-borderless mb-5">
+        <table class="table table-borderless">
             <tbody>
                 <tr>
                     <td>
                         <h6 class="text-white mb-3">...</h6>
                         <hr width="99%">
-                        <table class="table table-borderless mb-5">
+                        <table class="table table-borderless">
                         <tbody>
                             <tr>
                                 <td>

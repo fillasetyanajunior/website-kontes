@@ -52,8 +52,8 @@ $(document).ready(function () {
         }).render('#paypal-button-container');
     }
     $('#projectupgrades').hide()
-    var total = 0;
-    var selectedpackageprice = 0,projectupgrade = 0,transaction = 0;
+    $('#codediscount').hide()
+    $('#fileperjanjians').hide()
 
     $('#catagories*').click(function () {
         $('#addbisniscard').empty()
@@ -88,87 +88,218 @@ $(document).ready(function () {
 
     $('#addpackage*').click(function () {
         //deskripsi
-        var  addpackage = $('input[name="addpackage"]:checked').data('harga')
-        $('#selectedpackageprice').empty()
-        $('#selectedpackageprice').html('$ ' + addpackage)
-        selectedpackageprice = $('#selectedpackageprice').html()
+        var  addpackage = $('input[name="addpackage"]:checked').data('harga');
+        $('#selectedpackageprice').empty();
+        $('#selectedpackageprice').html('$ ' + addpackage);
         // addbisniscard = $('#addbisniscard').html()
-        projectupgrade = $('#projectupgrade').html()
+        var projectupgrade = $('#projectupgrade').html();
+        var discountcode = $('#discount').html();
+        var _url = '/getdatatotalcostpack';
+        let _token = $('meta[name="csrf-token"]').attr('content');
 
-        if (projectupgrade == '') {
-            totals = parseFloat(selectedpackageprice.substring(2, 100));
-        } else {
-            totals = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100));
-        }
+        $.ajax({
+            type: 'POST',
+            url: _url,
+            data: {
+                _token: _token,
+                projectupgrades: projectupgrade.substring(2.100),
+                selectedpackageprices: addpackage,
+                discountcodes: discountcode.substring(2.100),
+            },
+            success: function (hasil){
+                if ($('#coupon').val() == '') {
+                    $('#codediscount').hide()
+                    $('#discount').html('')
+                }
+                $('#projectupgrade').html('$ ' + hasil.projectupgrade)
+                $('#transaction').html('$ ' + hasil.fee)
+                $('#subtotal').html('$ ' + hasil.subtotalcost)
+                $('#total').html('$ ' + hasil.totalcost)
 
-        if ($('#coupon').val() == '') {
-            var discon = (15 / 100) * totals
-            $('#transaction').html('$ ' + discon)
-        }
-        transaction = $('#transaction').html()
+                $('#projectname').html('')
+                $('#desainrequired').html('')
+                $('#totalcost').html('')
 
-        if (projectupgrade == '') {
-            total = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(transaction.substring(2, 100));
-        } else {
-            total = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100)) + parseFloat(transaction.substring(2, 100));
-        }
-        $('#total').html('$ ' + total)
+                $('#projectname').html($('input[name="title"]').val())
+                $('#desainrequired').html($('input[name="catagories"]').data('name'))
+                $('#totalcost').html($('#total').html())
+                $('input[name="totalcost"]').val(hasil.totalcost)
 
-        $('#projectname').html('')
-        $('#desainrequired').html('')
-        $('#totalcost').html('')
+                $('#paypal-button-container').empty()
+                initPayPalButton(hasil.totalcost)
+            }
+        })
 
-        $('#projectname').html($('input[name="title"]').val())
-        $('#desainrequired').html($('input[name="catagories"]').data('name'))
-        $('#totalcost').html($('#total').html())
-        $('input[name="totalcost"]').val(total)
+        // if (projectupgrade == '') {
+        //     totals = parseFloat(selectedpackageprice.substring(2, 100));
+        // } else {
+        //     totals = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100));
+        // }
 
-        $('#paypal-button-container').empty()
-        initPayPalButton(total)
+        // if ($('#coupon').val() == '') {
+        //     $('#codediscount').hide()
+        //     $('#discount').html('')
+        // }
+
+        // if ($('#discount').html() != 'Free Fee') {
+        //     var fee = (15 / 100) * totals
+        //     $('#transaction').html('$ ' + fee)
+        // }
+        // transaction = $('#transaction').html()
+
+        // if (projectupgrade == '') {
+        //     total = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(transaction.substring(2, 100));
+        // } else {
+        //     total = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100)) + parseFloat(transaction.substring(2, 100));
+        // }
+
+        // $('#subtotal').html('$ ' + total)
+
+        // if ($('#discount').html() == '') {
+        //     $('#total').html('$ ' + total)
+        // } else {
+        //     var subtotal = $('#discount').html()
+        //     var payments = total - subtotal.substring(2, 100)
+        //     $('#total').html('$ ' + payments)
+        // }
+
+        // $('#projectname').html('')
+        // $('#desainrequired').html('')
+        // $('#totalcost').html('')
+
+        // $('#projectname').html($('input[name="title"]').val())
+        // $('#desainrequired').html($('input[name="catagories"]').data('name'))
+        // $('#totalcost').html($('#total').html())
+
+        // var payment = $('#total').html()
+        // $('input[name="totalcost"]').val(payment.substring(2, 100))
+
+        // $('#paypal-button-container').empty()
+        // initPayPalButton(payment.substring(2, 100))
     });
 
     $("#boxes input[type='checkbox']").click(function () {
-        $('#projectupgrades').show()
-        var addprojectupgrades = 0
+        $('#projectupgrades').show();
+        var addprojectupgrades = null;
+        var hariurgent = $('#dayUrgent input').val();
+        var hariextended = $('#dayExtended input').val();
+        var selectedpackageprice = $('#selectedpackageprice').html();
+        var discountcode = $('#discount').html();
+        var _url = '/getdatatotalcostupgrade';
+        let _token = $('meta[name="csrf-token"]').attr('content');
+
         $("#boxes input[type='checkbox']:checked").each(function () {
             //Update total
-            addprojectupgrades += parseFloat($(this).data("harga"), 10);
+            if (addprojectupgrades == null) {
+                addprojectupgrades = $(this).val();
+            } else {
+                addprojectupgrades = addprojectupgrades + '/' + $(this).val();
+            }
+
+            // if ($('#addprojectupgrades[data-names="Urgent"]').is(':checked')) {
+            //     if (hariurgent == null) {
+            //         var totalhargaurgent = parseFloat($('#addprojectupgrades[data-names="Urgent"]').data('harga')) * 1;
+            //     } else {
+            //         var totalhargaurgent = parseFloat($('#addprojectupgrades[data-names="Urgent"]').data('harga')) * hariurgent;
+            //     }
+            //     addprojectupgrades += totalhargaurgent;
+            // } else if ($(this).data('names') == 'Extended') {
+            //     if (hariextended == null) {
+            //         var totalhargaextended = parseFloat($(this).data('harga')) * 1;
+            //     } else {
+            //         var totalhargaextended = parseFloat($(this).data('harga')) * hariextended;
+            //     }
+            //     addprojectupgrades += totalhargaextended;
+            // }else{
+            //     addprojectupgrades += parseFloat($(this).data("harga"), 10);
+            // }
+
         });
-        //deskripsi
-        $('#projectupgrade').html('$ ' + addprojectupgrades)
-        selectedpackageprice = $('#selectedpackageprice').html()
-        // addbisniscard = $('#addbisniscard').html()
-        projectupgrade = $('#projectupgrade').html()
 
-        if (projectupgrade == '') {
-            totals = parseFloat(selectedpackageprice.substring(2, 100));
-        } else {
-            totals = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100));
-        }
+        $.ajax({
+            type: 'POST',
+            url: _url,
+            data: {
+                _token: _token,
+                addupgrade: addprojectupgrades,
+                selectedpackageprices: selectedpackageprice.substring(2, 100),
+                hariurgents: hariurgent,
+                hariextendeds: hariextended,
+                discountcodes: discountcode.substring(2.100),
+            },
+            success: function (hasil) {
+                if ($('#coupon').val() == '') {
+                    $('#codediscount').hide()
+                    $('#discount').html('')
+                }
+                $('#projectupgrade').html('$ ' + hasil.projectupgrade)
+                $('#transaction').html('$ ' + hasil.fee)
+                $('#subtotal').html('$ ' + hasil.subtotalcost)
+                $('#total').html('$ ' + hasil.totalcost)
 
-        if ($('#coupon').val() == '') {
-            var discon = (15 / 100) * totals
-            $('#transaction').html('$ ' + discon)
-        }
-        transaction = $('#transaction').html()
+                $('#projectname').html('')
+                $('#desainrequired').html('')
+                $('#totalcost').html('')
 
-        total = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100)) + parseFloat(transaction.substring(2, 100));
-        $('#total').html('$ ' + total)
+                $('#projectname').html($('input[name="title"]').val())
+                $('#desainrequired').html($('input[name="catagories"]').data('name'))
+                $('#totalcost').html($('#total').html())
+                $('input[name="totalcost"]').val(hasil.totalcost)
 
-        $('#projectname').html('')
-        $('#desainrequired').html('')
-        $('#totalcost').html('')
+                $('#paypal-button-container').empty()
+                initPayPalButton(hasil.totalcost)
+            }
+        })
 
-        $('#projectname').html($('input[name="title"]').val())
-        $('#desainrequired').html($('input[name="catagories"]').data('name'))
-        $('#totalcost').html($('#total').html())
-        $('input[name="totalcost"]').val(total)
+        // //deskripsi
+        // $('#projectupgrade').html('$ ' + addprojectupgrades)
+        // selectedpackageprice = $('#selectedpackageprice').html()
+        // // addbisniscard = $('#addbisniscard').html()
+        // projectupgrade = $('#projectupgrade').html()
 
-        $('#paypal-button-container').empty()
-        initPayPalButton(total)
+        // if (projectupgrade == '') {
+        //     totals = parseFloat(selectedpackageprice.substring(2, 100));
+        // } else {
+        //     totals = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100));
+        // }
+
+
+        // if ($('#discount').html() != 'Free Fee') {
+        //     var fee = (15 / 100) * totals
+        //     $('#transaction').html('$ ' + fee)
+        // }
+        // transaction = $('#transaction').html()
+
+        // total = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100)) + parseFloat(transaction.substring(2, 100));
+        // $('#subtotal').html('$ ' + total)
+
+        // if ($('#discount').html() == '') {
+        //     $('#total').html('$ ' + total)
+        // }else{
+        //     var subtotal = $('#discount').html()
+        //     var payments = total - subtotal.substring(2, 100)
+        //     $('#total').html('$ ' + payments)
+        // }
+
+
     });
 
+    $('#addprojectupgrades[data-names="Non Disclosure Agreement (NDA)"]').click(function () {
+        if ($(this).is(':checked')) {
+            $('#fileperjanjians').show()
+        } else {
+            $('#fileperjanjians').hide()
+        }
+    })
+
     $('#coupon').keyup(function () {
+
+        if ($(this).val() == '') {
+            $('#codediscount').hide()
+            $('#discount').html('')
+        }else{
+            $('#codediscount').show()
+        }
         var _url    = '/code/getdata'
         let _token  = $('meta[name="csrf-token"]').attr('content')
         var codes   = $(this).val()
@@ -181,72 +312,127 @@ $(document).ready(function () {
                 code: codes
             },
             success: function (hasil) {
-                var total   = $('#total').html()
-                var dic = 0
+                var addpackage = $('#selectedpackageprice').html();
+                var projectupgrade = $('#projectupgrade').html();
+                var _url2 = '/getdatatotalcostpack';
+                var _url3 = '/getdatatotalcostfreefee';
+
                 if (hasil.discount.choices == '$10') {
-                    selectedpackageprice = $('#selectedpackageprice').html()
-                    projectupgrade = $('#projectupgrade').html()
-                    if (projectupgrade == '') {
-                        var  totals = parseFloat(selectedpackageprice.substring(2, 100));
-                    } else {
-                        var totals = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100));
-                    }
-                    var discon = (15 / 100) * totals
-                    $('#transaction').html('$ ' + discon)
-                    transaction = $('#transaction').html()
-                    if (projectupgrade == '') {
-                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(transaction.substring(2, 100)) - 10;
-                    } else {
-                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100)) + parseFloat(transaction.substring(2, 100)) - 10;
-                    }
+                    $('#discount').html('$ 10')
+
+                    var discountcode = $('#discount').html();
+                    $.ajax({
+                        type: 'POST',
+                        url: _url2,
+                        data: {
+                            _token: _token,
+                            projectupgrades: projectupgrade.substring(2.100),
+                            selectedpackageprices: addpackage.substring(2,100),
+                            discountcodes: discountcode.substring(2.100),
+                        },
+                        success: function (hasil) {
+                            if ($('#coupon').val() == '') {
+                                $('#codediscount').hide()
+                                $('#discount').html('')
+                            }
+                            $('#subtotal').html('$ ' + hasil.subtotalcost)
+                            $('#total').html('$ ' + hasil.totalcost)
+
+                            $('#totalcost').html($('#total').html())
+                            $('input[name="totalcost"]').val(hasil.totalcost)
+
+                            $('#paypal-button-container').empty()
+                            initPayPalButton(hasil.totalcost)
+                        }
+                    })
                 } else if (hasil.discount.choices == '$20') {
-                    var discon = (15 / 100) * totals
-                    $('#transaction').html('$ ' + discon)
-                    transaction = $('#transaction').html()
-                    selectedpackageprice = $('#selectedpackageprice').html()
-                    projectupgrade = $('#projectupgrade').html()
-                    if (projectupgrade == '') {
-                        var totals = parseFloat(selectedpackageprice.substring(2, 100));
-                    } else {
-                        var totals = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100));
-                    }
-                    var discon = (15 / 100) * totals
-                    $('#transaction').html('$ ' + discon)
-                    transaction = $('#transaction').html()
-                    if (projectupgrade == '') {
-                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(transaction.substring(2, 100)) - 20;
-                    } else {
-                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100)) + parseFloat(transaction.substring(2, 100)) - 20;
-                    }
+                    $('#discount').html('$ 20')
+
+                    var discountcode = $('#discount').html();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: _url2,
+                        data: {
+                            _token: _token,
+                            projectupgrades: projectupgrade.substring(2.100),
+                            selectedpackageprices: addpackage.substring(2,100),
+                            discountcodes: discountcode.substring(2.100),
+                        },
+                        success: function (hasil) {
+                            if ($('#coupon').val() == '') {
+                                $('#codediscount').hide()
+                                $('#discount').html('')
+                            }
+                            $('#subtotal').html('$ ' + hasil.subtotalcost)
+                            $('#total').html('$ ' + hasil.totalcost)
+
+                            $('#totalcost').html($('#total').html())
+                            $('input[name="totalcost"]').val(hasil.totalcost)
+
+                            $('#paypal-button-container').empty()
+                            initPayPalButton(hasil.totalcost)
+                        }
+                    })
                 } else if (hasil.discount.choices == '$50') {
-                    transaction = $('#transaction').html()
-                    selectedpackageprice = $('#selectedpackageprice').html()
-                    projectupgrade = $('#projectupgrade').html()
-                    if (projectupgrade == '') {
-                        var totals = parseFloat(selectedpackageprice.substring(2, 100));
-                    } else {
-                        var totals = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100));
-                    }
-                    var discon = (15 / 100) * totals
-                    $('#transaction').html('$ ' + discon)
-                    transaction = $('#transaction').html()
-                    if (projectupgrade == '') {
-                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(transaction.substring(2, 100)) - 50;
-                    } else {
-                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100)) + parseFloat(transaction.substring(2, 100)) - 50;
-                    }
+                    $('#discount').html('$ 50')
+
+                    var discountcode = $('#discount').html();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: _url2,
+                        data: {
+                            _token: _token,
+                            projectupgrades: projectupgrade.substring(2.100),
+                            selectedpackageprices: addpackage.substring(2,100),
+                            discountcodes: discountcode.substring(2.100),
+                        },
+                        success: function (hasil) {
+                            if ($('#coupon').val() == '') {
+                                $('#codediscount').hide()
+                                $('#discount').html('')
+                            }
+                            $('#subtotal').html('$ ' + hasil.subtotalcost);
+                            $('#total').html('$ ' + hasil.totalcost);
+                            $('#totalcost').html($('#total').html());
+                            $('input[name="totalcost"]').val(hasil.totalcost);
+
+                            $('#paypal-button-container').empty();
+                            initPayPalButton(hasil.totalcost);
+                        }
+                    })
                 }else {
-                    $('#transaction').html('$ 0')
-                    transaction = $('#transaction').html()
-                    selectedpackageprice = $('#selectedpackageprice').html()
-                    projectupgrade = $('#projectupgrade').html()
-                    if (projectupgrade == '') {
-                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(transaction.substring(2, 100));
-                    } else {
-                        dic = parseFloat(selectedpackageprice.substring(2, 100)) + parseFloat(projectupgrade.substring(2, 100)) + parseFloat(transaction.substring(2, 100));
-                    }
+
+                    $('#discount').html('Free Fee');
+                    $('#transaction').html('$ 0');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: _url3,
+                        data: {
+                            _token: _token,
+                            projectupgrades: projectupgrade.substring(2.100),
+                            selectedpackageprices: addpackage.substring(2,100),
+                            discountcodes: discountcode.substring(2.100),
+                        },
+                        success: function (hasil) {
+                            if ($('#coupon').val() == '') {
+                                $('#codediscount').hide()
+                                $('#discount').html('')
+                            }
+                            $('#projectupgrade').html('$ ' + hasil.projectupgrade)
+                            $('#subtotal').html('$ ' + hasil.subtotalcost)
+                            $('#total').html('$ ' + hasil.totalcost)
+
+                            $('#totalcost').html($('#total').html())
+                            $('input[name="totalcost"]').val(hasil.totalcost)
+
+                            $('#paypal-button-container').empty()
+                            initPayPalButton(hasil.totalcost)
+                        }
+                    })
                 }
-                $('#total').html('$ ' + dic)
             }
         })
     });
@@ -262,6 +448,7 @@ $(document).ready(function () {
 
         total = parseFloat($(this).val()) + parseFloat(transaction.substring(2, 100));
 
+        $('#budget').html('$ ' + $(this).val())
         $('#total').html('$ ' + total)
 
         $('input[name="totalcost"]').val(total)

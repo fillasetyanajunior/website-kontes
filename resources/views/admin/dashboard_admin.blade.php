@@ -16,7 +16,7 @@
                             <i class="fa fa-hourglass-start"></i>
                         </span>
                         <div>
-                            <h4 class="m-0 text-white">{{$waittingpayment}}<small class="text-white"> Waitting Payment</small></h4>
+                            <h6 class="m-0 text-white">{{$waittingpayment}}<small class="text-white"> Waitting Payment</small></h6>
                         </div>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                             <i class="fa fa-refresh"></i>
                         </span>
                         <div>
-                            <h4 class="m-0 text-white">{{$projectrunning}}<small class="text-white"> Project Running</small></h4>
+                            <h6 class="m-0 text-white">{{$projectrunning}}<small class="text-white"> Project Running</small></h6>
                         </div>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                             <i class="fa fa-bullhorn"></i>
                         </span>
                         <div>
-                            <h4 class="m-0 text-white">{{$choosewinner}}<small class="text-white"> Choose Winner</small></h4>
+                            <h6 class="m-0 text-white">{{$choosewinner}}<small class="text-white"> Choose Winner</small></h6>
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                             <i class="fa fa-handshake-o"></i>
                         </span>
                         <div>
-                            <h4 class="m-0 text-white">{{$projecthandover}}<small class="text-white"> Project Handover</small></h4>
+                            <h6 class="m-0 text-white">{{$projecthandover}}<small class="text-white"> Project Handover</small></h6>
                         </div>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
                             <i class="fa fa-unlock-alt"></i>
                         </span>
                         <div>
-                            <h4 class="m-0 text-white">{{$projectlocked}}<small class="text-white"> Project Locked</small></h4>
+                            <h6 class="m-0 text-white">{{$projectlocked}}<small class="text-white"> Project Locked</small></h6>
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                             <i class="fa fa-users"></i>
                         </span>
                         <div>
-                            <h4 class="m-0 text-white">{{$mediation}}<small class="text-white"> Case/Mediation</small></h4>
+                            <h6 class="m-0 text-white">{{$mediation}}<small class="text-white"> Case/Mediation</small></h6>
                         </div>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                             <i class="fa fa-times-circle"></i>
                         </span>
                         <div>
-                            <h4 class="m-0 text-white">{{$projectcancel}}<small class="text-white"> Project Cancel</small></h4>
+                            <h6 class="m-0 text-white">{{$projectcancel}}<small class="text-white"> Project Cancel</small></h6>
                         </div>
                     </div>
                 </div>
@@ -100,7 +100,7 @@
                             <i class="fe fe-users"></i>
                         </span>
                         <div>
-                            <h4 class="m-0 text-white">{{$accountworker}}<small class="text-white"> Account Worker</small></h4>
+                            <h6 class="m-0 text-white">{{$accountworker}}<small class="text-white"> Account Worker</small></h6>
                         </div>
                     </div>
                 </div>
@@ -112,7 +112,7 @@
                             <i class="fe fe-users"></i>
                         </span>
                         <div>
-                            <h4 class="m-0 text-white">{{$accountworker}}<small class="text-white"> Account Client</small></h4>
+                            <h6 class="m-0 text-white">{{$accountworker}}<small class="text-white"> Account Client</small></h6>
                         </div>
                     </div>
                 </div>
@@ -124,28 +124,28 @@
                             <i class="fa fa-check"></i>
                         </span>
                         <div>
-                            <h4 class="m-0 text-white">{{$projectclose}}<small class="text-white"> Project Close</small></h4>
+                            <h6 class="m-0 text-white">{{$projectclose}}<small class="text-white"> Project Close</small></h6>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row row-cards row-deck">
-            <div class="col-12">
-                <div class="d-flex flex-row bd-highlight my-4">
-                    <div class="bd-highlight">
+            <div class="col-lg-12">
+                <div class="d-flex justify-content-start my-4">
+                    <div class="">
                         <a href="{{route('contestproject')}}" class="btn btn-orange">Add Fake Project Contest</a>
                     </div>
-                    <div class="ml-4 bd-highlight">
+                    <div class="ml-2">
                         <a href="{{route('directproject')}}" class="btn btn-lime">Add Fake Direct Contest</a>
-                    </div>
-                    <div class="ml-auto">
-                        <input type="text" id="searchprojectrunningadmin" class="form-control" placeholder="Search">
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Project Running</h3>
+                        <div class="ml-auto">
+                            <input type="text" id="searchprojectrunningadmin" class="form-control" placeholder="Search">
+                        </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table card-table table-vcenter text-nowrap">
@@ -207,15 +207,15 @@
                                             <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-success btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                             @endif
                                         @elseif ($itemproject->is_active == 'choose winner')
-                                        <a class="btn btn-azure btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                        <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-azure btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                         @elseif ($itemproject->is_active == 'handover')
-                                        <a href="/handoverproject/{{$itemproject->id}}" class="btn btn-primary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                        <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-primary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                         @elseif ($itemproject->is_active == 'close')
-                                        <a href="/handoverproject/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-uppercase">{{$itemproject->is_active}}</a>
+                                        <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-uppercase">{{$itemproject->is_active}}</a>
                                         @elseif ($itemproject->is_active == 'cancel')
-                                        <a class="btn btn-danger btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                        <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-danger btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                         @else
-                                        <a class="btn btn-gray-dark btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                        <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-gray-dark btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                         @endif
                                     </td>
                                 </tr>

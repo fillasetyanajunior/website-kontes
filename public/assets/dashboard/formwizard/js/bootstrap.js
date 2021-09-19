@@ -23,7 +23,7 @@ $(document).ready(function () {
     // Form
     $('.f1 fieldset:first').fadeIn('slow');
 
-    $('.f1 input[type="text"], .f1 textarea[name="description"], .f1 select').on('focus', function () {
+    $('.f1 input[name="title"], .f1 input[name="logo_text"], .f1 textarea[name="description"], .f1 select').on('focus', function () {
         $(this).removeClass('input-error');
     });
 
@@ -36,7 +36,7 @@ $(document).ready(function () {
         var progress_line = $(this).parents('.f1').find('.f1-progress-line');
 
         // validasi form
-        parent_fieldset.find('input[type="text"], textarea[name="description"], select').each(function () {
+        parent_fieldset.find('input[name="title"], input[name="logo_text"], textarea[name="description"], select').each(function () {
             if ($(this).val() == "") {
                 $(this).addClass('input-error');
                 next_step = false;
@@ -80,7 +80,7 @@ $(document).ready(function () {
     // submit (ketika klik tombol submit diakhir wizard)
     $('.f1').on('submit', function (e) {
         // validasi form
-        $(this).find('input[type="text"], textarea[name="description"], select').each(function () {
+        $(this).find('input[name="title"], input[name="logo_text"], textarea[name="description"], select').each(function () {
             if ($(this).val() == "") {
                 e.preventDefault();
                 $(this).addClass('input-error');

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateColorsTable extends Migration
+class CreateReplayPublicDiscusesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateColorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('colors', function (Blueprint $table) {
-            $table->integer('contest_id');
-            $table->string('hexa');
-            $table->string('rgb');
+        Schema::create('replay_public_discuses', function (Blueprint $table) {
+            $table->text('message_replay')->nullable();
+            $table->integer('user_id')->nullable();
+            $table->text('feedback')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateColorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('colors');
+        Schema::dropIfExists('replay_public_discuses');
     }
 }

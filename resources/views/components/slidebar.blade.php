@@ -28,8 +28,8 @@
                         style="background-image: url({{asset('assets/dashboard/images/default.jpg')}})"></span>
                         @endif
                         <span class="ml-2 d-none d-lg-block">
-                            <span class="text-default">{{Auth::user()->name}}</span>
-                            <small class="text-muted d-block mt-1 text-uppercase">{{Auth::user()->role}}</small>
+                            <span class="text-default" style="font-size: 11pt">{{Auth::user()->name}}</span>
+                            <small class="text-muted d-block mt-1 text-uppercase" style="font-size: 10pt">{{Auth::user()->role}}</small>
                         </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">

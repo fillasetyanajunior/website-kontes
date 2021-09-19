@@ -22,9 +22,6 @@ class CreateWinnerContestsTable extends Migration
             $table->string('filecontest');
             $table->string('logotext')->nullable();
             $table->string('logo')->nullable();
-            $table->text('hexa_color')->nullable();
-            $table->text('rgb_color')->nullable();
-            $table->text('font')->nullable();
             $table->timestamps();
         });
     }

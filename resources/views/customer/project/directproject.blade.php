@@ -106,6 +106,10 @@
                                     <div class="card">
                                         <table class="table card-table table-vcenter">
                                             <tr>
+                                                <td>Budget</td>
+                                                <td id="budget"></td>
+                                            </tr>
+                                            <tr>
                                                 <td>Transaction Fee</td>
                                                 <td id="transaction"></td>
                                             </tr>

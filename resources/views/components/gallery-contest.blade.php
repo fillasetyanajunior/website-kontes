@@ -8,16 +8,20 @@
         <div class="card p-3">
             @if ($itemresultcontest->is_active == 'active')
             <a href="javascript:void(0)" id="feedback" class="mb-3" data-target="#FeedbackContest" data-toggle="modal"
-                data-url="{{url('storage')}}" data-id="{{$itemresultcontest->id}}">
+                data-url="{{url('storage')}}" data-id="{{$itemresultcontest->id}}" data-user_id="{{request()->user()->id}}" data-role="{{request()->user()->role}}">
                 <img src="{{asset('/storage/resultcontest/' . $itemresultcontest->filecontest)}}" class="rounded"
                     style="width: 300px; height: 300px; overflow: hidden; width: 100%;">
             </a>
             @elseif ($itemresultcontest->is_active == 'eliminasi')
-            <img src="{{url('assets/dashboard/images/gembok.png')}}" class="rounded"
-                style="width: 300px; height: 300px; overflow: hidden; width: 100%;">
+            <a href="javascript:void(0)" id="feedback" class="mb-3" data-target="#FeedbackContest" data-toggle="modal"
+                data-url="{{url('storage')}}" data-id="{{$itemresultcontest->id}}" data-user_id="{{request()->user()->id}}" data-role="{{request()->user()->role}}">
+                <img src="{{asset('/storage/resultcontest/' . $itemresultcontest->filecontest)}}" class="rounded badge-secondary"
+                        style="width: 300px; height: 300px; overflow: hidden; width: 100%;filter:blur(5px);">
+                <p style="width: 100%; overflow: hidden; position: absolute;left: 0px; top: 150px; font-size: 20pt" class="text-center text-white">REJECTED</p>
+            </a>
             @else
             <a href="javascript:void(0)" id="feedback" class="mb-3" data-target="#FeedbackContest" data-toggle="modal"
-                data-url="{{url('storage')}}" data-id="{{$itemresultcontest->id}}">
+                data-url="{{url('storage')}}" data-id="{{$itemresultcontest->id}}" data-user_id="{{request()->user()->id}}" data-role="{{request()->user()->role}}">
                 <img src="{{asset('/storage/resultcontest/' . $itemresultcontest->filecontest)}}" class="rounded badge-secondary"
                     style="width: 300px; height: 300px; overflow: hidden; width: 100%;">
                 <img src="{{asset('assets/dashboard/images/piala.png')}}"
@@ -195,9 +199,9 @@
                     @endif
                 </div>
                 <div class="ml-auto">
-                    @if (request()->user()->role == 'customer' && request()->user()->id == $project->user_id &&
+                    @if (request()->user()->role == 'customer' && request()->user()->id == $project->user_id || request()->user()->role == 'admin' &&
                     $itemresultcontest->is_active == 'active' &&
-                    $project->is_active == 'running')
+                    $project->is_active == 'running' )
                     <div class="mb-1" id="eliminasicontest">
                         <button type="button" class="btn btn-danger col-12" id="btneliminasicontests"
                             data-toggle="modal" data-target="#ActionModal" data-url="{{url('assets/dashboard/images')}}"
@@ -233,17 +237,64 @@
             <h3 class="card-title">Public Discussion</h3>
         </div>
         <div class="card-body">
+            @foreach($message as $itemmessage)
             @php
-            foreach($message as $itemmessage) :
             $users = DB::table('users')->where('id',$itemmessage->user_id)->first();
             @endphp
-            {{$users->name}}
-            <div class="card">
-                <p>{{$itemmessage->feedback}}</p>
+            <div class="d-flex">
+                <div class="mr-auto">
+                    <div class="d-flex">
+                        <div>
+                            @if ($users->avatar == 'default.jpg')
+                            <img src="{{url('assets/dashboard/images/default.jpg')}}" width="75px" height="75px">
+                            @else
+                            <img src="{{url('storage/profile/' . $users->avatar)}}" width="75px" height="75px">
+                            @endif
+                        </div>
+                        <div class="ml-3">
+                            <h6 class="mt-3">{{$users->name}}</h6>
+                            <p class="mt-4">{{$itemmessage->feedback}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <button type="button" class="btn btn-secondary btn-sm">Replay</button>
+                </div>
             </div>
             @php
-            endforeach;
+                $cekreplay = DB::table('replay_public_discuses')->where('message_replay',$itemmessage->feedback)->first();
+                $replay = DB::table('replay_public_discuses')->where('message_replay',$itemmessage->feedback)->get();
             @endphp
+            @if ($cekreplay != null)
+            @foreach ($replay as $itemreplay)
+            @php
+                $userreplay = DB::table('users')->where('id',$itemreplay->user_id)->first();
+            @endphp
+            <hr align="right" width="97%">
+            <div class="d-flex ml-5 mt-5">
+                <div class="mr-auto">
+                    <div class="d-flex">
+                        <div>
+                            @if ($userreplay->avatar == 'default.jpg')
+                            <img src="{{url('assets/dashboard/images/default.jpg')}}" width="75px" height="75px">
+                            @else
+                            <img src="{{url('storage/profile/' . $userreplay->avatar)}}" width="75px" height="75px">
+                            @endif
+                        </div>
+                        <div class="ml-3">
+                            <h6 class="mt-3">{{$userreplay->name}}</h6>
+                            <p class="mt-4">{{$itemreplay->feedback}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <button type="button" class="btn btn-secondary btn-sm">Replay</button>
+                </div>
+            </div>
+            @endforeach
+            @endif
+            <hr>
+            @endforeach
         </div>
         <form action="{{route('comentar')}}" method="post">
             <div class="card-body">

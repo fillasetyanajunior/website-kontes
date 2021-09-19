@@ -8,22 +8,23 @@
             @if ($itemresultdirect->is_active == 'active')
             @if ($user->avatar != 'default.jpg')
             <a href="javascript:void(0)" id="feedbackbid" class="mb-3" data-target="#FeedbackDirect" data-toggle="modal"
-                data-url="{{url('storage')}}" data-id="{{$itemresultdirect->id}}">
+                data-url="{{url('storage')}}" data-id="{{$itemresultdirect->id}}" data-user_id="{{request()->user()->id}}" data-role="{{request()->user()->role}}">
                 <img src="{{asset('/storage/profile/' . $user->avatar)}}" class="rounded"
                     style="width: 300px; height: 300px; overflow: hidden; width: 100%;">
             </a>
             @else
             <a href="javascript:void(0)" id="feedbackbid" class="mb-3" data-target="#FeedbackDirect" data-toggle="modal"
-                data-url="{{url('storage')}}" data-id="{{$itemresultdirect->id}}">
+                data-url="{{url('storage')}}" data-id="{{$itemresultdirect->id}}" data-user_id="{{request()->user()->id}}" data-role="{{request()->user()->role}}">
                 <img src="{{asset('assets/dashboard/images/default.jpg')}}" class="rounded"
-                    style="width: 300px; height: 300px; overflow: hidden; width: 100%;">
+                    style="width: 300px; height: 300px; overflow: hidden; width: 100%; filter: blur (5px)">
+                <p style="width: 100%; overflow: hidden; position: absolute;left: 0px; top: 150px; font-size: 20pt" class="text-center text-white">REJECTED</p>
             @endif
             @elseif ($itemresultdirect->is_active == 'eliminasi')
             <img src="{{url('assets/dashboard/images/gembok.png')}}" class="rounded"
                 style="width: 300px; height: 300px; overflow: hidden; width: 100%;">
             @else
             <a href="javascript:void(0)" id="feedbackbid" class="mb-3" data-target="#FeedbackDirect"
-                data-toggle="modal" data-url="{{url('storage')}}" data-id="{{$itemresultdirect->id}}">
+                data-toggle="modal" data-url="{{url('storage')}}" data-id="{{$itemresultdirect->id}}" data-user_id="{{request()->user()->id}}" data-role="{{request()->user()->role}}">
                 <img src="{{asset('assets/dashboard/images/piala.png')}}" class="rounded"
                     style="width: 300px; height: 300px; overflow: hidden; width: 100%;">
                 <img src="{{asset('assets/dashboard/images/piala.png')}}"
@@ -192,7 +193,7 @@
                     @endif
                 </div>
                 <div class="ml-auto">
-                    @if (request()->user()->role == 'customer' && request()->user()->id == $project->user_id &&
+                    @if (request()->user()->role == 'customer' && request()->user()->id == $project->user_id || request()->user()->role == 'admin' &&
                     $project->is_active == 'running' && $itemresultdirect->is_active == 'active')
                     <div class="mb-1" id="eliminasidirect">
                         <button type="submit" class=" btn btn-danger col-12" id="btneliminasidirects"

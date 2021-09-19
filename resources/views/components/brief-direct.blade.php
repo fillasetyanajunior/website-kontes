@@ -79,9 +79,9 @@
                     $worker = DB::table('workers')->where('user_id',request()->user()->id)->first();
                 @endphp
                 @if (request()->user()->role == 'worker' && $project->is_active == 'running' && $worker->status_account != 'suspend')
-                <button type="button" class="btn btn-primary mb-5 col-lg-12" idcontest="{{$project->id}}"
+                <button type="button" class="btn btn-primary mb-5 col-lg-12 font-weight-bold" idcontest="{{$project->id}}"
                     data-toggle="modal" data-target="#directModal" id="tambahresultdirect">Submit
-                    Direct</button>
+                    Entry</button>
                 @elseif (request()->user()->role == 'admin')
                 <form action="/deletedirect/{{$project->id}}" method="post">
                     @csrf

@@ -5,7 +5,7 @@
     <div class="bg-gray d-flex align-items-center">
         <div class="container">
             <div class="page-header">
-                <h1 class="page-title text-white">
+                <h1 class="page-title text-white font-weight-bold">
                     Brief Project
                 </h1>
             </div>
@@ -14,11 +14,11 @@
     <div class="container">
         <ul class="nav nav-tabs mb-3 text-capitalize" id="tabs">
             <li class="nav-item">
-                <a class="nav-link active" id="descriptiontoggel" href="javascript:void(0)"
+                <a class="nav-link active font-weight-bold" id="descriptiontoggel" href="javascript:void(0)"
                     data-role="description">Description</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="entriestoggel" href="javascript:void(0)" data-role="entries">entries</a>
+                <a class="nav-link font-weight-bold" id="entriestoggel" href="javascript:void(0)" data-role="entries">entries</a>
             </li>
         </ul>
         <x-brief-direct id="{{$project->id}}"></x-brief-direct>
@@ -127,18 +127,8 @@
                                 <div id="name_worker"></div>
                             </div>
                             <div class="ml-auto">
-                                @if (request()->user()->role == 'customer' && request()->user()->id == $project->user_id
-                                &&
-                                $project->is_active == 'running')
-                                <div class="mb-1" id="eliminasidirect">
-                                    <button type="button" class=" btn btn-danger col-12" id="btneliminasidirect"
-                                        data-toggle="modal" data-url="{{url('assets/dashboard/images')}}" data-target="#ActionDirectModal">Eliminasi</button>
+                                <div id="buttonresultdirect">
                                 </div>
-                                <div class="mb-1" id="pickwinnerdirect">
-                                    <button type="button" class=" btn btn-azure col-12" id="btnpickwinnerdirect"
-                                        data-toggle="modal" data-url="{{url('assets/dashboard/images')}}" data-target="#ActionDirectModal">Pick Winner</button>
-                                </div>
-                                @endif
                                 @if ($report >= 3)
                                 @else
                                 <div class="mb-1">
@@ -150,28 +140,14 @@
                         </div>
                         <div class="mt-5">
                             <div class="mb-3">
-                                <div class="rating"></div>
+                                <div class="rating" style="font-size: 20pt"></div>
                             </div>
                             <h4>Description</h4>
                             <p id="descriptions"></p>
                         </div>
                     </div>
-                    <div class="card-body mb-2" id="feedback_card">
-
+                    <div id="feedbackcommentbid">
                     </div>
-                    @if (request()->user()->role == 'customer' || request()->user()->role == 'worker')
-                    <div class="card-body">
-                        <form action="" method="post">
-                            @csrf
-                            <div class="form-group">
-                                <textarea class="form-control" rows="5" name="feedback"></textarea>
-                            </div>
-                            <div class="text-right">
-                                <button type="submit" class="btn-sm btn  btn-primary">Submit</button>
-                            </div>
-                        </form>
-                    </div>
-                    @endif
                 </div>
             </div>
         </div>
