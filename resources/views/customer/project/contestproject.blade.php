@@ -46,7 +46,7 @@
                             </div>
                             <div class="f1-step">
                                 <div class="f1-step-icon">4</div>
-                                <p>Payment Opsions</p>
+                                <p>Payment Options</p>
                             </div>
                         </div>
                         <!-- step 1 -->
@@ -63,12 +63,14 @@
                                             <input type="radio" value="{{$itemcatagories->id}}"
                                                 class="imagecheck-input" name="catagories" id="catagories"
                                                 data-name="{{$itemcatagories->name}}"
+                                                data-url="{{asset('storage/icon/')}}"
                                                 data-harga="{{$itemcatagories->harga}}">
                                             <figure class="imagecheck-figure">
                                                 <div class="card-body imagecheck-image">
                                                     <div class="d-flex flex-row">
                                                         <div class="align-self-center">
-                                                            <i class="fa {{$itemcatagories->icon}}" style="font-size: 50pt"></i>
+                                                            <img src="{{asset('storage/icon/' . $itemcatagories->icon)}}" alt="" width="100px">
+                                                            {{-- <i class="fa {{$itemcatagories->icon}}" style="font-size: 50pt"></i> --}}
                                                         </div>
                                                         <div class="align-self-center ml-4">
                                                             <div class="d-flex flex-column">
@@ -113,7 +115,7 @@
                                 </div>
                             </div>
                             <div class="f1-buttons mt-5 d-flex flex-row-reverse">
-                                <button type="button" class="btn btn-primary btn-next">Selanjutnya <i
+                                <button type="button" class="btn btn-primary btn-next">Next <i
                                         class="fa fa-arrow-right"></i></button>
                             </div>
                         </fieldset>
@@ -132,7 +134,7 @@
                             <div class="form-group">
                                 <label class="form-label">Task description</label>
                                 <textarea class="form-control" name="description" rows="6"
-                                    placeholder="Describe what you need and tell us a bit about your requrements">{{old('description')}}</textarea>
+                                    placeholder="Describe what you need and tell us a bit about your Requirements">{{old('description')}}</textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Logo Text</label>
@@ -140,22 +142,21 @@
                                     placeholder="What do you want your logo to say on it">
                             </div>
                             <div class="form-group">
-                                <div class="form-label">Upload files <small>Opsional</small></div>
+                                <div class="form-label">Upload files <small>Optional</small></div>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="file[]" multiple>
-                                    <label class="custom-file-label">Choose file</label>
+                                    <input type="file" class="form-control-file" name="file[]" multiple>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label text-capitalize">should have <small>Opsional</small></label>
+                                <label class="form-label text-capitalize">should have <small>Optional</small></label>
                                 <textarea class="form-control" name="shouldhave" rows="6"
-                                    placeholder="Describe what you need and tell us a bit about your requrements">{{old('shouldhave')}}</textarea>
+                                    placeholder="Describe what you need and tell us a bit about your Requirements">{{old('shouldhave')}}</textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label text-capitalize">should not have
-                                    <small>Opsional</small></label>
+                                    <small>Optional</small></label>
                                 <textarea class="form-control" name="shouldnothave" rows="6"
-                                    placeholder="Describe what you need and tell us a bit about your requrements">{{old('shouldnothave')}}</textarea>
+                                    placeholder="Describe what you need and tell us a bit about your Requirements">{{old('shouldnothave')}}</textarea>
                             </div>
 
                             <div class="mt-5 mb-5">
@@ -177,11 +178,11 @@
                             </div>
 
                             <div class="f1-buttons mt-5 d-flex flex-row-reverse">
-                                <button type="button" class="btn btn-primary btn-next ml-2">Selanjutnya <i
+                                <button type="button" class="btn btn-primary btn-next ml-2">Next <i
                                         class="fa fa-arrow-right"></i></button>
                                 <button type="button" class="btn btn-warning btn-previous mr-2"><i
                                         class="fa fa-arrow-left"></i>
-                                    Sebelumnya</button>
+                                    Previous</button>
                             </div>
                         </fieldset>
                         <!-- step 3 -->
@@ -231,7 +232,7 @@
                                         <table class="table card-table table-vcenter col-lg-8">
                                             @foreach ($opsipackageupgrade as $itemopsipackageupgrade)
                                             <tr>
-                                                <td width="40px"><i class="fa {{$itemopsipackageupgrade->icon}}" style="font-size: 30pt"></i></td>
+                                                <td width="40px"><img src="{{url('assets/dashboard/images/' . $itemopsipackageupgrade->icon)}}" width="100px"></td>
                                                 <td width="50px">
                                                     <h6>{{$itemopsipackageupgrade->name}}</h6>
                                                     <p class="text-justify d-none d-md-table-cell text-nowrap">
@@ -239,10 +240,11 @@
                                                     </p>
                                                 </td>
                                                 <td class="align-middle" width="70px">
-                                                    {{"$ ". number_format($itemopsipackageupgrade->harga)}}
+                                                    {{"$". number_format($itemopsipackageupgrade->harga)}}
                                                 </td>
                                                 @if ($itemopsipackageupgrade->name == 'Urgent' || $itemopsipackageupgrade->name == 'Extended')
-                                                <td width="90px" id="day{{$itemopsipackageupgrade->name}}">
+                                                <td class="align-middle" width="90px" id="day{{$itemopsipackageupgrade->name}}">
+                                                    {{-- <small style="font-size:9pt">Days</small> --}}
                                                     <div class="form-group">
                                                         <input type="text" class="form-control" name="day{{$itemopsipackageupgrade->name}}"
                                                             placeholder="Day"
@@ -252,7 +254,7 @@
                                                 @else
                                                 <td></td>
                                                 @endif
-                                                <td class="align-middle" width="50px">
+                                                <td class="align-middle" width="40px">
                                                     <label class="selectgroup-item" id="boxes">
                                                         <input type="checkbox" name="addprojectupgrades[]"
                                                             value="{{$itemopsipackageupgrade->id}}"
@@ -269,7 +271,7 @@
                                     <div class="card" id="fileperjanjians">
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <div class="form-label" >File Perjanjian</div>
+                                                <div class="form-label" >Non Disclosure Agreement (NDA)</div>
                                                 <div class="custom-file">
                                                     <input type="file" class="custom-file-input" name="fileperjanjian">
                                                     <label class="custom-file-label">Choose file</label>
@@ -318,8 +320,10 @@
                                                 <td id="discount"></td>
                                             </tr>
                                             <tr>
-                                                <td>Total</td>
-                                                <td id="total"></td>
+                                                <b>
+                                                    <td>Total</td>
+                                                    <td id="total"></td>
+                                                </b>
                                             </tr>
                                         </table>
                                     </div>
@@ -343,11 +347,11 @@
                                 </div>
                             </div>
                             <div class="f1-buttons mt-5 d-flex flex-row-reverse">
-                                <button type="button" class="btn btn-primary btn-next ml-2">Selanjutnya <i
+                                <button type="button" class="btn btn-primary btn-next ml-2">Next <i
                                         class="fa fa-arrow-right"></i></button>
                                 <button type="button" class="btn btn-warning btn-previous mr-2"><i
                                         class="fa fa-arrow-left"></i>
-                                    Sebelumnya</button>
+                                    Previous</button>
                             </div>
                         </fieldset>
                         <!-- step 4 -->
@@ -365,7 +369,7 @@
                                                     <td id="projectname"></td>
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row">Desain Required</th>
+                                                    <th scope="row">Project Required</th>
                                                     <td id="desainrequired"></td>
                                                 </tr>
                                                 <tr>
@@ -413,7 +417,7 @@
                                     Submit</button>
                                 <button type="button" class="btn btn-warning btn-previous mr-2"><i
                                         class="fa fa-arrow-left"></i>
-                                    Sebelumnya</button>
+                                    Previous</button>
                             </div>
                         </fieldset>
                     </form>

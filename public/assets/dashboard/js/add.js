@@ -143,12 +143,12 @@ $(document).ready(function () {
     });
 
     $('#feedback*').click(function () {
-        var _id = $(this).data('id')
-        var _urlasset = $(this).data('url')
-        var _url = '/feedback/' + _id
-        let _token = $('meta[name="csrf-token"]').attr('content')
-        var _role = $(this).data('role')
-        var _user_id = $(this).data('user_id')
+        var _id         = $(this).data('id')
+        var _urlasset   = $(this).data('url')
+        var _url        = '/feedback/' + _id
+        let _token      = $('meta[name="csrf-token"]').attr('content')
+        var _role       = $(this).data('role')
+        var _user_id    = $(this).data('user_id')
 
         $.ajax({
             type: 'POST',
@@ -159,6 +159,7 @@ $(document).ready(function () {
             success: function (hasil) {
                 $('#feedback_card').empty()
                 $('#feedbackcomment').empty()
+                $('#buttonresultcontest').empty()
                 $('.rating').empty()
 
                 let url2 = '/feedback/users/' + _id
@@ -170,8 +171,8 @@ $(document).ready(function () {
                 }
                 $('#name_worker').html(hasil.user.name)
                 $('#description').html(hasil.resultcontest.title)
-                if (_role == 'customer' && _user_id == hasil.project.user_id || _role == 'admin' && hasil.resultcontest.is_active == 'active' && hasil.project.is_active == 'running' || hasil.project.is_active == 'choose winner') {
-                    $('#buttonresultcontest').append('<div class="mb-1" id="eliminasicontest"> <button type="button" class="btn btn-danger col-12" id="btneliminasicontest" data-toggle="modal" data-target="#ActionModal" > Eliminasi </button> </div> <div class="mb-1" id="pickwinnercontest" ><button type="button" class="btn btn-azure col-12" id="btnpickwinnercontest" data-toggle="modal" data-target="#ActionModal"> Pick Winner </button> </div>')
+                if (_role == 'customer' && _user_id == hasil.project.user_id && hasil.resultcontest.is_active == 'active' && hasil.project.is_active == 'running' || hasil.project.is_active == 'choose winner' || _role == 'admin' && hasil.resultcontest.is_active == 'active' && hasil.project.is_active == 'running' || hasil.project.is_active == 'choose winner') {
+                    $('#buttonresultcontest').append('<div class="mb-1" id="eliminasicontest"> <button type="button" class="btn btn-danger col-12" id="btneliminasicontest" data-toggle="modal" data-target="#ActionModal" > Eliminate </button> </div> <div class="mb-1" id="pickwinnercontest" ><button type="button" class="btn btn-azure col-12" id="btnpickwinnercontest" data-toggle="modal" data-target="#ActionModal"> Pick Winner </button> </div>')
                 }
                 $('#btneliminasicontest*').click(function () {
                    $('#ActionModalLabel').html('Eliminasi')
@@ -351,7 +352,9 @@ $(document).ready(function () {
             },
             success: function (hasil) {
                 $('#feedback_card').empty()
+                $('#buttonresultdirect').empty()
                 $('.rating').empty()
+                var description = hasil.resultproject.description.split('/')
                 let url2 = '/feedbackbid/users/' + _id
                 if (hasil.user.avatar == 'default.jpg') {
                     $('#profileworker').css('background-image', 'url("/assets/dashboard/images/default.jpg")')
@@ -359,23 +362,24 @@ $(document).ready(function () {
                     $('#profileworker').css('background-image', 'url(' + _urlasset + '/profile/' + hasil.user.avatar + ')')
                 }
                 $('#name_worker').html(hasil.user.name)
-                $('#descriptions').text(hasil.resultproject.description)
-                if (_role == 'customer' && _user_id == hasil.project.user_id || _role == 'admin' && hasil.resultproject.is_active == 'active' && hasil.project.is_active == 'running' || hasil.project.is_active == 'choose winner') {
-                    $('#buttonresultdirect').append('<div class="mb-1" id="eliminasidirect"> <button type = "button" class=" btn btn-danger col-12" id="btneliminasidirect" data-toggle="modal" data-target="#ActionDirectModal" > Eliminasi </button> </div> <div class="mb-1" id="pickwinnerdirect" ><button type="button" class=" btn btn-azure col-12" id="btnpickwinnerdirect" data-toggle="modal" data-target="#ActionDirectModal" > Pick Winner </button> </div>')
+                $('#descriptions').text(description[0])
+                $('#bid').text('$' + description[1])
+                if (_role == 'customer' && _user_id == hasil.project.user_id && hasil.resultproject.is_active == 'active' && hasil.project.is_active == 'running' || hasil.project.is_active == 'choose winner' || _role == 'admin' && hasil.resultproject.is_active == 'active' && hasil.project.is_active == 'running' || hasil.project.is_active == 'choose winner') {
+                    $('#buttonresultdirect').append('<div class="mb-1" id="eliminasidirect"> <button type = "button" class=" btn btn-danger col-12" id="btneliminasidirect" data-toggle="modal" data-target="#ActionDirectModal" > Eliminate </button> </div> <div class="mb-1" id="pickwinnerdirect" ><button type="button" class=" btn btn-azure col-12" id="btnpickwinnerdirect" data-toggle="modal" data-target="#ActionDirectModal" > Pick Winner </button> </div>')
                 }
                 $('#btneliminasidirect*').click(function () {
                     $('#ActionDirectModalLabel').html('Eliminasi')
-                    $('.footer_direct').html('Eliminasi')
+                    $('.footer_direct').html('Eliminate')
                     $('#captions_direct').html('Are you sure you want to eliminate this design?')
-                    $('#gambarAction').attr('src', '/assets/dashboard/images/gembok.png')
-                    $('#body_direct form').attr('action', '/feedbackbid/eliminasi/' + _id)
+                    $('#gambarActionDirect').attr('src', '/assets/dashboard/images/gembok.png')
+                    $('.body_direct form').attr('action', '/feedbackbid/eliminasi/' + _id)
                 })
                 $('#btnpickwinnerdirect*').click(function () {
                     $('#ActionDirectModalLabel').html('Pick Winner')
                     $('.footer_direct').html('Pick Winner')
-                    $('#gambarAction').attr('src', '/assets/dashboard/images/piala.png')
+                    $('#gambarActionDirect').attr('src', '/assets/dashboard/images/piala.png')
                     $('#captions_direct').html('Are you sure you chose this design as the winner?')
-                    $('#body_direct form').attr('action', '/feedbackbid/choosewinner/pickwinner/' + _id)
+                    $('.body_direct form').attr('action', '/feedbackbid/choosewinner/pickwinner/' + _id)
                 })
                 $('#id_worker').val(hasil.resultproject.user_id_worker)
                 $('#id_project').val(hasil.project.id)
@@ -429,7 +433,7 @@ $(document).ready(function () {
                         '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
                     )
                 }
-                if (_user_id == hasil.project.user_id || _user_id == hasil.resultcontest.user_id_worker || _role == 'admin') {
+                if (_user_id == hasil.project.user_id || _user_id == hasil.resultproject.user_id_worker || _role == 'admin') {
                     $('#feedbackcommentbid').append('<div class="card-body mb-2" id="feedback_card"></div> <div class="card-body" ><form action="/feedbackbid/kirim/' + _id +
                         '" method="post" > <input type="hidden" name="_token" value="' + _token +
                         '"> <div class = "form-group" ><textarea class="form-control" rows = "5"name="feedback" >' +
@@ -499,17 +503,17 @@ $(document).ready(function () {
 
     $('#btneliminasidirects*').click(function () {
         $('#ActionDirectModalLabel').html('Eliminasi')
-        $('.footer_direct').html('Eliminasi')
+        $('.footer_direct').html('Eliminate')
         $('#captions_direct').html('Are you sure you want to eliminate this design?')
-        $('#gambarAction').attr('src', $(this).data('url') + '/gembok.png')
-        $('.body_direct form').attr('action', '/feedback/eliminasi/' + $(this).data('id'))
+        $('#gambarActionDirect').attr('src', $(this).data('url') + '/gembok.png')
+        $('.body_direct form').attr('action', '/feedbackbid/eliminasi/' + $(this).data('id'))
     })
     $('#btnpickwinnerdirects*').click(function () {
         $('#ActionDirectModalLabel').html('Pick Winner')
         $('.footer_direct').html('Pick Winner')
-        $('#gambarAction').attr('src', $(this).data('url') + '/piala.png')
+        $('#gambarActionDirect').attr('src', $(this).data('url') + '/piala.png')
         $('#captions_direct').html('Are you sure you chose this design as the winner?')
-        $('.body_direct form').attr('action', '/feedback/choosewinner/pickwinner/' + $(this).data('id'))
+        $('.body_direct form').attr('action', '/feedbackbid/choosewinner/pickwinner/' + $(this).data('id'))
     })
 
     //FileUpload
@@ -519,6 +523,14 @@ $(document).ready(function () {
         $('.body-fileupload form').attr('action', '/fileupload/store');
         $('.body-fileupload form').attr('method', 'post');
     });
+
+    $('#uploadfilerevisi').click(function () {
+        $('.footer-fileupload button[type=submit]').html('Upload');
+        $('#UploadFilesLabel').html('Upload File Revisi');
+        $('.body-fileupload form').attr('action', '/fileuploadrevisi/store');
+        $('.body-fileupload form').attr('method', 'post');
+    });
+
 
     $('#uploadfilelogotext').click(function () {
         var _id = $(this).data('id')
@@ -534,6 +546,12 @@ $(document).ready(function () {
         $('#UploadFilesLabel').html('Upload Logo File');
         $('.body-fileupload form').attr('action', '/fileupload/store/logo/' + _id);
         $('.body-fileupload form').attr('method', 'post');
+    });
+
+    //Perjanjian
+    $('#btnnda').click(function () {
+        var _id = $(this).data('id')
+        $('.body_nda form').attr('action', '/managementwebsite/nda/' + _id);
     });
 
     //Browse
@@ -708,7 +726,7 @@ $(document).ready(function () {
 
     $('#opsicontest').on('click', function () {
         $('.footer_opsi button[type=submit]').html('Add');
-        $('#OpsiModalLabel').html('Tambah Opsi Conntest');
+        $('#OpsiModalLabel').html('Tambah Opsi Contest');
         $('.body_opsi form').attr('action', '/managementwebsite/opsicontest/create');
         $('.body_opsi form').attr('method', 'post');
 
@@ -722,7 +740,7 @@ $(document).ready(function () {
 
     $('#editopsicontest*').on('click', function () {
         $('.footer_opsi* button[type=submit]').html('Edit');
-        $('#OpsiModalLabel*').html('Edit Opsi Conntest');
+        $('#OpsiModalLabel*').html('Edit Opsi Contest');
         $('.body_opsi form*').attr('action', '/managementwebsite/opsicontest/update');
         $('.body_opsi form*').attr('method', 'post');
 
@@ -756,7 +774,7 @@ $(document).ready(function () {
 
     $('#editopsiupgradecontest*').on('click', function () {
         $('.footer_opsi* button[type=submit]').html('Edit');
-        $('#OpsiModalLabel*').html('Edit Opsi Conntest');
+        $('#OpsiModalLabel*').html('Edit Opsi Contest');
         $('.body_opsi form*').attr('action', '/managementwebsite/opsicontest/update');
         $('.body_opsi form*').attr('method', 'post');
 
@@ -911,14 +929,14 @@ $(document).ready(function () {
                                         '<img src="' + _asset + '/result' + project.catagories_project + '/' + resultproject.filecontest + '" class="rounded" style="width: 300px; height: 300px; overflow: hidden width: 100%;" >' +
                                         '</a>' +
                                         '<div class="d-flex align-items-center px-2 mt-5">' +
-                                        '<div id="ratingcontest">' +
+                                        '<div id="ratingcontest' + resultproject.id + '">' +
                                         '</div>' +
                                         '</div>' +
                                         '</div>' +
                                         '</div>'
                                     )
                                     if (resultproject.nilai == 1) {
-                                        $('#ratingcontest').append(
+                                        $('#ratingcontest' + resultproject.id).append(
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
@@ -926,7 +944,7 @@ $(document).ready(function () {
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
                                         )
                                     } else if (resultproject.nilai == 2) {
-                                        $('#ratingcontest').append(
+                                        $('#ratingcontest' + resultproject.id).append(
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
@@ -934,7 +952,7 @@ $(document).ready(function () {
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
                                         )
                                     } else if (resultproject.nilai == 3) {
-                                        $('#ratingcontest').append(
+                                        $('#ratingcontest' + resultproject.id).append(
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
@@ -942,7 +960,7 @@ $(document).ready(function () {
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
                                         )
                                     } else if (resultproject.nilai == 4) {
-                                        $('#ratingcontest').append(
+                                        $('#ratingcontest' + resultproject.id).append(
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
@@ -950,7 +968,7 @@ $(document).ready(function () {
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
                                         )
                                     } else if (resultproject.nilai == 5) {
-                                        $('#ratingcontest').append(
+                                        $('#ratingcontest' + resultproject.id).append(
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
@@ -958,7 +976,7 @@ $(document).ready(function () {
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>'
                                         )
                                     } else {
-                                        $('#ratingcontest').append(
+                                        $('#ratingcontest' + resultproject.id).append(
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
@@ -974,7 +992,7 @@ $(document).ready(function () {
                                         '<img src="assets/dashboard/images/bid.png" class="rounded" style="width: 300px; height: 300px; overflow: hidden width: 100%;" >' +
                                         '</a>' +
                                         '<div class="d-flex align-items-center px-2 mt-5">' +
-                                        '<div id="ratingdirect">' +
+                                        '<div id="ratingdirect' + resultproject.id + '">' +
                                         '</div>' +
                                         '</div>' +
                                         '</div>' +
@@ -982,7 +1000,7 @@ $(document).ready(function () {
                                     )
 
                                     if (resultproject.nilai == 1) {
-                                        $('#ratingdirect').append(
+                                        $('#ratingdirect' + resultproject.id).append(
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
@@ -990,7 +1008,7 @@ $(document).ready(function () {
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
                                         )
                                     } else if (resultproject.nilai == 2) {
-                                        $('#ratingdirect').append(
+                                        $('#ratingdirect' + resultproject.id).append(
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
@@ -998,7 +1016,7 @@ $(document).ready(function () {
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
                                         )
                                     } else if (resultproject.nilai == 3) {
-                                        $('#ratingdirect').append(
+                                        $('#ratingdirect' + resultproject.id).append(
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
@@ -1006,7 +1024,7 @@ $(document).ready(function () {
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
                                         )
                                     } else if (resultproject.nilai == 4) {
-                                        $('#ratingdirect').append(
+                                        $('#ratingdirect' + resultproject.id).append(
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
@@ -1014,7 +1032,7 @@ $(document).ready(function () {
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>'
                                         )
                                     } else if (resultproject.nilai == 5) {
-                                        $('#ratingdirect').append(
+                                        $('#ratingdirect' + resultproject.id).append(
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
@@ -1022,7 +1040,7 @@ $(document).ready(function () {
                                             '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>'
                                         )
                                     } else {
-                                        $('#ratingdirect').append(
+                                        $('#ratingdirect' + resultproject.id).append(
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
                                             '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
@@ -1104,6 +1122,30 @@ $(document).ready(function () {
             $('#entriestoggel').toggleClass('active')
             $('#descri').hide()
             $('#gallery').show()
+        }
+    })
+
+    //Replay Form Button
+    $('#replayform*').hide()
+    $('#replaybuttonform*').click(function () {
+        if ($(this).html() == 'Reply') {
+            $(this).html('Hide')
+            $('#replayform*').show()
+        } else {
+            $(this).html('Reply')
+            $('#replayform*').hide()
+            $('#replayform* textarea').val('')
+        }
+    })
+    $('#replayform2*').hide()
+    $('#replaybuttonform2*').click(function () {
+        if ($(this).html() == 'Reply') {
+            $(this).html('Hide')
+            $('#replayform2*').show()
+        } else {
+            $(this).html('Reply')
+            $('#replayform2*').hide()
+            $('#replayform2* textarea').val('')
         }
     })
 

@@ -196,16 +196,65 @@ class DatabaseSeeder extends Seeder
         ];
         $opsiupgrade = [
             [
-                'name'          => '7 Hari',
+                'name'          => '10 Days',
                 'description'   => 'wadawdaawdesfrdgd',
-                'harga'         => '30',
+                'harga'         => 30,
+                'hari'          => 10,
+                'icon'          => '10days.png',
                 'created_at'    => Carbon::now(),
                 'updated_at'    => Carbon::now(),
             ],
             [
-                'name'          => 'Desainer Pro',
+                'name'          => 'Designer Pro',
                 'description'   => 'sseftessfjyjgh',
-                'harga'         => '100',
+                'harga'         => 100,
+                'hari'          => 0,
+                'icon'          => 'designerpro.png',
+                'created_at'    => Carbon::now(),
+                'updated_at'    => Carbon::now(),
+            ],
+            [
+                'name'          => '20 Days',
+                'description'   => 'sseftessfjyjgh',
+                'harga'         => 100,
+                'hari'          => 20,
+                'icon'          => '20days.png',
+                'created_at'    => Carbon::now(),
+                'updated_at'    => Carbon::now(),
+            ],
+            [
+                'name'          => 'Guarenteed',
+                'description'   => 'sseftessfjyjgh',
+                'harga'         => 0,
+                'hari'          => 0,
+                'icon'          => 'guaranteedtoworker.png',
+                'created_at'    => Carbon::now(),
+                'updated_at'    => Carbon::now(),
+            ],
+            [
+                'name'          => 'Non Disclosure Agreement (NDA)',
+                'description'   => 'sseftessfjyjgh',
+                'harga'         => 10,
+                'hari'          => 0,
+                'icon'          => 'nda.png',
+                'created_at'    => Carbon::now(),
+                'updated_at'    => Carbon::now(),
+            ],
+            [
+                'name'          => 'Urgent',
+                'description'   => 'sseftessfjyjgh',
+                'harga'         => 10,
+                'hari'          => -1,
+                'icon'          => 'urgent.png',
+                'created_at'    => Carbon::now(),
+                'updated_at'    => Carbon::now(),
+            ],
+            [
+                'name'          => 'Extended',
+                'description'   => 'sseftessfjyjgh',
+                'harga'         => 5,
+                'hari'          => 1,
+                'icon'          => 'extended.png',
                 'created_at'    => Carbon::now(),
                 'updated_at'    => Carbon::now(),
             ],
@@ -217,8 +266,8 @@ class DatabaseSeeder extends Seeder
         DB::table('opsi_package_upgrades')->insert($opsiupgrade);
         DB::table('job_catagories')->insert($job);
 
-        $this->call([
-            IconSeeder::class,
-        ]);
+        // $this->call([
+        //     IconSeeder::class,
+        // ]);
     }
 }

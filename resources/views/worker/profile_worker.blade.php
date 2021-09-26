@@ -125,8 +125,9 @@
                             style="width: 300px; height: 300px; overflow: hidden; width: 100%;">
                         @endif
                         @else
-                        <img src="{{url('assets/dashboard/images/gembok.png')}}" class="rounded"
-                            style="width: 300px; height: 300px; overflow: hidden; width: 100%;">
+                        <img src="{{asset('/storage/resultcontest/' . $itemresultcontest->filecontest)}}" class="rounded"
+                            style="width: 300px; height: 300px; overflow: hidden; width: 100%;filter:blur(5px);">
+                        <p style="width: 100%; overflow: hidden; position: absolute;left: 0px; top: 150px; font-size: 20pt" class="text-center text-white bg-red">Hide</p>
                         @endif
                     </a>
                     <div class="d-flex align-items-center px-2 mt-5">

@@ -15,7 +15,6 @@
         "laravel/tinker": "^2.5",
         "laraveldaily/laravel-charts": "^0.1.25",
         "munafio/chatify": "^1.2",
-        "spatie/browsershot": "^3.50",
         "torann/geoip": "^3.0"
     },
     "require-dev": {

@@ -16,11 +16,15 @@ class SubCatagoriesController extends Controller
             'harga'         => 'required',
         ]);
 
-        if ($request->icon != '') {
+        $file = $request->file('icon');
+        $name = time() . rand(1, 100) . '.' . $file->extension();
+        $file->storeAs('subicon', $name);
+
+        if ($request->hasfile('icon')) {
             SubCatagories::create([
                 'catagori_id'   => $request->catagories,
                 'name'          => $request->name,
-                'icon'          => $request->icon,
+                'icon'          => $name,
                 'description'   => $request->description,
                 'harga'         => $request->harga,
             ]);
@@ -42,12 +46,16 @@ class SubCatagoriesController extends Controller
     }
     public function UpdateSubCatagories(Request $request, SubCatagories $subcatagories)
     {
-        if ($request->icon != '') {
+        $file = $request->file('icon');
+        $name = time() . rand(1, 100) . '.' . $file->extension();
+        $file->storeAs('subicon', $name);
+
+        if ($request->hasfile('icon')) {
             SubCatagories::where('id',$subcatagories->id)
                         ->update([
                 'catagori_id'   => $request->catagories,
                 'name'          => $request->name,
-                'icon'          => $request->icon,
+                'icon'          => $name,
                 'description'   => $request->description,
                 'harga'         => $request->harga,
             ]);

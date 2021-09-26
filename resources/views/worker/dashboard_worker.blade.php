@@ -109,14 +109,12 @@
         </div>
         <div class="row row-cards row-deck">
             <div class="col-12">
-                <div class="d-flex mb-3">
-                    <div class="ml-auto">
-                        <input type="text" id="searchprojectrunningworker" class="form-control" placeholder="Search">
-                    </div>
-                </div>
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Project Running</h3>
+                        <div class="ml-auto">
+                            <input type="text" id="searchprojectrunningworker" class="form-control" placeholder="Search">
+                        </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table card-table table-vcenter text-nowrap">
@@ -181,7 +179,7 @@
                                         {{date('d M, Y',strtotime($itemmyproject->deadline))}}
                                     </td>
                                     <td>
-                                        @if ($itemmyproject->is_active == 'waitting payment')
+                                        @if ($itemmyproject->is_active == 'waiting payment')
                                         <a class="btn btn-warning btn-sm text-white text-uppercase">{{$itemmyproject->is_active}}</a>
                                         @elseif ($itemmyproject->is_active == 'running')
                                             @if ($itemproject->catagories_project == 'contest')
@@ -203,9 +201,9 @@
                                             @endif
                                         @elseif ($itemmyproject->is_active == 'close')
                                             @if ($itemproject->catagories_project == 'contest')
-                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-uppercase">{{$itemproject->is_active}}</a>
                                             @else
-                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-uppercase">{{$itemproject->is_active}}</a>
                                             @endif
                                         @elseif ($itemmyproject->is_active == 'cancel')
                                         <a class="btn btn-danger btn-sm text-white text-uppercase">{{$itemmyproject->is_active}}</a>

@@ -10,8 +10,7 @@ class OpsiContestController extends Controller
 {
     public function StoreOpsi(Request $request)
     {
-
-        if ($request->pilihaninput == 1) {
+        // if ($request->pilihaninput == 1) {
             $request->validate([
                 'name'          => 'required',
                 'description'   => 'required',
@@ -23,24 +22,20 @@ class OpsiContestController extends Controller
                 'description'   => $request->description,
                 'harga'         => $request->harga,
             ]);
-        } else {
+        // } else {
+        //     $request->validate([
+        //         'name'          => 'required',
+        //         'description'   => 'required',
+        //         'harga'         => 'required',
+        //     ]);
+        //     OpsiPackageUpgrade::create([
+        //         'name'          => $request->name,
+        //         'description'   => $request->description,
+        //         'hari'          => $request->hari,
+        //         'harga'         => $request->harga,
+        //     ]);
 
-            $request->validate([
-                'name'          => 'required',
-                'icon'          => 'required',
-                'description'   => 'required',
-                'harga'         => 'required',
-            ]);
-
-            OpsiPackageUpgrade::create([
-                'name'          => $request->name,
-                'icon'          => $request->icon,
-                'description'   => $request->description,
-                'hari'          => $request->hari,
-                'harga'         => $request->harga,
-            ]);
-
-        }
+        // }
         return redirect()->back()->with('status', 'Opsi Berhasil Di Inputkan');
     }
     public function EditOpsi(Request $request)
@@ -65,24 +60,13 @@ class OpsiContestController extends Controller
                 'harga'         => $request->harga,
             ]);
         } else {
-            if ($request->icon != null) {
-                OpsiPackageUpgrade::where('id', $request->id)
-                                ->update([
-                    'name'          => $request->name,
-                    'icon'          => $request->icon,
-                    'description'   => $request->description,
-                    'hari'          => $request->hari,
-                    'harga'         => $request->harga,
-                ]);
-            }else{
-                OpsiPackageUpgrade::where('id', $request->id)
-                                ->update([
-                    'name'          => $request->name,
-                    'description'   => $request->description,
-                    'hari'          => $request->hari,
-                    'harga'         => $request->harga,
-                ]);
-            }
+            OpsiPackageUpgrade::where('id', $request->id)
+                            ->update([
+                'name'          => $request->name,
+                'description'   => $request->description,
+                'hari'          => $request->hari,
+                'harga'         => $request->harga,
+            ]);
         }
         return redirect()->back()->with('status', 'Opsi Berhasil Di Update');
     }

@@ -100,7 +100,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label class="form-label">Your Bid</label>
+                                    <label class="form-label">Your Bid ($)</label>
                                     <input type="text" class="form-control" name="harga" value="">
                                 </div>
                             </div>
@@ -132,7 +132,7 @@
                                 @if ($report >= 3)
                                 @else
                                 <div class="mb-1">
-                                    <button type="submit" class=" btn btn-warning col-12" data-target="#ReportModal"
+                                    <button type="submit" class=" btn btn-outline-danger col-12" data-target="#ReportModal"
                                         data-toggle="modal">Report</button>
                                 </div>
                                 @endif
@@ -144,6 +144,8 @@
                             </div>
                             <h4>Description</h4>
                             <p id="descriptions"></p>
+                            <h4>Your Bid</h4>
+                            <p id="bid"></p>
                         </div>
                     </div>
                     <div id="feedbackcommentbid">
@@ -205,7 +207,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Kirim</button>
+                    <button type="submit" class="btn btn-primary">Send</button>
                 </div>
             </form>
         </div>
@@ -243,7 +245,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="ActionDirectModalLabel">Modal title</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true"></span>
                 </button>
             </div>
             <div class="body_direct">

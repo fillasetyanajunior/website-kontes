@@ -20,20 +20,20 @@
                     </div>
                     <div class="ml-3">
                         <i class="fe fe-clock"></i>&nbsp;
-                        {{$time}} Hari
+                        {{$time}} Days
                     </div>
                     <div class="ml-3">
                         <i class="fa fa-image"></i>&nbsp;
-                        {{$desains}} Desain
+                        {{$desains}} Design
                     </div>
                     <div class="ml-3">
                         <i class="fa fa-user"></i>&nbsp;
-                        {{$desainers}} Desainers
+                        {{$desainers}} Designers
                     </div>
                 </div>
                 <hr>
                 <div>
-                    <h4 class="text-capitalize">logo desain brief</h4>
+                    <h4 class="text-capitalize">logo design brief</h4>
                     <div class="text-justify">
                         {{$detaildirect->description}}
                     </div>
@@ -47,9 +47,9 @@
                 <div>
                     <h4 class="text-capitalize">requirements</h4>
                     <h5 class="text-capitalize">should have</h5>
-                    <p>{{$project->shouldhave}}</p>
+                    <p class="text-justify">{{$project->shouldhave}}</p>
                     <h5 class="text-capitalize">should not have</h5>
-                    <p>{{$project->shouldnothave}}</p>
+                    <p class="text-justify">{{$project->shouldnothave}}</p>
                 </div>
                 <hr>
                 <div>

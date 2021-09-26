@@ -17,7 +17,7 @@ class HomeController extends Controller
     {
         if (request()->user()->role == 'admin') {
             $data['project']                    = Project::paginate(20);
-            $data['waittingpayment']            = Project::where('is_active','waitting payment')->count();
+            $data['waittingpayment']            = Project::where('is_active', 'waiting payment')->count();
             $data['projectrunning']             = Project::where('is_active','running')->count();
             $data['choosewinner']               = Project::where('is_active','choose winner')->count();
             $data['projecthandover']            = Project::where('is_active','handover')->count();

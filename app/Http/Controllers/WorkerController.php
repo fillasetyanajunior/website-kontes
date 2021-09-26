@@ -11,6 +11,7 @@ use App\Models\Worker;
 use Carbon\Carbon;
 use Cache;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class WorkerController extends Controller
 {
@@ -59,5 +60,52 @@ class WorkerController extends Controller
             ResultProject::where('id',$request->id)->update(['portfolio' => 'hide']);
         }
         return redirect()->back()->with('status','Portfolio Success in hide');
+    }
+    public function profileWorkerSetting()
+    {
+        $data['title']      = 'Worker Profile';
+        $data['worker']     = Worker::where('user_id', request()->user()->id)->first();
+        return view('worker.profile_setting', $data);
+    }
+    public function profileUpdate(Request $request, Worker $worker)
+    {
+        if ($request->hasfile('avatar')) {
+
+            if ($worker->avatar != null) {
+                Storage::delete('profile/' . $worker->avatar);
+            }
+
+            $file = $request->file('avatar');
+            $name = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('profile', $name);
+
+            Worker::where('id', $worker->id)
+                ->update([
+                    'name'          => $request->name,
+                    'email'         => $request->email,
+                    'paypal'        => $request->paypal,
+                    'avatar'        => $name,
+                ]);
+            User::where('id', $worker->user_id)
+                ->update([
+                    'name'      => $request->name,
+                    'email'     => $request->email,
+                    'avatar'    => $name,
+                ]);
+        } else {
+            Worker::where('id', $worker->id)
+                ->update([
+                    'name'      => $request->name,
+                    'email'     => $request->email,
+                    'paypal'    => $request->paypal,
+                ]);
+            User::where('id', $worker->user_id)
+                ->update([
+                    'name'  => $request->name,
+                    'email' => $request->email,
+                ]);
+        }
+
+        return redirect()->back()->with('status', 'Profile Berhasil Di Update');
     }
 }

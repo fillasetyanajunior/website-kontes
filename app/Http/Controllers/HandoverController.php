@@ -36,9 +36,9 @@ class HandoverController extends Controller
     public function HandoverConfirm(Project $project)
     {
         if ($project->catagories_project == 'contest') {
-            $idworker = ResultContest::where('contest_id',$project->id)->first();
+            $idworker = ResultContest::where('contest_id',$project->id)->where('is_active','winner')->first();
         } else {
-            $idworker = ResultProject::where('contest_id',$project->id)->first();
+            $idworker = ResultProject::where('contest_id',$project->id)->where('is_active','winner')->first();
         }
 
         $user   = User::where('id',$project->user_id)->first();
@@ -109,12 +109,14 @@ class HandoverController extends Controller
         //Font
         Font::where('contest_id',$winnercontest->contest_id)->delete();
         $font = $request->font;
-        if ($font != null) {
-            for ($i = 0; $i < 4; $i++) {
-                Font::create([
-                    'contest_id'    => $winnercontest->contest_id,
-                    'name'          => $font[$i],
-                ]);
+        if ($font != null ) {
+            if (count($font) <= 4) {
+                for ($i = 0; $i < count($font); $i++) {
+                    Font::create([
+                        'contest_id'    => $winnercontest->contest_id,
+                        'name'          => $font[$i],
+                    ]);
+                }
             }
         }
 
@@ -122,13 +124,15 @@ class HandoverController extends Controller
         $hexa = $request->hexa_color;
         $rgb = $request->rgb_color;
         Color::where('contest_id',$winnercontest->contest_id)->delete();
-        for ($i = 0; $i < 4; $i++) {
-            if ($hexa[$i] != null && $rgb[$i] != null) {
-                Color::create([
-                    'contest_id'    => $winnercontest->contest_id,
-                    'hexa'          => $hexa[$i],
-                    'rgb'           => $rgb[$i],
-                ]);
+        for ($i = 0; $i < count($hexa); $i++) {
+            if (count($hexa) <= 4) {
+                if ($hexa[$i] != null && $rgb[$i] != null) {
+                    Color::create([
+                        'contest_id'    => $winnercontest->contest_id,
+                        'hexa'          => $hexa[$i],
+                        'rgb'           => $rgb[$i],
+                    ]);
+                }
             }
         }
 

@@ -10,6 +10,7 @@ use App\Models\OpsiPackage;
 use App\Models\OpsiPackageUpgrade;
 use App\Models\SortCatagories;
 use App\Models\SubCatagories;
+use App\Models\UploadFilePerjanjian;
 use Illuminate\Http\Request;
 
 class ManagementWebsiteController extends Controller
@@ -38,5 +39,10 @@ class ManagementWebsiteController extends Controller
     {
        $data['code'] = Code::all();
        return view('admin.managementwebsite.code.code',$data);
+    }
+    public function NDA()
+    {
+        $data['perjanjian'] = UploadFilePerjanjian::orderBy('created_at','DESC')->paginate(20);
+        return view('admin.nda.nda',$data);
     }
 }

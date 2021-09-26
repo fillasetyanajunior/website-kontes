@@ -21,7 +21,6 @@ class CreateWorkersTable extends Migration
             $table->string('email');
             $table->string('location')->nullable();
             $table->string('avatar')->nullable();
-            $table->text('description')->nullable();
             $table->string('paypal')->nullable();
             $table->enum('status_account', ['unverified', 'verified','suspend']);
             $table->date('suspend')->nullable();

@@ -79,7 +79,6 @@
                                 <tr>
                                     <th class="w-1">No.</th>
                                     <th>Name</th>
-                                    <th>icon</th>
                                     <th>Description</th>
                                     <th>Hari</th>
                                     <th>Harga</th>
@@ -157,26 +156,16 @@
                             <input type="text" class="form-control" id="name" name="name">
                         </div>
                         <div class="form-group">
-                            <label for="harga">Harga</label>
+                            <label for="harga">Pricing</label>
                             <input type="text" class="form-control" id="harga" name="harga">
                         </div>
                         <div class="form-group">
-                            <label for="hari">Hari</label>
+                            <label for="hari">Days</label>
                             <input type="text" class="form-control" id="hari" name="hari">
                         </div>
                         <div class="form-group">
                             <label for="description">Description</label>
                             <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="icon">Icon</label>
-                            <select class="form-control fa" id="iconopsi" name="icon">
-                                <option value="">-- Choose --</option>
-                                @foreach ($icon as $itemicon)
-                                <option value="{{$itemicon->name}}">
-                                    &#x{{$itemicon->cheatsheet}}&nbsp;{{$itemicon->name}}</option>
-                                @endforeach
-                            </select>
                         </div>
                         <div class="form-group">
                             <label for="pilihaninput">Choice Input</label>

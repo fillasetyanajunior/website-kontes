@@ -5,12 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ReplayPublicDiscus extends Model
+class UploadFileRevisi extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'message_replay',
-        'user_id',
-        'feedback',
-    ];
+    protected $guarded = ['id'];
 }

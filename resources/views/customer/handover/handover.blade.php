@@ -8,7 +8,7 @@
                 Handover
             </h1>
         </div>
-        @if (request()->user()->role == 'customer' || request()->user()->role == 'admin' && $project->is_active == 'handover')
+        @if (request()->user()->role == 'customer' && $project->is_active == 'handover' || request()->user()->role == 'admin' && $project->is_active == 'handover')
         <div class="card">
             <div class="card-body">
                 <div class="d-flex ">
@@ -43,7 +43,7 @@
                     <div class="card-body">
                         <div class="d-flex ">
                             <div class="mr-auto ">
-                                <h4 class="text-capitalize">uploade files</h4>
+                                <h4 class="text-capitalize">upload files</h4>
                             </div>
                             @php
                                 //Deskripsi Variabel
@@ -99,6 +99,46 @@
                 @if (request()->user()->role == 'worker' && $project->is_active == 'handover')
                 <a href="javascript:void(0)" data-toggle="modal" data-target="#UploadFiles" id="uploadfile"
                     class="btn btn-primary btn-sm">Upload Files</a>
+                @endif
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex ">
+                            <div class="mr-auto ">
+                                <h4 class="text-capitalize">upload file revisi</h4>
+                            </div>
+                            <div class=" ml-3">
+                                <a href="{{'/convertzip/' . $handover->id}}" class="btn btn-primary">Download All
+                                    File Revisi</a>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table card-table table-vcenter">
+                        @php
+                        $fileuploadrevisi = DB::table('upload_file_revisis')->where('contest_id_winner',$handover->id)->get();
+                        @endphp
+                        @foreach ($fileuploadrevisi as $itemfileuploadrevisi)
+                        <tr>
+                            <td width="60px"><i class="fa fa-file" style="font-size: 20pt"></i></td>
+                            <td width="">{{$itemfileuploadrevisi->name}}</td>
+                            <td class="text-right">{{number_format($itemfileuploadrevisi->kapasitas)}} KB</td>
+                            @if (request()->user()->role == 'customer' && request()->user()->id == $handover->user_id)
+                            <td class="text-right" width="50px">
+                                <form action="/deletefileuploadrevisi/{{$itemfileuploadrevisi->id}}" method="post">
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit" class="btn btn-sm" style="background-color: Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;"><i class="fa fa-times-circle"></i></button>
+                                </form>
+                            </td>
+                            @endif
+                        </tr>
+                        @endforeach
+                    </table>
+                </div>
+                @if (request()->user()->role == 'customer' && $project->is_active == 'handover')
+                <a href="javascript:void(0)" data-toggle="modal" data-target="#UploadFiles" id="uploadfilerevisi"
+                    class="btn btn-primary btn-sm">Upload Files</a>
+                @endif
+                @if (request()->user()->role == 'worker' && $project->is_active == 'handover')
                 <div class="card mt-5">
                     <div class="card-body">
                         <form method="post" action="/updatefiles/{{$handover->id}}">
@@ -374,13 +414,25 @@
                 $users = DB::table('users')->where('id',$itemmessage->worker_id)->first();
                 }
                 @endphp
-                {{$users->name}}
+                <div class="d-flex">
+                    <div>
+                        @if ($users->avatar == 'default.jpg')
+                        <img src="{{url('assets/dashboard/images/default.jpg')}}" width="75px" height="75px">
+                        @else
+                        <img src="{{url('storage/profile/' . $users->avatar)}}" width="75px" height="75px">
+                        @endif
+                    </div>
+                    <div class="ml-3">
+                        <h6 class="mt-3">{{$users->name}}</h6>
+                        @if ($itemmessage->feedback_worker == null)
+                            <p class="mt-4">{{$itemmessage->feedback_customer}}</p>
+                        @else
+                            <p class="mt-4">{{$itemmessage->feedback_worker}}</p>
+                        @endif
+                    </div>
+                </div>
                 <div class="card">
-                    @if ($itemmessage->feedback_worker == null)
-                    <p>{{$itemmessage->feedback_customer}}</p>
-                    @else
-                    <p>{{$itemmessage->feedback_worker}}</p>
-                    @endif
+
                 </div>
                 @php
                 endforeach;
@@ -402,7 +454,7 @@
                             </div>
                         </div>
                         <div class="text-right">
-                            <button type="submit" class="btn btn-primary">Kirim</button>
+                            <button type="submit" class="btn btn-primary">Send</button>
                         </div>
                     </div>
                 </div>

@@ -25,6 +25,8 @@ use App\Http\Controllers\MessageHandoverController;
 use App\Http\Controllers\OpsiContestController;
 use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\PerjanjianController;
+use App\Http\Controllers\ReplayPublicDiscusController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SubCatagoriesController;
 use App\Http\Controllers\WaittingpaymentController;
@@ -60,7 +62,7 @@ function () {
 }
 );
 
-Route::get('/home', [HomeController::class,'index']);
+Route::get('/home', [HomeController::class,'index'])->name('home');
 
 Route::middleware('verified')->group(function () {
 
@@ -68,6 +70,9 @@ Route::middleware('verified')->group(function () {
     //Browse Project
     Route::get('/browseproject', [BrowseProjectController::class,'index'])->name('browseproject');
     Route::get('/browseproject/sort/{id}', [BrowseProjectController::class,'index']);
+    //Brief NDA
+    Route::get('/briefnda/{id}', [PerjanjianController::class,'PerjanjianShow']);
+    Route::get('/briefnda/perjanjianfileconfirm/{id}', [PerjanjianController::class,'Perjanjian']);
     //Brief Project
     Route::get('/briefcontest/{project}', [BrowseProjectController::class,'BriefContestProject']);
     Route::get('/briefdirect/{project}', [BrowseProjectController::class,'BriefDirectProject']);
@@ -93,6 +98,10 @@ Route::middleware('verified')->group(function () {
     Route::post('/report', [ReportController::class,'ReportCreate'])->name('reportcreate');
     //Profile Worker Public
     Route::get('/profileworker/{id}', [WorkerController::class, 'ProfileWorkerPublic']);
+    //Message Handover
+    Route::post('/kirimessagehandover', [MessageHandoverController::class, 'KirimFeedbackMessage'])->name('messagehandover');
+    //Replay Public Discus
+    Route::post('/replaypublicdiscus', [ReplayPublicDiscusController::class, 'StoreReplayPublic'])->name('replaydiscus');
 
     Route::middleware('admin')->group(function () {
         //Admin
@@ -114,6 +123,7 @@ Route::middleware('verified')->group(function () {
         Route::get('/managementwebsite/opsipackage', [ManagementWebsiteController::class,'OpsiPackage'])->name('opsipackage');
         Route::get('/managementwebsite/jobcatagories', [ManagementWebsiteController::class,'JobCatagories'])->name('jobcatagories');
         Route::get('/managementwebsite/code', [ManagementWebsiteController::class,'Code'])->name('code');
+        Route::get('/managementwebsite/nda', [ManagementWebsiteController::class,'NDA'])->name('nda');
         //Catagories
         Route::post('/managementwebsite/catagories/create', [CatagoriesController::class,'StoreCatagories']);
         Route::post('/managementwebsite/catagories/edit', [CatagoriesController::class,'EditCatagories']);
@@ -134,6 +144,8 @@ Route::middleware('verified')->group(function () {
         Route::post('/managementwebsite/jobdescription/edit/{jobcatagories}', [JobController::class,'EditJob']);
         Route::post('/managementwebsite/jobdescription/update/{jobcatagories}', [JobController::class,'UpdateJob']);
         Route::delete('/managementwebsite/jobdescription/delete/{jobcatagories}', [JobController::class,'DeleteJob']);
+        //NDA
+        Route::post ('/managementwebsite/nda/{uploadfileperjanjian}', [PerjanjianController::class,'UpdatePerjanjian']);
         //Brief Contest Action
         Route::delete('/deletecontest/{project}', [BriefProjectController::class,'DeleteContest']);
         Route::put('/lockedcontest/{project}', [BriefProjectController::class,'LockedContest']);
@@ -189,12 +201,13 @@ Route::middleware('verified')->group(function () {
         Route::get('/deadline/{project}', [HomeController::class,'Deadline']);
         //HandoverConfirm
         Route::put('/handoverproject/confirm/{project}', [HandoverController::class,'HandoverConfirm']);
+        //Upload File
+        Route::post('/fileuploadrevisi/store', [UploadFileController::class,'UploadfileRevisi']);
+        Route::delete('/deletefileuploadrevisi/{uploadfile}', [UploadFileController::class,'DeleteFileUploadRevisi']);
     });
 
     Route::middleware('customerworker')->group(function () {
         //CustomerWorker
-        //Message Handover
-        Route::post('/kirimessagehandover', [MessageHandoverController::class, 'KirimFeedbackMessage'])->name('messagehandover');
         //Feedback Contest
         Route::post('/feedback/kirim/{resultcontest}', [FeedbackController::class, 'KirimFeedback']);
         //Feedback Bid
@@ -218,9 +231,11 @@ Route::middleware('verified')->group(function () {
         Route::get('/updatefiles/delete/color/{id}', [HandoverController::class,'DeleteColor']);
         Route::get('/updatefiles/delete/font/{id}', [HandoverController::class,'DeleteFont']);
         //Profile
+        Route::get('/worker/profile/setting', [WorkerController::class, 'profileWorkerSetting'])->name('profileWorkerSetting');
         Route::get('/worker/profile', [WorkerController::class,'profileWorker'])->name('profileWorker');
         Route::put('/worker/profile/showportfolio/{id}', [WorkerController::class,'showPortFolio']);
         Route::put('/worker/profile/hideportfolio/{id}', [WorkerController::class, 'hidePortFolio']);
+        Route::put('/worker/setting/profile/update/{worker}', [WorkerController::class, 'profileUpdate']);
     });
 });
 

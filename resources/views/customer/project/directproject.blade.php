@@ -60,31 +60,30 @@
                                     <div class="form-group">
                                         <label class="form-label">Task description</label>
                                         <textarea class="form-control" name="description" rows="6"
-                                            placeholder="Describe what you need and tell us a bit about your requrements">{{old('description')}}</textarea>
+                                            placeholder="Describe what you need and tell us a bit about your Requirements">{{old('description')}}</textarea>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-label">Upload files <small>Opsional</small></div>
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" name="file[]" multiple>
-                                            <label class="custom-file-label">Choose file</label>
+                                            <input type="file" class="form-control-file" name="file[]" multiple>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label text-capitalize">should have
                                             <small>Opsional</small></label>
                                         <textarea class="form-control" name="shouldhave" rows="6"
-                                            placeholder="Describe what you need and tell us a bit about your requrements">{{old('shouldhave')}}</textarea>
+                                            placeholder="Describe what you need and tell us a bit about your Requirements">{{old('shouldhave')}}</textarea>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label text-capitalize">should not have
                                             <small>Opsional</small></label>
                                         <textarea class="form-control" name="shouldnothave" rows="6"
-                                            placeholder="Describe what you need and tell us a bit about your requrements">{{old('shouldnothave')}}</textarea>
+                                            placeholder="Describe what you need and tell us a bit about your Requirements">{{old('shouldnothave')}}</textarea>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Job Description</label>
                                         <select name="job_description" class="form-control">
-                                            <option value="">-- Pilih --</option>
+                                            <option value="">-- Choose --</option>
                                             @foreach ($jobcatagories as $itemjobcatagories)
                                             <option value="{{$itemjobcatagories->id}}" data-name="{{$itemjobcatagories->name}}">
                                                 {{$itemjobcatagories->name}}</option>
@@ -92,7 +91,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label class="form-label">Budget</label>
+                                        <label class="form-label">Budget($)</label>
                                         <input type="text" class="form-control" name="budget" value="{{old('budget')}}"
                                             placeholder="Enter Budget in US$">
                                     </div>
@@ -159,7 +158,7 @@
                                                     <td id="projectname"></td>
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row">Desain Required</th>
+                                                    <th scope="row">Design Required</th>
                                                     <td id="desainrequired"></td>
                                                 </tr>
                                                 <tr>
@@ -181,7 +180,7 @@
                                         <div class="text-center">
                                             <h2>Payment Method</h2>
                                         </div>
-                                        <div id="paypal-button-container"></div>
+                                        <div id="paypal-button-container" class="text-center"></div>
                                     </div>
                                 </div>
                             </div>

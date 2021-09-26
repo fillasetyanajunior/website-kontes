@@ -15,11 +15,15 @@ class CatagoriesController extends Controller
             'harga' => 'required',
         ]);
 
+        $file = $request->file('icon');
+        $name = time() . rand(1, 100) . '.' . $file->extension();
+        $file->storeAs('icon', $name);
+
         if ($request->pilihaninput == 1) {
-            if ($request->icon != '') {
+            if ($request->hasfile('icon')) {
                 Catagories::create([
                     'name' => $request->name,
-                    'icon' => $request->icon,
+                    'icon' => $name,
                     'harga' => $request->harga,
                 ]);
             } else {
@@ -33,10 +37,10 @@ class CatagoriesController extends Controller
                 'name' => $request->name
             ]);
         } else {
-            if ($request->icon != '') {
+            if ($request->hasfile('icon')) {
                 Catagories::create([
                     'name' => $request->name,
-                    'icon' => $request->icon,
+                    'icon' => $name,
                     'harga' => $request->harga,
                 ]);
             } else {
@@ -65,12 +69,16 @@ class CatagoriesController extends Controller
     }
     public function UpdateCatagories(Request $request)
     {
+        $file = $request->file('icon');
+        $name = time() . rand(1, 100) . '.' . $file->extension();
+        $file->storeAs('icon', $name);
+
         if ($request->pilihaninputs == 1) {
-            if ($request->icon != '') {
+            if ($request->hasfile('icon')) {
                 Catagories::where('id',$request->id)
                     ->update([
                     'name' => $request->name,
-                    'icon' => $request->icon,
+                    'icon' => $name,
                     'harga' => $request->harga,
                 ]);
             } else {
@@ -95,7 +103,6 @@ class CatagoriesController extends Controller
     public function DeleteCatagories(Request $request)
     {
         if ($request->pilihaninput == 'catagories') {
-
             $cata = Catagories::where('id',$request->id)->first();
             Catagories::destroy($cata->id);
             SortCatagories::where('name',$cata->name)->delete();

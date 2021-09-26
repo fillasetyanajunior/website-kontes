@@ -13,6 +13,7 @@ use App\Models\OpsiPackageUpgrade;
 use App\Models\Project;
 use App\Models\ProjectPayment;
 use App\Models\SubCatagories;
+use App\Models\UploadFilePerjanjian;
 use App\Models\UploadFileProject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -79,41 +80,73 @@ class ProjectController extends Controller
                     $addprojectupgrades =  $addprojectupgrades . '/' . $requpgrade[$i];
                 }
                 $opsiupgrade    = OpsiPackageUpgrade::where('id', $requpgrade[$i])->first();
-                if ($waktu == null) {
-                    $waktu          = 6 + ($opsiupgrade->hari);
-                } else {
-                    $waktu          = $waktu + ($opsiupgrade->hari);
-                }
                 if ($opsiupgrade->name == 'Non Disclosure Agreement (NDA)') {
                     $request->validate([
                         'fileperjanjian' => 'required',
                     ]);
-                }
-                if ($opsiupgrade->name == 'Urgent') {
+                }elseif ($opsiupgrade->name == 'Urgent') {
                     $request->validate([
                         'dayUrgent' => 'required',
                     ]);
+                    if ($waktu == null) {
+                        $waktu          = 6 + ($opsiupgrade->hari * $request->dayUrgent);
+                    } else {
+                        $waktu          = $waktu + ($opsiupgrade->hari * $request->dayUrgent);
+                    }
+                }elseif($opsiupgrade->name == 'Extended'){
+                    $request->validate([
+                        'dayExtended' => 'required',
+                    ]);
+                    if ($waktu == null) {
+                        $waktu          = 6 + ($opsiupgrade->hari * $request->dayExtended);
+                    } else {
+                        $waktu          = $waktu + ($opsiupgrade->hari * $request->dayExtended);
+                    }
+                }elseif($opsiupgrade->name == '10 Days'){
+                    if ($waktu == null) {
+                        $waktu          = 6 + ($opsiupgrade->hari);
+                    } else {
+                        $waktu          = $waktu + ($opsiupgrade->hari);
+                    }
+                }elseif($opsiupgrade->name == '20 Days'){
+                    if ($waktu == null) {
+                        $waktu          = 6 + ($opsiupgrade->hari);
+                    } else {
+                        $waktu          = $waktu + ($opsiupgrade->hari);
+                    }
+                }else{
+                    $waktu  = 6;
                 }
             }
         } else {
             $waktu  = 6;
         }
 
-        $id =   Project::create([
-                    'user_id'               => request()->user()->id,
-                    'id_project'            => $idproject,
-                    'title'                 => $request->title,
-                    'catagories_project'    => 'contest',
-                    'catagories'            => $catagories->name,
-                    'is_active'             => 'waitting payment',
-                    'deadline'              => date('Y-m-d',strtotime('+' . $waktu . ' days')),
-                    'harga'                 => $request->totalcost,
-                    'shouldhave'            => $request->shouldhave,
-                    'shouldnothave'         => $request->shouldnothave,
-                ]);
-        // Mail::to(request()->user()->email)->send(new PembayaranProjectMail($id->id));
-        if ($request->hasFile('file')) {
+        $id = Project::create([
+                'user_id'               => request()->user()->id,
+                'id_project'            => $idproject,
+                'title'                 => $request->title,
+                'catagories_project'    => 'contest',
+                'catagories'            => $catagories->name,
+                'is_active'             => 'waiting payment',
+                'deadline'              => date('Y-m-d',strtotime('+' . $waktu . ' days')),
+                'harga'                 => $request->totalcost,
+                'shouldhave'            => $request->shouldhave,
+                'shouldnothave'         => $request->shouldnothave,
+            ]);
 
+        if ($request->hasFile('fileperjanjian')) {
+            $files = $request->file('fileperjanjian');
+            $namenda = $files->getClientOriginalName();
+            $files->storeAs('nda', $namenda);
+
+            UploadFilePerjanjian::create([
+                'contest_id'    => $id->id,
+                'name'          => $namenda,
+            ]);
+        }
+
+        if ($request->hasFile('file')) {
             foreach ($request->file('file') as $file) {
                 $name = $file->getClientOriginalName();
                 $file->storeAs('fileproject/AllFileProject' . $id->id, $name);
@@ -186,7 +219,7 @@ class ProjectController extends Controller
                     'title'                 => $request->title,
                     'catagories_project'    => 'direct',
                     'catagories'            => 'Direct Project',
-                    'is_active'             => 'waitting payment',
+                    'is_active'             => 'waiting payment',
                     'deadline'              => date('Y-m-d',strtotime('+' . $request->timeline . 'days')),
                     'harga'                 => $request->budget,
                     'shouldhave'            => $request->shouldhave,

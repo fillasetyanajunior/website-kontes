@@ -41,7 +41,7 @@
                                     <td>{{$itempaymentlist->name}}</td>
                                     <td>{{$itempaymentlist->email}}</td>
                                     <td>
-                                        @if ($itempaymentlist->is_active == 'waitting payment')
+                                        @if ($itempaymentlist->is_active == 'waiting payment')
                                         <form action="/waittingpayment/confirm/{{$itempaymentlist->project_id}}" method="post">
                                             @csrf
                                             @method('put')

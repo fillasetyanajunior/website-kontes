@@ -2,7 +2,7 @@
     <div class="col-lg-9">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex flex-wrap">
+                <div class="row">
                     @php
                         $day        = date('d',strtotime($project->deadline));
                         $month      = date('m',strtotime($project->deadline));
@@ -18,17 +18,17 @@
                         <i class="fa fa-money"></i>&nbsp;
                         {{"$ ". number_format($harga + 40)}}
                     </div>
-                    <div class="ml-3">
+                    <div class="ml-2">
                         <i class="fe fe-clock"></i>&nbsp;
-                        {{$time}} Hari
+                        {{$time}} Days
                     </div>
-                    <div class="ml-3">
+                    <div class="ml-2">
                         <i class="fa fa-image"></i>&nbsp;
-                        {{$desains}} Desain
+                        {{$desains}} Design
                     </div>
-                    <div class="ml-3">
+                    <div class="ml-2">
                         <i class="fa fa-user"></i>&nbsp;
-                        {{$desainers}} Desainers
+                        {{$desainers}} Designers
                     </div>
                     <div class="ml-auto">
                         @php
@@ -36,17 +36,30 @@
                         @endphp
                         @for ($i = 0; $i < count($projectupgrade); $i++)
                             @php
-                                $rendombtn = array("red",'orange','azure','blue','indigo','purple','pink','yellow','lime','green','teal','cyan','gray','gray-dark');
-                                $rendomkey = array_rand($rendombtn,1);
                                 $nameupgrade = DB::table('opsi_package_upgrades')->where('id',$projectupgrade[$i])->first();
                             @endphp
-                        <p class="btn btn-sm btn-{{$rendombtn[$rendomkey]}}">{{$nameupgrade->name}}</p>
+                            @if ($nameupgrade->name == 'Urgent')
+                            <p class="btn btn-sm btn-red">{{$nameupgrade->name}}</p>
+                            @elseif ($nameupgrade->name == 'Guarenteed')
+                            <p class="btn btn-sm btn-green">{{$nameupgrade->name}}</p>
+                            @elseif ($nameupgrade->name == '10 Days')
+                            <p class="btn btn-sm btn-blue">{{$nameupgrade->name}}</p>
+                            @elseif ($nameupgrade->name == '20 Days')
+                            <p class="btn btn-sm btn-indigo">{{$nameupgrade->name}}</p>
+                            @elseif ($nameupgrade->name == 'Non Disclosure Agreement (NDA)')
+                            <p class="btn btn-sm btn-azure">{{$nameupgrade->name}}</p>
+                            @elseif ($nameupgrade->name == 'Designer Pro')
+                            <p class="btn btn-sm btn-orange">{{$nameupgrade->name}}</p>
+                            @else
+                            <p class="btn btn-sm btn-lime">{{$nameupgrade->name}}</p>
+                            @endif
+
                         @endfor
                     </div>
                 </div>
                 <hr>
                 <div>
-                    <h4 class="text-capitalize">logo desain brief</h4>
+                    <h4 class="text-capitalize">logo design brief</h4>
                     <p class="text-justify">
                         {{$detailcontest->description}}
                     </p>

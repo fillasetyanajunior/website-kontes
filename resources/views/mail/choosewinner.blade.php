@@ -32,7 +32,7 @@
             @if ($eliminasi->filecontest != null)
             <tr>
                 <td style="padding: 0.75rem;vertical-align: top;border-top: 1px solid #dee2e6;">
-                    <p style="font-size:16px; color:#333333; ">Desain</p>
+                    <p style="font-size:16px; color:#333333; ">Design</p>
                 </td>
             </tr>
             <tr>

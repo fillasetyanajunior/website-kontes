@@ -24,7 +24,7 @@ class CustomerController extends Controller
             }
 
             $file = $request->file('avatar');
-            $name = $customer->name . '.' . $file->getClientOriginalExtension();
+            $name = time() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('profile', $name);
 
             Customer::where('id', $customer->id)

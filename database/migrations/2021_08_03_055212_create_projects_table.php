@@ -20,7 +20,7 @@ class CreateProjectsTable extends Migration
             $table->string('title');
             $table->enum('catagories_project',['contest','direct']);
             $table->string('catagories');
-            $table->enum('is_active', ['waitting payment', 'running', 'choose winner', 'handover', 'close', 'cancel', 'mediation']);
+            $table->enum('is_active', ['waiting payment', 'running', 'choose winner', 'handover', 'close', 'cancel', 'mediation']);
             $table->integer('harga');
             $table->text('shouldhave')->nullable();
             $table->text('shouldnothave')->nullable();

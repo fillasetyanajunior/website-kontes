@@ -17,7 +17,7 @@
                 data-url="{{url('storage')}}" data-id="{{$itemresultcontest->id}}" data-user_id="{{request()->user()->id}}" data-role="{{request()->user()->role}}">
                 <img src="{{asset('/storage/resultcontest/' . $itemresultcontest->filecontest)}}" class="rounded badge-secondary"
                         style="width: 300px; height: 300px; overflow: hidden; width: 100%;filter:blur(5px);">
-                <p style="width: 100%; overflow: hidden; position: absolute;left: 0px; top: 150px; font-size: 20pt" class="text-center text-white">REJECTED</p>
+                <p style="width: 100%; overflow: hidden; position: absolute;left: 0px; top: 150px; font-size: 20pt" class="text-center text-white bg-red">REJECTED</p>
             </a>
             @else
             <a href="javascript:void(0)" id="feedback" class="mb-3" data-target="#FeedbackContest" data-toggle="modal"
@@ -29,17 +29,27 @@
             </a>
             @endif
             <div class="d-flex align-items-center mt-5">
-                @if ($user->avatar != 'default.jpg')
-                <div class="avatar avatar-md mr-3"
-                    style="background-image: url({{asset('/storage/profile/' . $user->avatar)}})">
-                </div>
+                @if ($user != null)
+                    @if ($user->avatar != 'default.jpg')
+                        <div class="avatar avatar-md mr-3"
+                            style="background-image: url({{asset('/storage/profile/' . $user->avatar)}}); background-repeat: no-repeat;">
+                        </div>
+                    @else
+                        <div class="avatar avatar-md mr-3"
+                            style="background-image: url({{asset('assets/dashboard/images/default.jpg')}})">
+                        </div>
+                    @endif
                 @else
                 <div class="avatar avatar-md mr-3"
                     style="background-image: url({{asset('assets/dashboard/images/default.jpg')}})">
                 </div>
                 @endif
                 <div>
-                    <h6 class="text-muted">#{{$i++ . ' By ' . $user->name}}</h6>
+                    @if ($user != null)
+                    <a href="/profileworker/{{$user->user_id}}"><h6 class="text-muted">#{{$i++ . ' By ' . $user->name}}</h6></a>
+                    @else
+                    <a href="javascript:void(0)"><h6 class="text-muted">#{{$i++ . ' By Worker'}}</h6></a>
+                    @endif
                     @if ($itemresultcontest->nilai == 1)
                     <a href="javascript:void(0)" @if(request()->user()->role == 'customer' &&
                         request()->user()->id == $project->user_id && $project->is_active == 'running' &&
@@ -199,9 +209,10 @@
                     @endif
                 </div>
                 <div class="ml-auto">
-                    @if (request()->user()->role == 'customer' && request()->user()->id == $project->user_id || request()->user()->role == 'admin' &&
-                    $itemresultcontest->is_active == 'active' &&
-                    $project->is_active == 'running' )
+                    @if ($user != null)
+                    @if (request()->user()->role == 'customer' && request()->user()->id == $project->user_id &&
+                    $itemresultcontest->is_active == 'active' && $project->is_active == 'running' || $project->is_active == 'choose winner' || request()->user()->role == 'admin'  &&
+                    $itemresultcontest->is_active == 'active' && $project->is_active == 'running' || $project->is_active == 'choose winner' )
                     <div class="mb-1" id="eliminasicontest">
                         <button type="button" class="btn btn-danger col-12" id="btneliminasicontests"
                             data-toggle="modal" data-target="#ActionModal" data-url="{{url('assets/dashboard/images')}}"
@@ -213,6 +224,8 @@
                             data-id="{{$itemresultcontest->id}}">Pick Winner</button>
                     </div>
                     @endif
+                    @else
+                    @endif
                     @if ($project->is_active == 'handover' && $itemresultcontest->is_active == 'winner')
                         @if (request()->user()->id ==
                         $itemresultcontest->user_id_worker || request()->user()->id == $project->user_id)
@@ -223,7 +236,7 @@
                     @endif
                     <div class="mb-1">
                         <button type="button" id="feedback" class="mb-1 btn btn-green col-12" data-target="#FeedbackContest"
-                            data-toggle="modal" data-url="{{url('storage')}}" data-id="{{$itemresultcontest->id}}">
+                            data-toggle="modal" data-url="{{url('storage')}}" data-user_id="{{request()->user()->id}}" data-role="{{request()->user()->role}}" data-id="{{$itemresultcontest->id}}">
                             Feedback
                         </button>
                     </div>
@@ -258,9 +271,23 @@
                     </div>
                 </div>
                 <div class="">
-                    <button type="button" class="btn btn-secondary btn-sm">Replay</button>
+                    <button type="button" class="btn btn-secondary btn-sm" id="replaybuttonform">Reply</button>
                 </div>
             </div>
+            <form action="{{route('replaydiscus')}}" method="post" id="replayform">
+                <div class="card-body">
+                    @csrf
+                    <input type="hidden" name="id" value="{{$itemmessage->feedback}}">
+                    <div class="form-group">
+                        <div class="form-group mb-0">
+                            <textarea rows="2" class="form-control" name="feedback"></textarea>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </div>
+            </form>
             @php
                 $cekreplay = DB::table('replay_public_discuses')->where('message_replay',$itemmessage->feedback)->first();
                 $replay = DB::table('replay_public_discuses')->where('message_replay',$itemmessage->feedback)->get();
@@ -288,9 +315,23 @@
                     </div>
                 </div>
                 <div class="">
-                    <button type="button" class="btn btn-secondary btn-sm">Replay</button>
+                    <button type="button" class="btn btn-secondary btn-sm" id="replaybuttonform2">Reply</button>
                 </div>
             </div>
+            <form action="{{route('replaydiscus')}}" method="post" id="replayform2">
+                <div class="card-body">
+                    @csrf
+                    <input type="hidden" name="id" value="{{$itemmessage->feedback}}">
+                    <div class="form-group">
+                        <div class="form-group mb-0">
+                            <textarea rows="2" class="form-control" name="feedback"></textarea>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </div>
+            </form>
             @endforeach
             @endif
             <hr>
@@ -307,7 +348,7 @@
                         </div>
                     </div>
                     <div class="text-right">
-                        <button type="submit" class="btn btn-primary">Kirim</button>
+                        <button type="submit" class="btn btn-primary">Send</button>
                     </div>
                 </div>
             </div>

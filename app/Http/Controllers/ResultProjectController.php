@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\VerifiedWorkerMail;
 use App\Models\NewsFeed;
-use App\Models\Portfolio;
 use App\Models\Project;
 use App\Models\ResultContest;
 use App\Models\ResultProject;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ResultProjectController extends Controller
 {
@@ -51,6 +53,16 @@ class ResultProjectController extends Controller
                 ->update([
                     'submit' => $datetime->created_at,
                 ]);
+
+        $result = ResultContest::where('user_id_worker',request()->user()->id)->distinct('contest_id')->count();
+        $admin = User::where('role','admin')->get();
+        // dd($result);
+        if ($result == 3 || $result >= 3 ) {
+            foreach ($admin as $itemadmin) {
+                Mail::to($itemadmin->email)->send(new VerifiedWorkerMail(request()->user()->id));
+            }
+        }
+
         return redirect()->back()->with('status', 'Submit Contest Success');
     }
     public function createSubmitDirect(Request $request)

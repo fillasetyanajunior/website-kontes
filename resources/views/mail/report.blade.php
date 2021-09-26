@@ -3,6 +3,9 @@
 <td width="4" height="4" style="background:url({{url("assets//email/shadow-left-top.png")}}) no-repeat 100% 0;">
     <p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p>
 </td>
+@php
+    $report = DB::table('reports')->where('id',$id)->first();
+@endphp
 <td colspan="3" rowspan="3" bgcolor="#f0f2ea" style="padding:0 0 30px;">
     <!-- begin content -->
     <img src="{{url('assets/email/bg1.png')}}" width="600" height="400"

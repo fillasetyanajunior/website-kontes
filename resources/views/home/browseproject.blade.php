@@ -78,6 +78,7 @@
                                 $desains    = DB::table('result_contests')->where('contest_id',$itemproject->id)->count();
                                 $nilai      = DB::table('result_contests')->where('contest_id',$itemproject->id)->having('nilai','>',4)->count('nilai');
                                 $role       = 'contest';
+                                $projectupgrade = explode('/',$data->packageupgrade);
                             } else {
                                 $data       = DB::table('detail_projects')->where('project_id',$itemproject->id)->first();
                                 $datas      = DB::table('result_projects')->where('contest_id',$itemproject->id)->where('is_active','winner')->first();
@@ -86,6 +87,7 @@
                                 $job        = DB::table('job_catagories')->where('id',$data->job_description)->first();
                                 $nilai      = DB::table('result_projects')->where('contest_id',$itemproject->id)->having('nilai','>',4)->count('nilai');
                                 $role       = 'direct';
+                                $projectupgrade = null;
                             }
                             $day            = date('d',strtotime($itemproject->deadline));
                             $month          = date('m',strtotime($itemproject->deadline));
@@ -94,7 +96,20 @@
                             $fee            = ((15/100) * $itemproject->harga);
                             $harga          = $itemproject->harga - $fee;
                         @endphp
-                        <tr id="browsetable" data-url="{{'/brief' . $role . '/' . $itemproject->id}}">
+                        @if ($projectupgrade == null)
+                            <tr id="browsetable" data-url="{{'/brief' . $role . '/' . $itemproject->id}}">
+                        @else
+                            @for ($i = 0; $i < count($projectupgrade); $i++)
+                                @php
+                                    $upgrade = DB::table('opsi_package_upgrades')->where('id',$projectupgrade[$i])->first()
+                                @endphp
+                                @if ($upgrade->name == 'Non Disclosure Agreement (NDA)')
+                                    <tr id="browsetable" data-url="{{'/briefnda/' . $itemproject->id}}">
+                                @else
+                                    <tr id="browsetable" data-url="{{'/brief' . $role . '/' . $itemproject->id}}">
+                                @endif
+                            @endfor
+                        @endif
                             <td width="200px" class="d-none d-md-table-cell text-nowrap">
                                 @if ($itemproject->catagories_project == 'contest')
                                     @if ($datas != null)
@@ -141,7 +156,7 @@
                             <td>
                                 <div class="d-flex flex-column bd-highlight mt-4">
                                     <div class="bd-highlight">
-                                         <p><i class="fa fa-money"></i>{{"$ ". number_format($harga)}}</p>
+                                         <p><i class="fa fa-money"></i> {{"$". number_format($harga)}}</p>
                                     </div>
                                     <div class="bd-highlight">
                                         <p><i class="fe fe-clock"></i> Under {{$time}} Hari</p>

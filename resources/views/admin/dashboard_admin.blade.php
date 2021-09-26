@@ -16,7 +16,7 @@
                             <i class="fa fa-hourglass-start"></i>
                         </span>
                         <div>
-                            <h6 class="m-0 text-white">{{$waittingpayment}}<small class="text-white"> Waitting Payment</small></h6>
+                            <h6 class="m-0 text-white">{{$waittingpayment}}<small class="text-white"> Waiting Payment</small></h6>
                         </div>
                     </div>
                 </div>
@@ -124,7 +124,7 @@
                             <i class="fa fa-check"></i>
                         </span>
                         <div>
-                            <h6 class="m-0 text-white">{{$projectclose}}<small class="text-white"> Project Close</small></h6>
+                            <h6 class="m-0 text-white">{{$projectclose}}<small class="text-white"> Project Closed</small></h6>
                         </div>
                     </div>
                 </div>
@@ -198,7 +198,7 @@
                                         {{date('d M, Y',strtotime($itemproject->deadline))}}
                                     </td>
                                     <td>
-                                        @if ($itemproject->is_active == 'waitting payment')
+                                        @if ($itemproject->is_active == 'waiting payment')
                                         <a href="/waittingpayment" class="btn btn-warning btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                         @elseif ($itemproject->is_active == 'running')
                                             @if ($itemproject->catagories_project == 'contest')
@@ -207,15 +207,35 @@
                                             <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-success btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                             @endif
                                         @elseif ($itemproject->is_active == 'choose winner')
-                                        <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-azure btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                             @if ($itemproject->catagories_project == 'contest')
+                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-azure btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @else
+                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-azure btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @endif
                                         @elseif ($itemproject->is_active == 'handover')
-                                        <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-primary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @if ($itemproject->catagories_project == 'contest')
+                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-primary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @else
+                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-primary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @endif
                                         @elseif ($itemproject->is_active == 'close')
-                                        <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-uppercase">{{$itemproject->is_active}}</a>
+                                            @if ($itemproject->catagories_project == 'contest')
+                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @else
+                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @endif
                                         @elseif ($itemproject->is_active == 'cancel')
-                                        <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-danger btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @if ($itemproject->catagories_project == 'contest')
+                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-danger btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @else
+                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-danger btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @endif
                                         @else
-                                        <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-gray-dark btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @if ($itemproject->catagories_project == 'contest')
+                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-gray-dark btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @else
+                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-gray-dark btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>

@@ -59,9 +59,10 @@ $(document).ready(function () {
         $('#addbisniscard').empty()
         $('#subcata').empty()
 
-        var _id = $(this).val()
-        let _token = $('meta[name="csrf-token"]').attr('content');
-        var _url = '/getcubcatagories/' + _id
+        var _id         = $(this).val()
+        var _asseturl   = $(this).data('url')
+        let _token      = $('meta[name="csrf-token"]').attr('content');
+        var _url        = '/getcubcatagories/' + _id
 
         $.ajax({
             type: 'POST',
@@ -72,8 +73,8 @@ $(document).ready(function () {
             success: function (hasil) {
                 $.each(hasil.subcatagories,function (index,sub) {
                     $('#subcata').append('<div class="col-6 col-sm-4"> <label class="imagecheck mb-4" ><input type="radio" value="' + sub.id + '" data-harga="'
-                    + sub.harga + '" class="imagecheck-input" name="subcatagories" id="subcatagories"><figure class="imagecheck-figure" ><div class="card-body imagecheck-image" ><div class="d-flex flex-row bd-highlight" ><div class="p-2 bd-highlight align-self-center" ><i class="fa '
-                    + sub.icon + '" style="font-size: 50pt"></i></div> <div class="p-2 bd-highlight align-self-center" ><div class="d-flex flex-column bd-highlight" ><div class="bd-highlight" >' + sub.name + '</div> <div class="bd-highlight" >from $'
+                    + sub.harga + '" class="imagecheck-input" name="subcatagories" id="subcatagories"><figure class="imagecheck-figure" ><div class="card-body imagecheck-image" ><div class="d-flex flex-row bd-highlight" ><div class="p-2 bd-highlight align-self-center" ><img src="'
+                    + _asseturl + sub.icon + '" width="100px"></img></div> <div class="p-2 bd-highlight align-self-center" ><div class="d-flex flex-column bd-highlight" ><div class="bd-highlight" >' + sub.name + '</div> <div class="bd-highlight" >from $'
                     +sub.harga + '</div> <div class="bd-highlight" ></div></div></div></div><p class="text-justify">' + sub.description + '</p></div> </figure> </label> </div>')
 
                     // $('#subcata input[name="subcatagories"]*').on('change', function () {
@@ -442,19 +443,21 @@ $(document).ready(function () {
     })
     $('input[name="budget"]').on('keyup',function () {
 
-        var discon = (15 / 100) * $(this).val()
-        $('#transaction').html('$ ' + discon)
-        transaction = $('#transaction').html()
+        var discon = (15 / 100) * $(this).val();
+        $('#transaction').html('$ ' + discon);
+        transaction = $('#transaction').html();
 
         total = parseFloat($(this).val()) + parseFloat(transaction.substring(2, 100));
 
-        $('#budget').html('$ ' + $(this).val())
-        $('#total').html('$ ' + total)
+        $('#budget').html('$ ' + $(this).val());
+        $('#total').html('$ ' + total);
 
-        $('input[name="totalcost"]').val(total)
-        $('#totalcost').html('$ ' + total)
-        $('#paypal-button-container').empty()
-        initPayPalButton(total)
+        $('input[name="totalcost"]').val(total);
+        $('#totalcost').html('$ ' + total);
+        $('#paypal-button-container').empty();
+        console.log(total)
+
+        initPayPalButton(total);
     })
     $('select[name="job_description"]').on('change',function () {
         // console.log($('select[name="job_description"] option:selected').data('name'))

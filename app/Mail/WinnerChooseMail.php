@@ -26,9 +26,9 @@ class WinnerChooseMail extends Mailable implements ShouldQueue
         $this->project  = $project;
         $this->role     = $role;
         if ($project->catagories_project == 'contest') {
-            $this->eliminasi = ResultContest::where('contest_id', $id)->first();
+            $this->eliminasi = ResultContest::where('contest_id', $id)->where('is_active','winner')->first();
         } else {
-            $this->eliminasi = ResultProject::where('contest_id', $id)->first();
+            $this->eliminasi = ResultProject::where('contest_id', $id)->where('is_active','winner')->first();
         }
     }
 

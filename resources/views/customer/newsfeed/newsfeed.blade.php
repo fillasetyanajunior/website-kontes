@@ -12,8 +12,8 @@
                     <table class="table card-table table-vcenter">
                         @foreach ($newsfeed as $itemnewsfeed)
                         @php
-                        $user = DB::table('users')->where('id',$itemnewsfeed->user_id_from)->first();
-                        $project = DB::table('projects')->where('id',$itemnewsfeed->contest_id)->first();
+                        $user       = DB::table('users')->where('id',$itemnewsfeed->user_id_from)->first();
+                        $project    = DB::table('projects')->where('id',$itemnewsfeed->contest_id)->first();
                         @endphp
 
                         @if ($itemnewsfeed->choices == 'eliminasi')
@@ -24,7 +24,11 @@
                                         <div>
                                             <div>
                                                 <a href="javascript:void(0)">
+                                                    @if ($user != null)
                                                     {{$user->name}}
+                                                    @else
+
+                                                    @endif
                                                 </a>
                                                 You have been eliminated for
                                                 <a
@@ -53,7 +57,11 @@
                                         <div>
                                             <div>
                                                 <a href="javascript:void(0)">
+                                                    @if ($user != null)
                                                     {{$user->name}}
+                                                    @else
+
+                                                    @endif
                                                 </a>
                                                 Your got feedback for
                                                 <a
@@ -79,7 +87,11 @@
                                         <div>
                                             <div>
                                                 <a href="javascript:void(0)">
+                                                    @if ($user != null)
                                                     {{$user->name}}
+                                                    @else
+
+                                                    @endif
                                                 </a>
                                                 {{$project->catagories_project}} project you have passed the time
                                                 limit, choose a winner immediately for
@@ -101,7 +113,11 @@
                                         <div>
                                             <div>
                                                 <a href="javascript:void(0)">
+                                                    @if ($user != null)
                                                     {{$user->name}}
+                                                    @else
+
+                                                    @endif
                                                 </a>
                                                 Congrats you got the rating for
                                                 <a
@@ -189,7 +205,11 @@
                                         <div>
                                             <div>
                                                 <a href="javascript:void(0)">
+                                                    @if ($user != null)
                                                     {{$user->name}}
+                                                    @else
+
+                                                    @endif
                                                 </a>
                                                 Your got comment public for
                                                 <a
@@ -215,7 +235,11 @@
                                         <div>
                                             <div>
                                                 <a href="javascript:void(0)">
+                                                    @if ($user != null)
                                                     {{$user->name}}
+                                                    @else
+
+                                                    @endif
                                                 </a>
                                                 {{$itemnewsfeed->feedback}} for
                                                 <a
@@ -236,7 +260,11 @@
                                         <div>
                                             <div>
                                                 <a href="javascript:void(0)">
+                                                    @if ($user != null)
                                                     {{$user->name}}
+                                                    @else
+
+                                                    @endif
                                                 </a>
                                                 Congratulations you are the winner of the contest for
                                                 <a
@@ -265,7 +293,11 @@
                                         <div>
                                             <div>
                                                 <a href="javascript:void(0)">
+                                                    @if ($user != null)
                                                     {{$user->name}}
+                                                    @else
+
+                                                    @endif
                                                 </a>
                                                 Your got handover command for
                                                 <a
@@ -291,7 +323,11 @@
                                         <div>
                                             <div>
                                                 <a href="javascript:void(0)">
+                                                    @if ($user != null)
                                                     {{$user->name}}
+                                                    @else
+
+                                                    @endif
                                                 </a>
                                                 submit your contest for
                                                 <a
@@ -302,7 +338,7 @@
                                         </div>
                                     </div>
                                     <div class="p-2">
-                                        @if ($itemnewsfeed->filecontest != '')
+                                        @if ($itemnewsfeed->filecontest != null)
                                         <img src="{{asset('/storage/resultcontest/' . $itemnewsfeed->filecontest)}}"
                                             width="200px">
                                         @else

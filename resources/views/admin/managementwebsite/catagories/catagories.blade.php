@@ -5,21 +5,21 @@
     <div class="container">
         <div class="page-header">
             <h1 class="page-title">
-                Catagories
+                Categories
             </h1>
         </div>
         <button type="button" class="btn btn-primary mb-5" data-toggle="modal" data-target="#CatagoriesModal" id="addcatagories">Add
-            Catagories</button>
+            Categories</button>
         <button type="button" class="btn btn-primary mb-5" data-toggle="modal" data-target="#SubCatagoriesModal" id="addsubcatagories">Add Sub
-            Catagories</button>
+            Categories</button>
         <div class="form-group row">
             <div class="col-lg-3">
                 <label for="pilihantable">Pilihan Data</label>
                 <select class="form-control" id="pilihantable">
                     <option disabled value="">-- Pilih --</option>
-                    <option selected value="1">Catagories</option>
-                    <option value="2">Sort Catagories</option>
-                    <option value="3">Sub Catagories</option>
+                    <option selected value="1">Categories</option>
+                    <option value="2">Sort Categories</option>
+                    <option value="3">Sub Categories</option>
                 </select>
             </div>
         </div>
@@ -27,7 +27,7 @@
             <div class="col-12" id="catagories_table">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Catagories</h3>
+                        <h3 class="card-title">Categories</h3>
                     </div>
                     <div class="table-responsive">
                         <table class="table card-table table-vcenter text-nowrap">
@@ -81,7 +81,7 @@
             <div class="col-12" id="sort_catagories_table">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Search Catagories</h3>
+                        <h3 class="card-title">Search Categories</h3>
                     </div>
                     <div class="table-responsive">
                         <table class="table card-table table-vcenter text-nowrap">
@@ -125,7 +125,7 @@
             <div class="col-12" id="sub_catagories_table">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Sub Catagories</h3>
+                        <h3 class="card-title">Sub Categories</h3>
                     </div>
                     <div class="table-responsive">
                         <table class="table card-table table-vcenter text-nowrap">
@@ -195,7 +195,7 @@
                 </button>
             </div>
             <div class="body_catagories">
-                <form action="" method="POST">
+                <form action="" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <input type="hidden" name="pilihaninputs">
@@ -205,17 +205,19 @@
                             <input type="text" class="form-control" id="name" name="name">
                         </div>
                         <div class="form-group">
-                            <label for="harga">Harga</label>
+                            <label for="harga">Pricing</label>
                             <input type="text" class="form-control" id="harga" name="harga">
                         </div>
                         <div class="form-group">
                             <label for="icon">Icon</label>
-                            <select class="form-control fa" id="icon" name="icon">
+                            <input type="file" name="icon" id="icon" class="form-control-file">
+                            <small>Size File 1200 X 1200 Pixel</small>
+                            {{-- <select class="form-control fa" id="icon" name="icon">
                                 <option value="">-- Pilih --</option>
                                 @foreach ($icon as $itemicon)
                                 <option value="{{$itemicon->name}}">&#x{{$itemicon->cheatsheet}}&nbsp;{{$itemicon->name}}</option>
                                 @endforeach
-                            </select>
+                            </select> --}}
                         </div>
                         <div class="form-group">
                             <label for="pilihaninput">Choice Input</label>
@@ -247,7 +249,7 @@
                 </button>
             </div>
             <div class="body_sub_catagories">
-                <form action="" method="POST">
+                <form action="" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
@@ -255,7 +257,7 @@
                             <input type="text" class="form-control" id="namesub" name="name">
                         </div>
                         <div class="form-group">
-                            <label for="harga">Harga</label>
+                            <label for="harga">Pricing</label>
                             <input type="text" class="form-control" id="hargasub" name="harga">
                         </div>
                         <div class="form-group">
@@ -264,12 +266,14 @@
                         </div>
                         <div class="form-group">
                             <label for="icon">Icon</label>
-                            <select class="form-control fa" id="iconsub" name="icon">
+                            <input type="file" name="icon" id="iconsub" class="form-control-file">
+                            <small>Size File 1200 X 1200 Pixel</small>
+                            {{-- <select class="form-control fa" id="iconsub" name="icon">
                                 <option value="">-- Pilih --</option>
                                 @foreach ($icon as $itemicon)
                                 <option value="{{$itemicon->name}}">&#x{{$itemicon->cheatsheet}}&nbsp;{{$itemicon->name}}</option>
                                 @endforeach
-                            </select>
+                            </select> --}}
                         </div>
                         <div class="form-group">
                             <label for="catagories">Choice Catagories</label>

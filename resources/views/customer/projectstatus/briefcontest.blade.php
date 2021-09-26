@@ -147,7 +147,7 @@
                                     @if ($report >= 3)
                                     @else
                                     <div class="mb-1">
-                                        <button type="submit" class=" btn btn-warning col-12" data-target="#ReportModal"
+                                        <button type="submit" class=" btn btn-outline-danger col-12" data-target="#ReportModal"
                                             data-toggle="modal">Report</button>
                                     </div>
                                     @endif
@@ -216,7 +216,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Kirim</button>
+                    <button type="submit" class="btn btn-primary">Send</button>
                 </div>
             </form>
         </div>
