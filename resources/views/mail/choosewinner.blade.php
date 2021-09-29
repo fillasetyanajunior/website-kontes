@@ -17,14 +17,14 @@
             $name = DB::table('users')->where('id',$eliminasi->user_id_worker)->first();
         @endphp
         @if ($role == 'customer')
-        Anda telah memilih {{$name->name}} sebagai juara dari contest {{$project->title}}.
+        You have chosen {{$name->name}} as the champion of the contest {{$project->title}}.
         @else
-        Selamat anda juara dari {{$project->title}}.
+        Congratulations you are the champion of {{$project->title}}.
         @endif
     </p>
     <p
         style="margin:0 30px 25px; text-align:left; text-transform:capitalize; font-size:14px; line-height:30px; color:#484a42;">
-        Berikut adalah detail juara dari contest {{$project->title}}.
+        Here are the details of the winner of the contest {{$project->title}}.
     </p>
     <br>
     <table style="margin:0 30px 33px; width: 90%;margin-bottom: 1rem;color: #212529; border-collapse: collapse;">

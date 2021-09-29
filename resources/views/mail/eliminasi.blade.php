@@ -14,17 +14,17 @@
     <p
         style="margin:0 30px 33px; text-align:left; text-transform:capitalize; font-size:14px; line-height:30px; font-weight:bold; color:#484a42;">
         @if ($role == 'customer')
-        Terima Kasih telah melakukan eliminasi peserta
+        Thank you for eliminating participants
         @else
-        Maaf anda di eliminasi dari {{$project->title}}
+        Sorry you were eliminated from {{$project->title}}
         @endif
     </p>
     <p
         style="margin:0 30px 25px; text-align:left; text-transform:capitalize; font-size:14px; line-height:30px; color:#484a42;">
         @if ($role == 'customer')
-        Berikut adalah detail data pesrta yang di eliminasi oleh anda.
+        Here are the details of the participant data that were eliminated by you.
         @else
-        Berikut adalah detail data eliminasi anda.
+        Here are the details of your elimination data.
         @endif
     </p>
     <br>

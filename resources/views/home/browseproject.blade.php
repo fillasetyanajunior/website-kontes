@@ -159,7 +159,7 @@
                                          <p><i class="fa fa-money"></i> {{"$". number_format($harga)}}</p>
                                     </div>
                                     <div class="bd-highlight">
-                                        <p><i class="fe fe-clock"></i> Under {{$time}} Hari</p>
+                                        <p><i class="fe fe-clock"></i> Under {{$time}} Days</p>
                                     </div>
                                     <div class="bd-highlight">
                                         <p><i class="fa fa-image"></i> {{$desains}} Desain</p>

@@ -51,7 +51,7 @@ class HandoverController extends Controller
         ]);
 
         Mail::to($user->email)->send(new ProjectDoneMail());
-        Mail::to($worker->email)->send(new PaymentApprovedMail($project->name,$project->harga));
+        Mail::to($worker->email)->send(new PaymentApprovedMail($project->id));
 
         Project::where('id',$project->id)
                 ->update([

@@ -27,15 +27,15 @@ class GalleryContest extends Component
      */
     public function render()
     {
-        $project = Project::where('id',$this->id)->first();
-        $data['message'] = MessageComentar::where('result_id', $project->id)->get();
+        $project            = Project::where('id',$this->id)->first();
+        $data['message']    = MessageComentar::where('result_id', $project->id)->get();
         if (request()->user()->role == 'customer' || request()->user()->role == 'admin') {
-            $data['resultcontest'] = ResultContest::where('contest_id', $project->id)->get();
+            $data['resultcontest'] = ResultContest::orderBy('is_active','DESC')->where('contest_id', $project->id)->get();
         } else {
             if ($project->is_active == 'running') {
-                $data['resultcontest'] = ResultContest::where('contest_id', $project->id)->where('user_id_worker', request()->user()->id)->get();
+                $data['resultcontest'] = ResultContest::orderBy('is_active','DESC')->where('contest_id', $project->id)->where('user_id_worker', request()->user()->id)->get();
             } else {
-                $data['resultcontest'] = ResultContest::where('contest_id', $project->id)->get();
+                $data['resultcontest'] = ResultContest::orderBy('is_active','DESC')->where('contest_id', $project->id)->get();
             }
         }
         return view('components.gallery-contest',$data,compact('project'));

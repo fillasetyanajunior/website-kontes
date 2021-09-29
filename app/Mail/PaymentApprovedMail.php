@@ -16,11 +16,10 @@ class PaymentApprovedMail extends Mailable implements ShouldQueue
      *
      * @return void
      */
-    public $project,$harga;
-    public function __construct($project,$harga)
+    public $id;
+    public function __construct($id)
     {
-        $this->project = $project;
-        $this->harga = $harga;
+        $this->id = $id;
     }
 
     /**

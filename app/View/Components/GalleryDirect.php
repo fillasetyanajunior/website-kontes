@@ -27,15 +27,15 @@ class GalleryDirect extends Component
      */
     public function render()
     {
-        $project = Project::where('id', $this->id)->first();
-        $data['message'] = MessageComentar::where('result_id',$project->id)->get();
+        $project            = Project::where('id', $this->id)->first();
+        $data['message']    = MessageComentar::where('result_id',$project->id)->get();
         if (request()->user()->role == 'customer' || request()->user()->role == 'admin') {
-            $data['resultdirect'] = ResultProject::where('contest_id', $project->id)->get();
+            $data['resultdirect'] = ResultProject::orderBy('is_active','DESC')->where('contest_id', $project->id)->get();
         } else {
             if ($project->is_active == 'running') {
-                $data['resultdirect'] = ResultProject::where('contest_id', $project->id)->where('user_id_worker', request()->user()->id)->get();
+                $data['resultdirect'] = ResultProject::orderBy('is_active','DESC')->where('contest_id', $project->id)->where('user_id_worker', request()->user()->id)->get();
             } else {
-                $data['resultdirect'] = ResultProject::where('contest_id', $project->id)->get();
+                $data['resultdirect'] = ResultProject::orderBy('is_active','DESC')->where('contest_id', $project->id)->get();
             }
         }
         return view('components.gallery-direct',$data,compact('project'));

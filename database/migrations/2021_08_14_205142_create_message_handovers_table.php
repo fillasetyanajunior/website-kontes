@@ -19,6 +19,7 @@ class CreateMessageHandoversTable extends Migration
             $table->integer('worker_id')->nullable();
             $table->text('feedback_customer')->nullable();
             $table->text('feedback_worker')->nullable();
+            $table->string('file')->nullable();
             $table->timestamps();
         });
     }

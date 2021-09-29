@@ -32,6 +32,8 @@
                         data-url="{{url('storage')}}" data-id="{{$itemresultdirect->id}}" data-user_id="{{request()->user()->id}}" data-role="{{request()->user()->role}}">
                         <img src="{{asset('/storage/profile/' . $user->avatar)}}" class="rounded"
                             style="width: 300px; height: 300px; overflow: hidden; width: 100%;">
+                        <img src="{{asset('assets/dashboard/images/piala.png')}}"
+                        style="width: 110px; height: 100px; overflow: hidden; position: absolute;left: 0px; top: 0px;">
                     </a>
                     @else
                     <a href="javascript:void(0)" id="feedbackbid" class="mb-3" data-target="#FeedbackDirect" data-toggle="modal"
@@ -264,9 +266,9 @@
                     <div class="d-flex">
                         <div>
                             @if ($users->avatar == 'default.jpg')
-                            <img src="{{url('assets/dashboard/images/default.jpg')}}" width="75px" height="75px">
+                            <img src="{{url('assets/dashboard/images/default.jpg')}}" width="150px" class="mt-5">
                             @else
-                            <img src="{{url('storage/profile/' . $users->avatar)}}" width="75px" height="75px">
+                            <img src="{{url('storage/profile/' . $users->avatar)}}" width="150px" class="mt-5">
                             @endif
                         </div>
                         <div class="ml-3">
@@ -308,9 +310,9 @@
                     <div class="d-flex">
                         <div>
                             @if ($userreplay->avatar == 'default.jpg')
-                            <img src="{{url('assets/dashboard/images/default.jpg')}}" width="75px" height="75px">
+                            <img src="{{url('assets/dashboard/images/default.jpg')}}" width="150px" class="mt-5">
                             @else
-                            <img src="{{url('storage/profile/' . $userreplay->avatar)}}" width="75px" height="75px">
+                            <img src="{{url('storage/profile/' . $userreplay->avatar)}}" width="150px" class="mt-5">
                             @endif
                         </div>
                         <div class="ml-3">

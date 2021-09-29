@@ -40,7 +40,7 @@
                             @endphp
                             @if ($nameupgrade->name == 'Urgent')
                             <p class="btn btn-sm btn-red">{{$nameupgrade->name}}</p>
-                            @elseif ($nameupgrade->name == 'Guarenteed')
+                            @elseif ($nameupgrade->name == 'Guaranteed')
                             <p class="btn btn-sm btn-green">{{$nameupgrade->name}}</p>
                             @elseif ($nameupgrade->name == '10 Days')
                             <p class="btn btn-sm btn-blue">{{$nameupgrade->name}}</p>

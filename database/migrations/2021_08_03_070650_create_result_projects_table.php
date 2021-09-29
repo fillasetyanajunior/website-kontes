@@ -20,7 +20,6 @@ class CreateResultProjectsTable extends Migration
             $table->text('description');
             $table->integer('nilai')->nullable();
             $table->enum('is_active', ['active', 'eliminasi', 'winner']);
-            $table->enum('portfolio', ['show', 'hide']);
             $table->timestamps();
         });
     }

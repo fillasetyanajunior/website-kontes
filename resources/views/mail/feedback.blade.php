@@ -13,11 +13,11 @@
     </p>
     <p
         style="margin:0 30px 33px; text-align:left; text-transform:capitalize; font-size:14px; line-height:30px; font-weight:bold; color:#484a42;">
-        Anda mendapatkan feedback dari contest {{$project}}
+        You get feedback from the contest {{$project}}
     </p>
     <p
         style="margin:0 30px 25px; text-align:left; text-transform:capitalize; font-size:14px; line-height:30px; color:#484a42;">
-        Berikut adalah detail feedback yang dikirimkan ke anda.
+        Here are the details of the feedback that was sent to you.
     </p>
     <br>
     <table style="margin:0 30px 33px; width: 90%;margin-bottom: 1rem;color: #212529; border-collapse: collapse;">

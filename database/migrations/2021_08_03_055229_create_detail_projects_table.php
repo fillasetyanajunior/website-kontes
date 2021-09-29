@@ -19,6 +19,7 @@ class CreateDetailProjectsTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->integer('job_description');
+            $table->integer('hari');
             $table->integer('harga');
             $table->timestamps();
         });

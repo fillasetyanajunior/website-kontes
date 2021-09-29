@@ -15,13 +15,29 @@ class MessageHandoverController extends Controller
     public function KirimFeedbackMessage(Request $request)
     {
         $project = Project::where('id', $request->id)->first();
+
+        $file = $request->file('filechat');
+        $name = time() . '.' . $file->getClientOriginalExtension();
+        $file->storeAs('profile', $name);
+
         if (request()->user()->role == 'customer') {
-            $MessageHandover = MessageHandover::create([
-                'result_id'         => $request->id,
-                'worker_id'         => $request->user_id_worker,
-                'customer_id'       => request()->user()->id,
-                'feedback_customer' => $request->feedback,
-            ]);
+            if ($request->file('filechat')) {
+                $MessageHandover = MessageHandover::create([
+                    'result_id'         => $request->id,
+                    'worker_id'         => $request->user_id_worker,
+                    'customer_id'       => request()->user()->id,
+                    'feedback_customer' => $request->feedback,
+                    'file'              => $name,
+                ]);
+            } else {
+                $MessageHandover = MessageHandover::create([
+                    'result_id'         => $request->id,
+                    'worker_id'         => $request->user_id_worker,
+                    'customer_id'       => request()->user()->id,
+                    'feedback_customer' => $request->feedback,
+                ]);
+            }
+
             NewsFeed::create([
                 'contest_id'    => $request->id,
                 'user_id_from'  => request()->user()->id,
@@ -32,12 +48,22 @@ class MessageHandoverController extends Controller
             $worker = User::where('id', $MessageHandover->worker_id)->first();
             Mail::to($worker->email)->send(new HandoverCommentMail($request->feedback, $project->title));
         } else {
-            $MessageHandover = MessageHandover::create([
-                'result_id'         => $request->id,
-                'worker_id'         => request()->user()->id,
-                'customer_id'       => $request->user_id,
-                'feedback_worker'   => $request->feedback,
-            ]);
+            if ($request->file('filechat')) {
+                $MessageHandover = MessageHandover::create([
+                    'result_id'         => $request->id,
+                    'worker_id'         => request()->user()->id,
+                    'customer_id'       => $request->user_id,
+                    'feedback_worker'   => $request->feedback,
+                    'file'              => $name,
+                ]);
+            } else {
+                $MessageHandover = MessageHandover::create([
+                    'result_id'         => $request->id,
+                    'worker_id'         => request()->user()->id,
+                    'customer_id'       => $request->user_id,
+                    'feedback_worker'   => $request->feedback,
+                ]);
+            }
 
             NewsFeed::create([
                 'contest_id'    => $request->id,

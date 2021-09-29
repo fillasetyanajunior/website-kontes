@@ -364,6 +364,7 @@ $(document).ready(function () {
                 $('#name_worker').html(hasil.user.name)
                 $('#descriptions').text(description[0])
                 $('#bid').text('$' + description[1])
+                $('#bidhari').text(description[2] + ' Days')
                 if (_role == 'customer' && _user_id == hasil.project.user_id && hasil.resultproject.is_active == 'active' && hasil.project.is_active == 'running' || hasil.project.is_active == 'choose winner' || _role == 'admin' && hasil.resultproject.is_active == 'active' && hasil.project.is_active == 'running' || hasil.project.is_active == 'choose winner') {
                     $('#buttonresultdirect').append('<div class="mb-1" id="eliminasidirect"> <button type = "button" class=" btn btn-danger col-12" id="btneliminasidirect" data-toggle="modal" data-target="#ActionDirectModal" > Eliminate </button> </div> <div class="mb-1" id="pickwinnerdirect" ><button type="button" class=" btn btn-azure col-12" id="btnpickwinnerdirect" data-toggle="modal" data-target="#ActionDirectModal" > Pick Winner </button> </div>')
                 }

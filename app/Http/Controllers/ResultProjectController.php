@@ -90,7 +90,7 @@ class ResultProjectController extends Controller
         $datetime = ResultProject::create([
             'contest_id'    => $request->id,
             'user_id_worker'=> request()->user()->id,
-            'description'   => $request->description . '/' . $request->harga,
+            'description'   => $request->description . '/' . $request->harga . '/' . $request->hari,
             'is_active'     => 'active',
             'portfolio'     => $portfolio,
         ]);

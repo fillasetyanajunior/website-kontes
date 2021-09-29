@@ -81,28 +81,17 @@ class WorkerController extends Controller
 
             Worker::where('id', $worker->id)
                 ->update([
-                    'name'          => $request->name,
-                    'email'         => $request->email,
                     'paypal'        => $request->paypal,
                     'avatar'        => $name,
                 ]);
             User::where('id', $worker->user_id)
                 ->update([
-                    'name'      => $request->name,
-                    'email'     => $request->email,
                     'avatar'    => $name,
                 ]);
         } else {
             Worker::where('id', $worker->id)
                 ->update([
-                    'name'      => $request->name,
-                    'email'     => $request->email,
                     'paypal'    => $request->paypal,
-                ]);
-            User::where('id', $worker->user_id)
-                ->update([
-                    'name'  => $request->name,
-                    'email' => $request->email,
                 ]);
         }
 

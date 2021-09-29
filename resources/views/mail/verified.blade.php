@@ -16,10 +16,10 @@
     @endphp
     <p
         style="margin:0 30px 33px; text-align:left; text-transform:capitalize; font-size:14px; line-height:30px; font-weight:bold; color:#484a42;">
-        Name Worker {{$worker->name}}, ID Worker {{$worker->worker_id}} Account ini Telah Mencapai Target Verified Tolong Di Periksa.
+        Name Worker {{$worker->name}}, ID Worker {{$worker->worker_id}} This Account Has Reached The Verified Target Please Check.
     </p>
     <p
         style="margin:0 30px 33px; text-align:left; text-transform:capitalize; font-size:14; line-height:30px; font-weight:bold; color:#484a42;">
-        Terima kasih telah memesan layanan kami, semoga anda senang dengan pelayanan kami.
+        Thank you for ordering our service, we hope you are happy with our service.
     </p>
 @endsection

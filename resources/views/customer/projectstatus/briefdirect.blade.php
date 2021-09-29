@@ -47,7 +47,7 @@
                                         <textarea class="form-control" rows="5" name="description"></textarea>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <div class="form-group">
                                         <div class="form-label">Licensed Content</div>
                                         <div class="form-label text-capitalize">declare any stock content used to avoid
@@ -85,7 +85,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="form-group">
                                     <div class="custom-controls-stacked">
                                         <label class="custom-control custom-checkbox">
@@ -102,6 +102,10 @@
                                 <div class="form-group">
                                     <label class="form-label">Your Bid ($)</label>
                                     <input type="text" class="form-control" name="harga" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">This project will be delivered in:....Days</label>
+                                    <input type="text" class="form-control" name="hari" value="">
                                 </div>
                             </div>
                         </div>
@@ -146,6 +150,8 @@
                             <p id="descriptions"></p>
                             <h4>Your Bid</h4>
                             <p id="bid"></p>
+                            <h4>This Project Will Be Delivered In</h4>
+                            <p id="bidhari"></p>
                         </div>
                     </div>
                     <div id="feedbackcommentbid">
@@ -233,7 +239,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
         </div>

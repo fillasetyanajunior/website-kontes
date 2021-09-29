@@ -27,9 +27,9 @@ class BriefDirect extends Component
      */
     public function render()
     {
-        $project = Project::where('id', $this->id)->first();
-        $detail = DetailProject::where('project_id', $this->id)->first();
-        $data['detaildirect'] = DetailProject::where('project_id', $this->id)->first();
+        $project                = Project::where('id', $this->id)->first();
+        $detail                 = DetailProject::where('project_id', $this->id)->first();
+        $data['detaildirect']   = DetailProject::where('project_id', $this->id)->first();
         $data['jobdescription'] = JobCatagories::where('id', $detail->job_description)->first();
         return view('components.brief-direct',$data,compact('project'));
     }

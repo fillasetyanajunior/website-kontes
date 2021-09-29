@@ -220,9 +220,9 @@
                                             @endif
                                         @elseif ($itemproject->is_active == 'close')
                                             @if ($itemproject->catagories_project == 'contest')
-                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-uppercase">{{$itemproject->is_active}}</a>
                                             @else
-                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-uppercase">{{$itemproject->is_active}}</a>
                                             @endif
                                         @elseif ($itemproject->is_active == 'cancel')
                                             @if ($itemproject->catagories_project == 'contest')

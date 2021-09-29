@@ -115,6 +115,9 @@ class ProjectController extends Controller
                         $waktu          = $waktu + ($opsiupgrade->hari);
                     }
                 }else{
+                    if($opsiupgrade->name == 'Guaranteed'){
+                        $guaranteed = 'active';
+                    }
                     $waktu  = 6;
                 }
             }
@@ -130,6 +133,7 @@ class ProjectController extends Controller
                 'catagories'            => $catagories->name,
                 'is_active'             => 'waiting payment',
                 'deadline'              => date('Y-m-d',strtotime('+' . $waktu . ' days')),
+                'guarded'               => $guaranteed,
                 'harga'                 => $request->totalcost,
                 'shouldhave'            => $request->shouldhave,
                 'shouldnothave'         => $request->shouldnothave,
@@ -220,7 +224,7 @@ class ProjectController extends Controller
                     'catagories_project'    => 'direct',
                     'catagories'            => 'Direct Project',
                     'is_active'             => 'waiting payment',
-                    'deadline'              => date('Y-m-d',strtotime('+' . $request->timeline . 'days')),
+                    'deadline'              => date('Y-m-d',strtotime('+12 days')),
                     'harga'                 => $request->budget,
                     'shouldhave'            => $request->shouldhave,
                     'shouldnothave'         => $request->shouldnothave,
@@ -239,11 +243,13 @@ class ProjectController extends Controller
             }
 
         }
+
         DetailProject::create([
             'project_id'        => $id->id,
             'title'             => $request->title,
             'description'       => $request->description,
             'job_description'   => $request->job_description,
+            'hari'              => $request->timeline,
             'harga'             => $request->budget,
             'is_active'         => 'active',
         ]);

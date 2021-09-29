@@ -131,45 +131,6 @@
                         @endif
                     </a>
                     <div class="d-flex align-items-center px-2 mt-5">
-                        <div>
-                            @if ($itemresultcontest->nilai == 1)
-                            <a href="javascript:void(0)" data-nilai="1"><i class="fa fa-star text-yellow"></i></a>
-                            <a href="javascript:void(0)" data-nilai="2"><i class="fa fa-star-o"></i></a>
-                            <a href="javascript:void(0)" data-nilai="3"><i class="fa fa-star-o"></i></a>
-                            <a href="javascript:void(0)" data-nilai="4"><i class="fa fa-star-o"></i></a>
-                            <a href="javascript:void(0)" data-nilai="5"><i class="fa fa-star-o"></i></a>
-                            @elseif ($itemresultcontest->nilai == 2)
-                            <a href="javascript:void(0)" data-nilai="1"><i class="fa fa-star text-yellow"></i></a>
-                            <a href="javascript:void(0)" data-nilai="2"><i class="fa fa-star text-yellow"></i></a>
-                            <a href="javascript:void(0)" data-nilai="3"><i class="fa fa-star-o"></i></a>
-                            <a href="javascript:void(0)" data-nilai="4"><i class="fa fa-star-o"></i></a>
-                            <a href="javascript:void(0)" data-nilai="5"><i class="fa fa-star-o"></i></a>
-                            @elseif ($itemresultcontest->nilai == 3)
-                            <a href="javascript:void(0)" data-nilai="1"><i class="fa fa-star text-yellow"></i></a>
-                            <a href="javascript:void(0)" data-nilai="2"><i class="fa fa-star text-yellow"></i></a>
-                            <a href="javascript:void(0)" data-nilai="3"><i class="fa fa-star text-yellow"></i></a>
-                            <a href="javascript:void(0)" data-nilai="4"><i class="fa fa-star-o"></i></a>
-                            <a href="javascript:void(0)" data-nilai="5"><i class="fa fa-star-o"></i></a>
-                            @elseif ($itemresultcontest->nilai == 4)
-                            <a href="javascript:void(0)" data-nilai="1"><i class="fa fa-star text-yellow"></i></a>
-                            <a href="javascript:void(0)" data-nilai="2"><i class="fa fa-star text-yellow"></i></a>
-                            <a href="javascript:void(0)" data-nilai="3"><i class="fa fa-star text-yellow"></i></a>
-                            <a href="javascript:void(0)" data-nilai="4"><i class="fa fa-star text-yellow"></i></a>
-                            <a href="javascript:void(0)" data-nilai="5"><i class="fa fa-star-o"></i></a>
-                            @elseif ($itemresultcontest->nilai == 5)
-                            <a href="javascript:void(0)" data-nilai="1"><i class="fa fa-star text-yellow"></i></a>
-                            <a href="javascript:void(0)" data-nilai="2"><i class="fa fa-star text-yellow"></i></a>
-                            <a href="javascript:void(0)" data-nilai="3"><i class="fa fa-star text-yellow"></i></a>
-                            <a href="javascript:void(0)" data-nilai="4"><i class="fa fa-star text-yellow"></i></a>
-                            <a href="javascript:void(0)" data-nilai="5"><i class="fa fa-star text-yellow"></i></a>
-                            @else
-                            <a href="javascript:void(0)" data-nilai="1"><i class="fa fa-star-o"></i></a>
-                            <a href="javascript:void(0)" data-nilai="2"><i class="fa fa-star-o"></i></a>
-                            <a href="javascript:void(0)" data-nilai="3"><i class="fa fa-star-o"></i></a>
-                            <a href="javascript:void(0)" data-nilai="4"><i class="fa fa-star-o"></i></a>
-                            <a href="javascript:void(0)" data-nilai="5"><i class="fa fa-star-o"></i></a>
-                            @endif
-                        </div>
                         <div class="ml-auto">
                             @if ($itemresultcontest->portfolio == 'show')
                             <div class="mb-1">

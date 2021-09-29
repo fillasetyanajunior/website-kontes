@@ -1,5 +1,5 @@
 <div class="row row-cards" id="descri">
-    <div class="col-lg-8">
+    <div class="col-lg-9">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex flex-wrap">
@@ -10,9 +10,9 @@
                         $time       = (int)((mktime (0,0,0,$month,$day,$year) - time())/86400);
                         $desainers  = DB::table('result_projects')->where('contest_id',$project->id)->distinct()->count('user_id_worker');
                         $desains    = DB::table('result_projects')->where('contest_id',$project->id)->count();
-                        $file      = DB::table('upload_file_projects')->where('contest_id',$project->id)->get();
+                        $file       = DB::table('upload_file_projects')->where('contest_id',$project->id)->get();
                         $fee        = ((15/100) * $project->harga);
-                        $harga      = $project->harga - $fee - 40;
+                        $harga      = $project->harga - $fee;
                     @endphp
                     <div class="">
                         <i class="fa fa-money"></i>&nbsp;
@@ -45,6 +45,11 @@
                 </div>
                  <hr>
                 <div>
+                    <h4 class="text-capitalize">processing time</h4>
+                    <p>{{$detaildirect->hari}} Days</p>
+                </div>
+                 <hr>
+                <div>
                     <h4 class="text-capitalize">requirements</h4>
                     <h5 class="text-capitalize">should have</h5>
                     <p class="text-justify">{{$project->shouldhave}}</p>
@@ -72,13 +77,15 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="row">
             <div class="col-md-6 col-lg-12">
                 @php
                     $worker = DB::table('workers')->where('user_id',request()->user()->id)->first();
+                    $resultdirect = DB::table('result_projects')->where('user_id_worker',request()->user()->id)->first();
+                    $resultdirects = DB::table('result_projects')->where('contest_id',$project->id)->where('is_active','winner')->first();
                 @endphp
-                @if (request()->user()->role == 'worker' && $project->is_active == 'running' && $worker->status_account != 'suspend')
+                @if (request()->user()->role == 'worker' && $project->is_active == 'running' && $worker->status_account != 'suspend' && $resultdirect == null)
                 <button type="button" class="btn btn-primary mb-5 col-lg-12 font-weight-bold" idcontest="{{$project->id}}"
                     data-toggle="modal" data-target="#directModal" id="tambahresultdirect">Submit
                     Entry</button>
@@ -94,7 +101,7 @@
                     <button type="submit" class="btn btn-azure col-lg-12 mb-5">Locked Project</button>
                 </form>
                 @else
-                    @if (request()->user()->id == $project->user_id)
+                    @if (request()->user()->id == $project->user_id && $resultdirects != null)
                     <button type="button" class="btn btn-primary col-lg-12 mb-5" data-toggle="modal"
                         data-target="#ExtendedDeadline">Extended Deadline</button>
                     @endif

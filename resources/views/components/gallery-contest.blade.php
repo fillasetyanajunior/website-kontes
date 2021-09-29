@@ -259,9 +259,9 @@
                     <div class="d-flex">
                         <div>
                             @if ($users->avatar == 'default.jpg')
-                            <img src="{{url('assets/dashboard/images/default.jpg')}}" width="75px" height="75px">
+                            <img src="{{url('assets/dashboard/images/default.jpg')}}" width="150px" class="mt-5">
                             @else
-                            <img src="{{url('storage/profile/' . $users->avatar)}}" width="75px" height="75px">
+                            <img src="{{url('storage/profile/' . $users->avatar)}}" width="150px" class="mt-5">
                             @endif
                         </div>
                         <div class="ml-3">
@@ -303,9 +303,9 @@
                     <div class="d-flex">
                         <div>
                             @if ($userreplay->avatar == 'default.jpg')
-                            <img src="{{url('assets/dashboard/images/default.jpg')}}" width="75px" height="75px">
+                            <img src="{{url('assets/dashboard/images/default.jpg')}}" width="150px" class="mt-5">
                             @else
-                            <img src="{{url('storage/profile/' . $userreplay->avatar)}}" width="75px" height="75px">
+                            <img src="{{url('storage/profile/' . $userreplay->avatar)}}" width="150px" class="mt-5">
                             @endif
                         </div>
                         <div class="ml-3">

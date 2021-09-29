@@ -223,7 +223,7 @@ class DatabaseSeeder extends Seeder
                 'updated_at'    => Carbon::now(),
             ],
             [
-                'name'          => 'Guarenteed',
+                'name'          => 'Guaranteed',
                 'description'   => 'sseftessfjyjgh',
                 'harga'         => 0,
                 'hari'          => 0,

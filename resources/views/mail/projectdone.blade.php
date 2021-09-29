@@ -13,10 +13,10 @@
     </p>
     <p
         style="margin:0 30px 33px; text-align:left; text-transform:capitalize; font-size:14px; line-height:30px; font-weight:bold; color:#484a42;">
-        Project yang anda pesan telah selesai.
+        The project you ordered has been completed.
     </p>
     <p
         style="margin:0 30px 33px; text-align:left; text-transform:capitalize; font-size:14; line-height:30px; font-weight:bold; color:#484a42;">
-        Terima kasih telah memesan layanan kami, semoga anda senang dengan pelayanan kami.
+        Thank you for ordering our service, we hope you are happy with our service.
     </p>
 @endsection

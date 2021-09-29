@@ -7,18 +7,15 @@
             <div class="col-lg-4">
                 <div class="card card-profile">
                     <div class="card-header"
-                        style="background-image: url({{url('assets/dashboard/images/thumbnail.jpg')}});">
+                        style="background-image: white;">
                     </div>
                     <div class="card-body text-center">
                         @if ($worker->avatar != 'default.jpg')
-                        <img class="card-profile-img" src="{{asset('/storage/profile/' . $worker->avatar)}}">
+                        <img class="card-profile-img" src="{{asset('/storage/profile/' . $worker->avatar)}}" >
                         @else
-                        <img class="card-profile-img" src="{{url('assets/dashboard/images/default.jpg')}}">
+                        <img class="card-profile-img" src="{{url('assets/dashboard/images/default.jpg')}}" >
                         @endif
                         <h3 class="mb-3">{{$worker->name}}</h3>
-                        <p class="mb-4">
-                            {{$worker->tagline}}
-                        </p>
                     </div>
                 </div>
             </div>
@@ -32,27 +29,25 @@
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Worker ID</label>
-                                    <input type="text" class="form-control" id="customer_id" placeholder="Customer ID"
-                                        value="{{$worker->customer_id}}" readonly>
+                                    <input type="text" class="form-control" placeholder="Worker ID" value="{{$worker->worker_id}}" readonly>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Email address</label>
-                                    <input type="email" class="form-control" name="email" placeholder="Email" value="{{$worker->email}}">
+                                    <input type="email" class="form-control" placeholder="Email" value="{{$worker->email}}" readonly>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-12">
                                 <div class="form-group">
                                     <label class="form-label">Name</label>
-                                    <input type="text" class="form-control" name="name" placeholder="Name"
-                                        value="{{$worker->name}}">
+                                    <input type="text" class="form-control" placeholder="Name" value="{{$worker->name}}" readonly>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-label">Paypal Account</label>
-                                    <input type="text" class="form-control" name="paypal" placeholder="Tag Line"
+                                    <input type="text" class="form-control" name="paypal" placeholder="Account Paypal"
                                         value="{{$worker->paypal}}" >
                                 </div>
                             </div>
