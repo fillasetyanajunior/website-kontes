@@ -55,15 +55,16 @@ class FeedbackBidController extends Controller
             } else {
                 $admin = User::where('role','admin')->get();
                 for ($i=0; $i < count($admin); $i++) {
-                    NewsFeed::create([
-                        'contest_id'    => $resultproject->contest_id,
-                        'user_id_from'  => request()->user()->id,
-                        'user_id_to'    => $admin[$i]->id,
-                        'feedback'      => $request->feedback,
-                        'choices'       => 'feedback',
-                    ]);
-
-                    Mail::to($admin[$i]->email)->send(new FeedbackMail($request->feedback,$project->title));
+                    foreach ($admin as $itemadmin) {
+                        NewsFeed::create([
+                            'contest_id'    => $resultproject->contest_id,
+                            'user_id_from'  => request()->user()->id,
+                            'user_id_to'    => $itemadmin->id,
+                            'feedback'      => $request->feedback,
+                            'choices'       => 'feedback',
+                        ]);
+                        Mail::to($itemadmin->email)->send(new FeedbackMail($request->feedback,$project->title));
+                    }
                 }
             }
         } else {
@@ -163,16 +164,18 @@ class FeedbackBidController extends Controller
         } else {
             $admin = User::where('role','admin')->get();
             for ($i=0; $i < count($admin); $i++) {
-                Mail::to($admin[$i]->email)->send(new EliminasiMail($resultproject->contest_id, $admin[$i]->role));
-                Mail::to(request()->user()->email)->send(new EliminasiMail($resultproject->contest_id, request()->user()->role));
+                foreach ($admin as $itemadmin) {
+                    Mail::to($itemadmin->email)->send(new EliminasiMail($resultproject->contest_id, $itemadmin->role));
 
-                NewsFeed::create([
-                    'contest_id'    => $resultproject->contest_id,
-                    'user_id_from'  => request()->user()->id,
-                    'user_id_to'    => $admin[$i]->id,
-                    'choices'       => 'eliminasi',
-                ]);
+                    NewsFeed::create([
+                        'contest_id'    => $resultproject->contest_id,
+                        'user_id_from'  => request()->user()->id,
+                        'user_id_to'    => $itemadmin->id,
+                        'choices'       => 'eliminasi',
+                    ]);
+                }
             }
+            Mail::to(request()->user()->email)->send(new EliminasiMail($resultproject->contest_id, request()->user()->role));
         }
 
         return redirect()->back()->with('status', 'Update Direct Success');
@@ -182,6 +185,11 @@ class FeedbackBidController extends Controller
         $project = Project::where('id',$resultproject->contest_id)->first();
 
         $worker = Worker::where('user_id', $resultproject->user_id_worker)->first();
+
+        ResultProject::where('id', $resultproject->id)
+            ->update([
+                'is_active'     => 'winner',
+            ]);
 
         if ($worker != null) {
             if ($worker->earning == 0) {
@@ -215,30 +223,27 @@ class FeedbackBidController extends Controller
         } else {
             $admin = User::where('role','admin')->get();
             for ($i=0; $i < count($admin); $i++) {
-                NewsFeed::create([
-                    'contest_id'    => $resultproject->contest_id,
-                    'user_id_from'  => request()->user()->id,
-                    'user_id_to'    => $admin[$i]->id,
-                    'choices'       => 'pick winner',
-                ]);
+                foreach ($admin as $itemadmin) {
+                    NewsFeed::create([
+                        'contest_id'    => $resultproject->contest_id,
+                        'user_id_from'  => request()->user()->id,
+                        'user_id_to'    => $itemadmin->id,
+                        'choices'       => 'pick winner',
+                    ]);
 
-                WinnerContest::create([
-                    'contest_id'        => $resultproject->contest_id,
-                    'user_id'           => request()->user()->id,
-                    'user_id_worker'    => $admin[$i]->id,
-                    'title'             => $project->title,
-                    'filecontest'       => '',
-                ]);
+                    WinnerContest::create([
+                        'contest_id'        => $resultproject->contest_id,
+                        'user_id'           => request()->user()->id,
+                        'user_id_worker'    => $itemadmin->id,
+                        'title'             => $project->title,
+                        'filecontest'       => '',
+                    ]);
 
-                Mail::to($admin[$i]->email)->send(new WinnerChooseMail($resultproject->contest_id, $admin[$i]->role));
-                Mail::to(request()->user()->email)->send(new WinnerChooseMail($resultproject->contest_id, request()->user()->role));
+                    Mail::to($itemadmin->email)->send(new WinnerChooseMail($resultproject->contest_id, $itemadmin->role));
+                }
             }
+            Mail::to(request()->user()->email)->send(new WinnerChooseMail($resultproject->contest_id, request()->user()->role));
         }
-
-        ResultProject::where('id', $resultproject->id)
-            ->update([
-                'is_active'     => 'winner',
-            ]);
 
         Project::where('id', $resultproject->contest_id)
             ->update([

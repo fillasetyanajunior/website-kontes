@@ -19,6 +19,7 @@
             foreach ($data as $data):
             $user = DB::table('users')->where('id',$data->user_id_worker)->first();
             @endphp
+            @if ($user != null)
             <div class="col-sm-6 col-lg-4">
                 <div class="card p-3">
                     <a href="javascript:void(0)" class="mb-3">
@@ -37,6 +38,26 @@
                     </div>
                 </div>
             </div>
+            @else
+            <div class="col-sm-6 col-lg-4">
+                <div class="card p-3">
+                    <a href="javascript:void(0)" class="mb-3">
+                        @if ($itemfavourites->catagories_project == 'contest')
+                        <img src="{{asset('/storage/resultcontest/' . $data->filecontest)}}"class="rounded">
+                        @else
+                        <img src="{{asset('/storage/profile/' . $user->avatar)}}"class="rounded">
+                        @endif
+                    </a>
+                    <div class="d-flex align-items-center px-2">
+                        <div class="avatar avatar-md mr-3" style="background-image: url({{url('assets/dashboard/images/default.jpg')}})"></div>
+                        <div>
+                            <div><a href="javascript:void(0)">Worker</a></div>
+                            <small class="d-block text-muted">{{$itemfavourites->catagories_project}}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
             @endforeach
             @endforeach
         </div>

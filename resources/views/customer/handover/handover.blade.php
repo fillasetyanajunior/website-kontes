@@ -431,7 +431,7 @@
                             </div>
                             <div class="custom-file col-md-1">
                                 <label for="filechat"><img src="{{url('assets/dashboard/images/addimages.png')}}" alt="" width="50px"></label>
-                                <input type="file" style="display: inline-block;visibility: hidden;" id="filechat">
+                                <input type="file" style="display: inline-block;visibility: hidden;" id="filechat" name="filechat">
                             </div>
                         </div>
                         <div class="text-right">

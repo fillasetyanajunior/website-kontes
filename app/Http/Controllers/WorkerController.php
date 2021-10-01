@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AccountWorkerMail;
 use App\Models\Project;
 use App\Models\Rating;
 use App\Models\ResultContest;
@@ -11,6 +12,7 @@ use App\Models\Worker;
 use Carbon\Carbon;
 use Cache;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class WorkerController extends Controller
@@ -18,7 +20,7 @@ class WorkerController extends Controller
     public function profileWorker()
     {
         $data['worker']     = Worker::where('user_id',request()->user()->id)->first();
-        $data['project']    = Project::all();
+        $data['project']    = Project::where('catagories_project','contest')->get();
         $data['projects']   = Project::first();
         $data['rating']     = Rating::where('user_id_worker',request()->user()->id)->count();
         $user               = User::where('id', request()->user()->id)->first();
@@ -94,6 +96,11 @@ class WorkerController extends Controller
                     'paypal'    => $request->paypal,
                 ]);
         }
+
+        if ($request->paypal != $worker->paypal) {
+            Mail::to($worker->email)->send(new AccountWorkerMail($request->paypal));
+        }
+
 
         return redirect()->back()->with('status', 'Profile Berhasil Di Update');
     }

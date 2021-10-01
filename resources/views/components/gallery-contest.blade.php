@@ -209,7 +209,6 @@
                     @endif
                 </div>
                 <div class="ml-auto">
-                    @if ($user != null)
                     @if (request()->user()->role == 'customer' && request()->user()->id == $project->user_id &&
                     $itemresultcontest->is_active == 'active' && $project->is_active == 'running' || $project->is_active == 'choose winner' || request()->user()->role == 'admin'  &&
                     $itemresultcontest->is_active == 'active' && $project->is_active == 'running' || $project->is_active == 'choose winner' )
@@ -223,8 +222,6 @@
                             data-toggle="modal" data-target="#ActionModal" data-url="{{url('assets/dashboard/images')}}"
                             data-id="{{$itemresultcontest->id}}">Pick Winner</button>
                     </div>
-                    @endif
-                    @else
                     @endif
                     @if ($project->is_active == 'handover' && $itemresultcontest->is_active == 'winner')
                         @if (request()->user()->id ==

@@ -46,7 +46,17 @@ class MessageHandoverController extends Controller
                 'choices'       => 'handover command',
             ]);
             $worker = User::where('id', $MessageHandover->worker_id)->first();
-            Mail::to($worker->email)->send(new HandoverCommentMail($request->feedback, $project->title));
+            if ($worker != null) {
+                Mail::to($worker->email)->send(new HandoverCommentMail($request->feedback, $project->title));
+            } else {
+                $admin = User::where('role', 'admin')->get();
+                for ($i = 0; $i < count($admin); $i++) {
+                    foreach ($admin as $itemadmin) {
+                        Mail::to($itemadmin->email)->send(new HandoverCommentMail($request->feedback, $project->title));
+                    }
+                }
+            }
+
         } else {
             if ($request->file('filechat')) {
                 $MessageHandover = MessageHandover::create([

@@ -14,10 +14,10 @@
     <p
         style="margin:0 30px 33px; text-align:left; text-transform:capitalize; font-size:14px; line-height:30px; font-weight:bold; color:#484a42;">
         @php
-            $name = DB::table('users')->where('id',$eliminasi->user_id_worker)->first();
+            $names = DB::table('users')->where('id',$eliminasi->user_id_worker)->first();
         @endphp
         @if ($role == 'customer')
-        You have chosen {{$name->name}} as the champion of the contest {{$project->title}}.
+        You have chosen {{$names->name}} as the champion of the contest {{$project->title}}.
         @else
         Congratulations you are the champion of {{$project->title}}.
         @endif
@@ -29,7 +29,7 @@
     <br>
     <table style="margin:0 30px 33px; width: 90%;margin-bottom: 1rem;color: #212529; border-collapse: collapse;">
         <tbody>
-            @if ($eliminasi->filecontest != null)
+            @if ($project->catagories_project == 'contest')
             <tr>
                 <td style="padding: 0.75rem;vertical-align: top;border-top: 1px solid #dee2e6;">
                     <p style="font-size:16px; color:#333333; ">Design</p>
