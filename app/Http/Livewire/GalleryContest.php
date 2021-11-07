@@ -11,6 +11,7 @@ use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Models\ReplayPublicDiscus;
+use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 
 class GalleryContest extends Component
@@ -50,6 +51,10 @@ class GalleryContest extends Component
                         ]);
                         $worker = User::where('id', $kirimnotifcomentar[$i]->user_id)->first();
                         Mail::to($worker->email)->send(new PublicDiscussionMail($this->feedback, $project->title));
+                        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                            'number' => $worker->phone,
+                            'message' =>    'You get a comment from the contest ' . $project->title
+                        ]);
                     }
                 }
             } else {
@@ -68,6 +73,10 @@ class GalleryContest extends Component
                 ]);
                 $customer = User::where('id', $project->user_id)->first();
                 Mail::to($customer->email)->send(new PublicDiscussionMail($this->feedback, $project->title));
+                Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                    'number' => $customer->phone,
+                    'message' =>    'You get a comment from the contest ' . $project->title
+                ]);
             }
         } else {
             ReplayPublicDiscus::create([

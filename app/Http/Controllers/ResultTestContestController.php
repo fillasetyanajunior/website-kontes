@@ -57,7 +57,7 @@ class ResultTestContestController extends Controller
                     'submit' => $datetime->created_at,
                 ]);
         }
-        Worker::where('id', $request->user_id_worker)
+        Worker::where('user_id', $request->user_id_worker)
             ->update([
                 'status_account' => 'verified',
             ]);

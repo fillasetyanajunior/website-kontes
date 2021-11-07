@@ -55,7 +55,7 @@ class FeedbackController extends Controller
                 Mail::to($worker->email)->send(new FeedbackMail($request->feedback, $project->title));
                 Http::post(env('API_WHATSAPP_URL') . 'send-message', [
                     'number' => $worker->phone,
-                    'message' =>    'You get feedback from the contest.' . $resultcontest->title
+                    'message' =>    'You get feedback from the contest ' . $project->title
                 ]);
             } else {
                 $admin = User::where('role','admin')->get();
@@ -71,7 +71,7 @@ class FeedbackController extends Controller
                         Mail::to($itemadmin->email)->send(new FeedbackMail($request->feedback, $project->title));
                         Http::post(env('API_WHATSAPP_URL') . 'send-message', [
                             'number' => $itemadmin->phone,
-                            'message' =>    'You get feedback from the contest.' . $resultcontest->title
+                            'message' =>    'You get feedback from the contest ' . $project->title
                         ]);
                     }
                 }
@@ -94,6 +94,10 @@ class FeedbackController extends Controller
 
             $customer = User::where('id', $feedback->customer_id)->first();
             Mail::to($customer->email)->send(new FeedbackMail($request->feedback, $project->title));
+            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                'number' => $customer->phone,
+                'message' =>    'You get feedback from the contest ' . $project->title
+            ]);
         }
         return redirect()->back()->with('status','Feedback Berhasil di kirim');
     }
@@ -155,6 +159,8 @@ class FeedbackController extends Controller
                 'is_active'     => 'eliminasi',
             ]);
 
+        $project = Project::where('id',$resultcontest->contest_id)->first();
+
         $worker = User::where('id',$resultcontest->user_id_worker)->first();
 
         if ($worker != null) {
@@ -162,11 +168,11 @@ class FeedbackController extends Controller
             Mail::to(request()->user()->email)->send(new EliminasiMail($resultcontest->contest_id, request()->user()->role));
             Http::post(env('API_WHATSAPP_URL') . 'send-message', [
                 'number' => $worker->phone,
-                'message' =>    'Sorry you were eliminated from.' . $resultcontest->title
+                'message' =>    'Sorry you were eliminated from ' . $project->title
             ]);
             Http::post(env('API_WHATSAPP_URL') . 'send-message', [
                 'number' => request()->user()->phone,
-                'message' =>    'Thank you for eliminating participants.' . $resultcontest->title
+                'message' =>    'Thank you for eliminating participants ' . $project->title
             ]);
 
             NewsFeed::create([
@@ -185,7 +191,7 @@ class FeedbackController extends Controller
                     Mail::to($itemadmin->email)->send(new EliminasiMail($resultcontest->contest_id,$itemadmin->role));
                     Http::post(env('API_WHATSAPP_URL') . 'send-message', [
                         'number' => $admin->phone,
-                        'message' =>    'Sorry you were eliminated from.' . $resultcontest->title
+                        'message' =>    'Sorry you were eliminated from ' . $project->title
                     ]);
 
                     NewsFeed::create([
@@ -200,7 +206,7 @@ class FeedbackController extends Controller
             Mail::to(request()->user()->email)->send(new EliminasiMail($resultcontest->contest_id, request()->user()->role));
             Http::post(env('API_WHATSAPP_URL') . 'send-message', [
                 'number' => request()->user()->phone,
-                'message' =>    'Thank you for eliminating participants.' . $resultcontest->title
+                'message' =>    'Thank you for eliminating participants ' . $project->title
             ]);
         }
 
@@ -245,11 +251,11 @@ class FeedbackController extends Controller
             Mail::to(request()->user()->email)->send(new WinnerChooseMail($resultcontest->contest_id, request()->user()->role));
             Http::post(env('API_WHATSAPP_URL') . 'send-message', [
                 'number' => request()->user()->phone,
-                'message' =>    'You have chosen ' . $worker->name . ' as the champion of the contest .' . $resultcontest->title
+                'message' =>    'You have chosen ' . $worker->name . ' as the champion of the contest ' . $project->title
             ]);
             Http::post(env('API_WHATSAPP_URL') . 'send-message', [
                 'number' => $worker->phone,
-                'message' =>    'Congratulations you are the champion of' . $resultcontest->title
+                'message' =>    'Congratulations you are the champion of ' . $project->title
             ]);
 
             Worker::where('user_id', $resultcontest->user_id_worker)
@@ -280,14 +286,14 @@ class FeedbackController extends Controller
                     Mail::to($itemadmin->email)->send(new WinnerChooseMail($resultcontest->contest_id, $itemadmin->role));
                     Http::post(env('API_WHATSAPP_URL') . 'send-message', [
                         'number' => $itemadmin->phone,
-                        'message' =>    'Congratulations you are the champion of' . $resultcontest->title
+                        'message' =>    'Congratulations you are the champion of ' . $project->title
                     ]);
                 }
             }
             Mail::to(request()->user()->email)->send(new WinnerChooseMail($resultcontest->contest_id, request()->user()->role));
             Http::post(env('API_WHATSAPP_URL') . 'send-message', [
                 'number' => request()->user()->phone,
-                'message' =>    'You have chosen ' . request()->user()->name . ' as the champion of the contest .' . $resultcontest->title
+                'message' =>    'You have chosen ' . request()->user()->name . ' as the champion of the contest ' . $project->title
             ]);
         }
 

@@ -28,9 +28,11 @@
         @endif
         <div class="row">
             <div class="col-lg-8">
-                @if (request()->user()->role == 'customer' && $project->is_active == 'handover' || request()->user()->role == 'admin' && $project->is_active == 'handover')
                 @php
                     $detail = DB::table('detail_projects')->where('project_id',$project->id)->first();
+                @endphp
+                @if (request()->user()->role == 'customer' && $project->is_active == 'handover' && $detail != null || request()->user()->role == 'admin' && $project->is_active == 'handover' && $detail != null)
+                @php
                     $results = DB::table('result_projects')->where('contest_id',$project->id)->first();
                     $result = explode('/',$results->description)
                 @endphp

@@ -11,12 +11,10 @@
                         $desainers  = DB::table('result_projects')->where('contest_id',$project->id)->distinct()->count('user_id_worker');
                         $desains    = DB::table('result_projects')->where('contest_id',$project->id)->count();
                         $file       = DB::table('upload_file_projects')->where('contest_id',$project->id)->get();
-                        $fee        = ((15/100) * $project->harga);
-                        $harga      = $project->harga - $fee;
                     @endphp
                     <div class="">
                         <i class="fa fa-money"></i>&nbsp;
-                        {{"$ ". number_format($harga)}}
+                        {{"$ ". number_format($project->harga)}}
                     </div>
                     <div class="ml-3">
                         <i class="fe fe-clock"></i>&nbsp;
@@ -82,7 +80,7 @@
             <div class="col-md-6 col-lg-12">
                 @php
                     $worker = DB::table('workers')->where('user_id',request()->user()->id)->first();
-                    $resultdirect = DB::table('result_projects')->where('user_id_worker',request()->user()->id)->first();
+                    $resultdirect = DB::table('result_projects')->where('user_id_worker',request()->user()->id)->where('contest_id',$project->id)->first();
                     $resultdirects = DB::table('result_projects')->where('contest_id',$project->id)->where('is_active','winner')->first();
                 @endphp
                 @if (request()->user()->role == 'worker' && $project->is_active == 'running' && $worker->status_account != 'suspend' && $resultdirect == null)

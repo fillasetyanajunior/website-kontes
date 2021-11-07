@@ -51,7 +51,7 @@ class MessageHandoverController extends Controller
                 Mail::to($worker->email)->send(new HandoverCommentMail($request->feedback, $project->title));
                 Http::post(env('API_WHATSAPP_URL') . 'send-message', [
                     'number' => $worker->phone,
-                    'message' =>    'You get a comment from the contest' . $project->title
+                    'message' =>    'You get a comment from the contest ' . $project->title
                 ]);
             } else {
                 $admin = User::where('role', 'admin')->get();
@@ -60,7 +60,7 @@ class MessageHandoverController extends Controller
                         Mail::to($itemadmin->email)->send(new HandoverCommentMail($request->feedback, $project->title));
                         Http::post(env('API_WHATSAPP_URL') . 'send-message', [
                             'number' => $itemadmin->phone,
-                            'message' =>    'You get a comment from the contest' . $project->title
+                            'message' =>    'You get a comment from the contest ' . $project->title
                         ]);
                     }
                 }
@@ -95,7 +95,7 @@ class MessageHandoverController extends Controller
             Mail::to($customer->email)->send(new HandoverCommentMail($request->feedback, $project->title));
             Http::post(env('API_WHATSAPP_URL') . 'send-message', [
                 'number' => $customer->phone,
-                'message' =>    'You get a comment from the contest' . $project->title
+                'message' =>    'You get a comment from the contest ' . $project->title
             ]);
         }
         return redirect()->back()->with('status', 'Message Bid Berhasil di kirim');

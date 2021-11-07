@@ -16,7 +16,6 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\ManagementCustomerController;
 use App\Http\Controllers\ManagementWebsiteController;
 use App\Http\Controllers\ManagementWorkerController;
-use App\Http\Controllers\MessageComentarController;
 use App\Http\Controllers\NewsFeedController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ResultProjectController;
@@ -27,7 +26,6 @@ use App\Http\Controllers\OpsiContestController;
 use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\PerjanjianController;
-use App\Http\Controllers\ReplayPublicDiscusController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ResultTestContestController;
 use App\Http\Controllers\ShareController;
@@ -106,8 +104,6 @@ Route::middleware('verified')->group(function () {
     Route::get('/profileworker/{id}', [WorkerController::class, 'ProfileWorkerPublic']);
     //Message Handover
     Route::post('/kirimessagehandover', [MessageHandoverController::class, 'KirimFeedbackMessage'])->name('messagehandover');
-    //Replay Public Discus
-    Route::post('/replaypublicdiscus', [ReplayPublicDiscusController::class, 'StoreReplayPublic'])->name('replaydiscus');
     //NewsFeed
     Route::get('/newsfeed', [NewsFeedController::class, 'NewsFeed'])->name('newsfeed');
 

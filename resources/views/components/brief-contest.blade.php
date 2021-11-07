@@ -11,12 +11,11 @@
                         $desainers  = DB::table('result_contests')->where('contest_id',$project->id)->distinct()->count('user_id_worker');
                         $desains    = DB::table('result_contests')->where('contest_id',$project->id)->count();
                         $file       = DB::table('upload_file_projects')->where('contest_id',$project->id)->get();
-                        $fee        = ((15/100) * $project->harga);
-                        $harga      = $project->harga - $fee - 40;
+                        $harga      = $project->harga - 40;
                     @endphp
                     <div class="">
                         <i class="fa fa-money"></i>&nbsp;
-                        {{"$ ". number_format($harga + 40)}}
+                        {{"$ ". number_format($project->harga)}}
                     </div>
                     <div class="ml-2">
                         <i class="fe fe-clock"></i>&nbsp;

@@ -93,8 +93,6 @@
                             $month          = date('m',strtotime($itemproject->deadline));
                             $year           = date('Y',strtotime($itemproject->deadline));
                             $time           = (int)((mktime (0,0,0,$month,$day,$year) - time())/86400);
-                            $fee            = ((15/100) * $itemproject->harga);
-                            $harga          = $itemproject->harga - $fee;
                         @endphp
                         @if ($projectupgrade == null)
                             <tr id="browsetable" data-url="{{'/brief' . $role . '/' . $itemproject->id}}">
@@ -158,7 +156,7 @@
                             <td>
                                 <div class="d-flex flex-column bd-highlight mt-4">
                                     <div class="bd-highlight">
-                                         <p><i class="fa fa-money"></i> {{"$". number_format($harga)}}</p>
+                                         <p><i class="fa fa-money"></i> {{"$". number_format($itemproject->harga)}}</p>
                                     </div>
                                     <div class="bd-highlight">
                                         <p><i class="fe fe-clock"></i> Under {{$time}} Days</p>
