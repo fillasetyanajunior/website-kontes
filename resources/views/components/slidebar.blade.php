@@ -35,6 +35,14 @@
                         <span class="float-right"></span>
                         <i class="dropdown-icon fe fe-mail"></i> Inbox
                     </a>
+                    <a class="dropdown-item" href="{{env('API_WHATSAPP_URL')}}">
+                        <span class="float-right"></span>
+                        <i class="dropdown-icon fa fa-whatsapp"></i> Whatsapp Web QR
+                    </a>
+                    <a class="dropdown-item" href="{{route('newsfeed')}}">
+                        <span class="float-right"></span>
+                        <i class="dropdown-icon fe fe-bell"></i> News Feed
+                    </a>
                     <a class="dropdown-item" href="{{route('accounting')}}">
                         <span class="float-right"></span>
                         <i class="dropdown-icon fa fa-bar-chart"></i> Accounting
@@ -109,6 +117,8 @@
                             <a href="{{route('opsipackage')}}" class="dropdown-item ">Opsi Paket Contest</a>
                             <a href="{{route('jobcatagories')}}" class="dropdown-item ">Job Description</a>
                             <a href="{{route('code')}}" class="dropdown-item ">Code Discount</a>
+                            <a href="{{route('nda')}}" class="dropdown-item ">NDA</a>
+                            <a href="{{route('resultcontest')}}" class="dropdown-item ">Test Contest</a>
                         </div>
                     </li>
                     @endif

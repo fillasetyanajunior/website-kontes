@@ -34,27 +34,28 @@
                         @php
                             $projectupgrade = explode('/',$detailcontest->packageupgrade);
                         @endphp
-                        @for ($i = 0; $i < count($projectupgrade); $i++)
-                            @php
-                                $nameupgrade = DB::table('opsi_package_upgrades')->where('id',$projectupgrade[$i])->first();
-                            @endphp
-                            @if ($nameupgrade->name == 'Urgent')
-                            <p class="btn btn-sm btn-red">{{$nameupgrade->name}}</p>
-                            @elseif ($nameupgrade->name == 'Guaranteed')
-                            <p class="btn btn-sm btn-green">{{$nameupgrade->name}}</p>
-                            @elseif ($nameupgrade->name == '10 Days')
-                            <p class="btn btn-sm btn-blue">{{$nameupgrade->name}}</p>
-                            @elseif ($nameupgrade->name == '20 Days')
-                            <p class="btn btn-sm btn-indigo">{{$nameupgrade->name}}</p>
-                            @elseif ($nameupgrade->name == 'Non Disclosure Agreement (NDA)')
-                            <p class="btn btn-sm btn-azure">{{$nameupgrade->name}}</p>
-                            @elseif ($nameupgrade->name == 'Designer Pro')
-                            <p class="btn btn-sm btn-orange">{{$nameupgrade->name}}</p>
-                            @else
-                            <p class="btn btn-sm btn-lime">{{$nameupgrade->name}}</p>
-                            @endif
-
-                        @endfor
+                        @if ($detailcontest->packageupgrade != null)
+                            @for ($i = 0; $i < count($projectupgrade); $i++)
+                                @php
+                                    $nameupgrade = DB::table('opsi_package_upgrades')->where('id',$projectupgrade[$i])->first();
+                                @endphp
+                                @if ($nameupgrade->name == 'Urgent')
+                                <p class="btn btn-sm btn-red">{{$nameupgrade->name}}</p>
+                                @elseif ($nameupgrade->name == 'Guaranteed')
+                                <p class="btn btn-sm btn-green">{{$nameupgrade->name}}</p>
+                                @elseif ($nameupgrade->name == '10 Days')
+                                <p class="btn btn-sm btn-blue">{{$nameupgrade->name}}</p>
+                                @elseif ($nameupgrade->name == '20 Days')
+                                <p class="btn btn-sm btn-indigo">{{$nameupgrade->name}}</p>
+                                @elseif ($nameupgrade->name == 'Non Disclosure Agreement (NDA)')
+                                <p class="btn btn-sm btn-azure">{{$nameupgrade->name}}</p>
+                                @elseif ($nameupgrade->name == 'Designer Pro')
+                                <p class="btn btn-sm btn-orange">{{$nameupgrade->name}}</p>
+                                @else
+                                <p class="btn btn-sm btn-lime">{{$nameupgrade->name}}</p>
+                                @endif
+                            @endfor
+                        @endif
                     </div>
                 </div>
                 <hr>
@@ -130,6 +131,11 @@
                 </form>
                 <button type="button" class="btn btn-primary col-lg-12 mb-5" data-toggle="modal"
                     data-target="#ExtendedDeadline">Extended Deadline</button>
+                @else
+                @if (request()->user()->role == 'customer' && request()->user()->id == $project->user_id && $project->is_active == 'running' || $project->is_active == 'choose winner')
+                <button type="button" class="btn btn-primary col-lg-12 mb-5" data-toggle="modal" id="sharecontest" data-url="{{asset('assets/dashboard/images')}}"
+                    data-target="#ShareModal">Share</button>
+                @endif
                 @endif
             </div>
             <div class="col-md-6 col-lg-12">

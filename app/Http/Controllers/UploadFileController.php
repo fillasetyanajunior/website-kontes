@@ -9,6 +9,7 @@ use App\Models\UploadFile;
 use App\Models\User;
 use App\Models\WinnerContest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class UploadFileController extends Controller
@@ -43,6 +44,10 @@ class UploadFileController extends Controller
         $project = Project::where('id',$winnercontest->contest_id)->first();
 
         Mail::to($user->email)->send(new UploadFileHandoverMail($request->id,$project->title));
+        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+            'number' => $user->phone,
+            'message' =>    'the handover file has been uploaded, please check the handover contest'
+        ]);
 
         return redirect()->back();
     }

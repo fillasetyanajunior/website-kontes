@@ -49,13 +49,6 @@
                                         value="{{$customer->name}}">
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="form-label">Teg Line</label>
-                                    <input type="text" class="form-control" name="tagline" placeholder="Tag Line"
-                                        value="{{$customer->tagline}}">
-                                </div>
-                            </div>
                             <div class="col-sm-6 col-md-12">
                                 <div class="form-group">
                                     <label for="avatar">Foto Profile</label>

@@ -19,7 +19,8 @@ class WaittingpaymentController extends Controller
     {
         Project::where('id',$project->id)
                 ->update([
-                    'is_active' => 'running'
+                    'deadline'  => date('Y-m-d', strtotime('+' . $project->hari . ' days')),
+                    'is_active' => 'running',
                 ]);
         return redirect('/home')->with('status','Project Berhasil Di Berjalan');
     }

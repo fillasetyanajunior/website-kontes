@@ -22,7 +22,7 @@
             </li>
         </ul>
         <x-brief-contest id="{{$project->id}}"></x-brief-contest>
-        <x-gallery-contest id="{{$project->id}}"></x-gallery-contest>
+        <livewire:gallery-contest :project="$project" :key="$project->id">
     </div>
 </div>
 <div class="modal fade" id="contestModal" tabindex="-1" aria-labelledby="contestModalLabel" aria-hidden="true">
@@ -243,6 +243,36 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="ShareModal" tabindex="-1" aria-labelledby="ShareModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ShareModalLabel">Share</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <form action="/sharecontest/{{$project->id}}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <div class="d-flex justify-content-center">
+                        <div class="text-center">
+                            <div class="mt-3">
+                                <img src="" alt="" id="gambarShare" width="200px">
+                            </div>
+                            <div class="mt-3">
+                                <p id="captions_share"></p>
+                            </div>
+                            <div class="mt-3">
+                                <button type="submit" class="btn btn-primary footer_contest">Share</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

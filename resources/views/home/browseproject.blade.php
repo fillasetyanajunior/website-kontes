@@ -98,6 +98,8 @@
                         @endphp
                         @if ($projectupgrade == null)
                             <tr id="browsetable" data-url="{{'/brief' . $role . '/' . $itemproject->id}}">
+                        @elseif ($data->packageupgrade == null)
+                            <tr id="browsetable" data-url="{{'/brief' . $role . '/' . $itemproject->id}}">
                         @else
                             @for ($i = 0; $i < count($projectupgrade); $i++)
                                 @php

@@ -99,6 +99,13 @@ $(document).ready(function () {
             window.location.assign('/browseproject/sort/' + value)
         }
     });
+    //search enteries
+    $('#searchentries').keyup(function () {
+        var value = $(this).val().toLowerCase();
+        $("#gallerysearch").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    })
 
     //Contest
     var s = $('#tambahresultcontest').data('catagories')
@@ -144,7 +151,7 @@ $(document).ready(function () {
 
     $('#feedback*').click(function () {
         var _id         = $(this).data('id')
-        var _urlasset   = $(this).data('url')
+        let _urlasset   = $(this).data('url')
         var _url        = '/feedback/' + _id
         let _token      = $('meta[name="csrf-token"]').attr('content')
         var _role       = $(this).data('role')
@@ -164,12 +171,18 @@ $(document).ready(function () {
 
                 let url2 = '/feedback/users/' + _id
                 $('#hasilcontest').attr('src', _urlasset + '/resultcontest/' + hasil.resultcontest.filecontest)
-                if (hasil.user.avatar == 'default.jpg') {
-                    $('#profileworker').css('background-image', 'url("/assets/dashboard/images/default.jpg")')
+                if (hasil.user != null) {
+                    if (hasil.user.avatar == 'default.jpg') {
+                        $('#profileworker').css('background-image', 'url("/assets/dashboard/images/default.jpg")')
+                    } else {
+                        $('#profileworker').css('background-image', 'url("' + _urlasset + '/profile/' + hasil.user.avatar + '")')
+                    }
+                    $('#name_worker').html(hasil.user.name)
+
                 } else {
-                    $('#profileworker').css('background-image', 'url(' + _urlasset + '/profile/' + hasil.user.avatar + ')')
+                    $('#profileworker').css('background-image', 'url("/assets/dashboard/images/default.jpg")')
+                    $('#name_worker').html('Worker')
                 }
-                $('#name_worker').html(hasil.user.name)
                 $('#description').html(hasil.resultcontest.title)
                 if (_role == 'customer' && _user_id == hasil.project.user_id && hasil.resultcontest.is_active == 'active' && hasil.project.is_active == 'running' || hasil.project.is_active == 'choose winner' || _role == 'admin' && hasil.resultcontest.is_active == 'active' && hasil.project.is_active == 'running' || hasil.project.is_active == 'choose winner') {
                     $('#buttonresultcontest').append('<div class="mb-1" id="eliminasicontest"> <button type="button" class="btn btn-danger col-12" id="btneliminasicontest" data-toggle="modal" data-target="#ActionModal" > Eliminate </button> </div> <div class="mb-1" id="pickwinnercontest" ><button type="button" class="btn btn-azure col-12" id="btnpickwinnercontest" data-toggle="modal" data-target="#ActionModal"> Pick Winner </button> </div>')
@@ -252,14 +265,19 @@ $(document).ready(function () {
                                 url: url2,
                                 data: {
                                     _token: _token,
-                                    role_user: 'customer',
+                                    datas: 'customer'
                                 },
                                 success: function (hasils) {
-                                    if (hasil.user.avatar == 'default.jpg') {
-                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg);"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_customer + '</p> </div> </div>')
-                                    } else {
-                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar +
-                                            ');"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_customer + '</p> </div> </div>')
+                                    console.log(hasils.user.avatar == 'default.jpg')
+                                    if (hasil.user != null) {
+                                        if (hasils.user.avatar == 'default.jpg') {
+                                            $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg);"> </div> <div style="width:1500px">' + hasils.user.name + '<p>' + feedbackall.feedback_customer + '</p></div> </div>')
+                                        } else {
+                                            $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar + ');"> </div> <div style="width:1500px">' +
+                                            hasils.user.name + '<p class="text-justify">' + feedbackall.feedback_customer + '</p></div> </div>')
+                                        }
+                                    }else{
+                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg);"> </div> <div style="width:1500px">' + hasils.user.name + '<p class="text-justify">' + feedbackall.feedback_customer + '</p></div> </div>')
                                     }
                                 }
                             });
@@ -269,14 +287,19 @@ $(document).ready(function () {
                                 url: url2,
                                 data: {
                                     _token: _token,
-                                    role_user: 'worker',
+                                    datas: 'worker'
                                 },
                                 success: function (hasils) {
-                                    if (hasil.user.avatar == 'default.jpg') {
-                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg);"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_worker + '</p> </div> </div>')
-                                    } else {
-                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar +
-                                            ');"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_worker + '</p> </div> </div>')
+                                    console.log(hasil.user)
+                                    if (hasil.user != null) {
+                                        if (hasils.user.avatar == 'default.jpg') {
+                                            $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg);"> </div> <div style="width:1500px">' + hasils.user.name + '<div><p class="text-justify">' + feedbackall.feedback_worker + '</p></div>')
+                                        } else {
+                                            $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar + ');"> </div> <div style="width:1500px">' +
+                                            hasils.user.name + '<div><p class="text-justify">' + feedbackall.feedback_worker + '</p></div>')
+                                        }
+                                    }else{
+                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg);"> </div> <div style="width:1500px">' + hasils.user.name + '<div><p class="text-justify">' + feedbackall.feedback_worker + '</p></div>')
                                     }
                                 }
                             });
@@ -356,12 +379,17 @@ $(document).ready(function () {
                 $('.rating').empty()
                 var description = hasil.resultproject.description.split('/')
                 let url2 = '/feedbackbid/users/' + _id
-                if (hasil.user.avatar == 'default.jpg') {
-                    $('#profileworker').css('background-image', 'url("/assets/dashboard/images/default.jpg")')
+                if (hasil.user != null) {
+                    if (hasil.user.avatar == 'default.jpg') {
+                        $('#profileworker').css('background-image', 'url("/assets/dashboard/images/default.jpg")')
+                    } else {
+                        $('#profileworker').css('background-image', 'url("' + _urlasset + '/profile/' + hasil.user.avatar + '")')
+                    }
+                    $('#name_worker').html(hasil.user.name)
                 } else {
-                    $('#profileworker').css('background-image', 'url(' + _urlasset + '/profile/' + hasil.user.avatar + ')')
+                    $('#profileworker').css('background-image', 'url("/assets/dashboard/images/default.jpg")')
+                    $('#name_worker').html('Worker')
                 }
-                $('#name_worker').html(hasil.user.name)
                 $('#descriptions').text(description[0])
                 $('#bid').text('$' + description[1])
                 $('#bidhari').text(description[2] + ' Days')
@@ -449,11 +477,15 @@ $(document).ready(function () {
                                     role_user: 'customer',
                                 },
                                 success: function (hasils) {
-                                    if (hasil.user.avatar == 'default.jpg') {
-                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg);"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_customer + '</p> </div> </div>')
+                                    if (hasils.user != null) {
+                                        if (hasil.user.avatar == 'default.jpg') {
+                                            $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg); "> </div> <div>' + hasils.user.name + '<div><p class="text-justify">' + feedbackall.feedback_customer + '</p></div>')
+                                        } else {
+                                            $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar +
+                                            ');"> </div> <div style="width:1500px">' + hasils.user.name + '<div><p class="text-justify">' + feedbackall.feedback_customer + '</p></div>')
+                                        }
                                     } else {
-                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar +
-                                            ');"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_customer + '</p> </div> </div>')
+                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg);"> </div> <div style="width:1500px">' + hasils.user.name + '<div><p class="text-justify">' + feedbackall.feedback_customer + '</p></div>')
                                     }
                                 }
                             });
@@ -466,11 +498,15 @@ $(document).ready(function () {
                                     role_user: 'worker',
                                 },
                                 success: function (hasils) {
-                                    if (hasil.user.avatar == 'default.jpg') {
-                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg);"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_worker + '</p> </div> </div>')
-                                    } else {
-                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar +
-                                            ');"> </div> <div>' + hasils.user.name + '<div> </div> <p>' + feedbackall.feedback_worker + '</p> </div> </div>')
+                                    if (hasil.user != null) {
+                                        if (hasils.user.avatar == 'default.jpg') {
+                                            $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg);"> </div> <div style="width:1500px">' + hasils.user.name + '<div><p class="text-justify">' + feedbackall.feedback_worker + '</p></div>')
+                                        } else {
+                                            $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(' + _urlasset + '/profile/' + hasils.user.avatar +
+                                            ');"> </div> <div style="width:1500px">' + hasils.user.name + '<div><p class="text-justify">' + feedbackall.feedback_worker + '</p></div>')
+                                        }
+                                    }else{
+                                        $('#feedback_card').append('<div class="d-flex align-items-center px-2"> <div class="avatar avatar-md mr-3" style="background-image: url(/assets/dashboard/images/default.jpg);"> </div> <div style="width:1500px">' + hasils.user.name + '<div><p class="text-justify">' + feedbackall.feedback_worker + '</p></div>')
                                     }
                                 }
                             });
@@ -1057,6 +1093,106 @@ $(document).ready(function () {
             }
         });
     });
+    $('#viewtest*').click(function () {
+        var id = $(this).data('id')
+        var _asset = $(this).data('url')
+        let _url = '/resulttestcontest/viewaccount/' + id
+
+        let _token = $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+            type: 'POST',
+            url: _url,
+            data: {
+                _token: _token,
+            },
+            success: function (hasil) {
+                $('#portfolioview').empty()
+                if (hasil.worker.avatar != 'default.jpg') {
+                    $('#workerprofile').attr('src', _asset + '/profile/' + hasil.worker.avatar)
+                } else {
+                    $('#workerprofile').attr('src', '/assets/dashboard/images/default.jpg')
+                }
+                $('#rangking').html('#' + hasil.worker.rangking)
+                $('#location').html(hasil.worker.location)
+                $('#status').html(hasil.status)
+                $('#statusaccount').html(hasil.worker.status_account)
+                $('#earnings').html(formatter.format(hasil.worker.earning))
+                $('#oncesuspend').html(hasil.suspend + ' X Account Suspend')
+
+                if (hasil.rating > 20) {
+                    $('#rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>')
+                } else if (hasil.rating > 40) {
+                    $('#rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>')
+                } else if (hasil.rating > 60) {
+                    $('#rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>')
+                } else if (hasil.rating > 80) {
+                    $('#rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>')
+                } else if (hasil.rating > 100) {
+                    $('#rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star text-yellow"> </i></a>')
+                } else {
+                    $('#rating').append(
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"></i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>' +
+                        '<a href="javascript:void(0)"><i class="fa fa-star-o"> </i></a>')
+                }
+
+                let _url2 = '/resulttestcontest/viewproject/'
+                $.ajax({
+                    type: 'POST',
+                    url: _url2 + id,
+                    data: {
+                        _token: _token,
+                    },
+                    success: function (hasils) {
+                        $.each(hasils.resultproject, function (index, resultproject) {
+                            $('#portfolioview').append(
+                                '<div class="col-sm-6 col-lg-2">' +
+                                '<div class="card p-3" >' +
+                                '<a href="javascript:void(0)" >' +
+                                '<img src="' + _asset + '/resultcontest' + '/' + resultproject.filecontest + '" class="rounded" style="width: 300px; height: 300px; overflow: hidden width: 100%;" >' +
+                                '</a>' +
+                                '<div class="d-flex align-items-center px-2 mt-5">' +
+                                '<form action="/resulttestcontest/delete/' + resultproject.id +
+                                '" method="post"><input type="hidden" name="_token" value="' + _token +
+                                '"> <button type="submit" class="btn btn-primary"> Delete </button> </form>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>'
+                            )
+                        })
+                    }
+                });
+            }
+        });
+    });
 
     //Font Color Used
     //Font Used
@@ -1108,6 +1244,13 @@ $(document).ready(function () {
         $(this).parent('div').remove();
         x--; //Decrement field counter
     });
+
+    //Share Contest
+    $('#sharecontest').click(function () {
+        $('#ShareModalLabel').html('Share Contest')
+        $('#captions_share').html('are you sure you want to share this contest to your favorite worker?')
+        $('#gambarShare').attr('src', $(this).data('url') + '/share.png')
+    })
 
     //Show Hide Brief
     $('#gallery').hide()

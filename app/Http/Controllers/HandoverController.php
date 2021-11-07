@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\WinnerContest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class HandoverController extends Controller
@@ -52,6 +53,14 @@ class HandoverController extends Controller
 
         Mail::to($user->email)->send(new ProjectDoneMail());
         Mail::to($worker->email)->send(new PaymentApprovedMail($project->id));
+        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+            'number' => $user->phone,
+            'message' =>    'The project you ordered has been completed.'
+        ]);
+        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+            'number' => $worker->phone,
+            'message' =>    'the handover has been confirmed successfully and we will immediately send the payment to you'
+        ]);
 
         Project::where('id',$project->id)
                 ->update([

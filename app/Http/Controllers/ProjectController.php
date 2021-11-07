@@ -15,7 +15,9 @@ use App\Models\ProjectPayment;
 use App\Models\SubCatagories;
 use App\Models\UploadFilePerjanjian;
 use App\Models\UploadFileProject;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class ProjectController extends Controller
@@ -71,7 +73,8 @@ class ProjectController extends Controller
 
         $requpgrade = $request->addprojectupgrades;
         $addprojectupgrades = null;
-        $waktu = null;
+        $waktu = 6;
+        $guaranteed = 'not active';
         if ($requpgrade != null) {
             for ($i = 0; $i < count($requpgrade); $i++) {
                 if ($addprojectupgrades == null) {
@@ -118,11 +121,8 @@ class ProjectController extends Controller
                     if($opsiupgrade->name == 'Guaranteed'){
                         $guaranteed = 'active';
                     }
-                    $waktu  = 6;
                 }
             }
-        } else {
-            $waktu  = 6;
         }
 
         $id = Project::create([
@@ -132,7 +132,7 @@ class ProjectController extends Controller
                 'catagories_project'    => 'contest',
                 'catagories'            => $catagories->name,
                 'is_active'             => 'waiting payment',
-                'deadline'              => date('Y-m-d',strtotime('+' . $waktu . ' days')),
+                'hari'                  => $waktu,
                 'guarded'               => $guaranteed,
                 'harga'                 => $request->totalcost,
                 'shouldhave'            => $request->shouldhave,
@@ -184,6 +184,17 @@ class ProjectController extends Controller
             'name'                  => request()->user()->name,
             'email'                 => request()->user()->email,
         ]);
+        $user = User::where('id',request()->user()->id)->first();
+        Http::post(env('API_WHATSAPP_URL') . 'send-message',[
+            'number' => $user->phone,
+            'message' =>    'Thank you for ordering.
+Here are the contest details:' . '
+
+Transaction ID        : ' . $request->id_transaksi . '
+Title Project            : ' . $request->title . '
+Price                       : ' . '$' . $request->totalcost . '
+Email Transaction   : ' . $request->email_transaksi
+        ]);
         return redirect('/home')->with('status','Add contest project success');
     }
     public function IndexDirectProject()
@@ -224,7 +235,7 @@ class ProjectController extends Controller
                     'catagories_project'    => 'direct',
                     'catagories'            => 'Direct Project',
                     'is_active'             => 'waiting payment',
-                    'deadline'              => date('Y-m-d',strtotime('+12 days')),
+                    'hari'                  => 12,
                     'harga'                 => $request->budget,
                     'shouldhave'            => $request->shouldhave,
                     'shouldnothave'         => $request->shouldnothave,
@@ -263,6 +274,17 @@ class ProjectController extends Controller
             'email_transaksi'       => $request->email_transaksi,
             'name'                  => request()->user()->name,
             'email'                 => request()->user()->email,
+        ]);
+        $user = User::where('id', request()->user()->id)->first();
+        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+            'number' => $user->phone,
+            'message' =>    'Thank you for ordering.
+Here are the contest details:' . '
+
+Transaction ID        : ' . $request->id_transaksi . '
+Title Project            : ' . $request->title . '
+Price                       : ' . '$' . $request->totalcost . '
+Email Transaction   : ' . $request->email_transaksi
         ]);
         return redirect('/home')->with('status','Add direct project success');
     }

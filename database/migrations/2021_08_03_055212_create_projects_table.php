@@ -22,6 +22,7 @@ class CreateProjectsTable extends Migration
             $table->string('catagories');
             $table->enum('is_active', ['waiting payment', 'running', 'choose winner', 'handover', 'close', 'cancel', 'mediation']);
             $table->integer('harga');
+            $table->integer('hari');
             $table->text('shouldhave')->nullable();
             $table->text('shouldnothave')->nullable();
             $table->date('deadline')->nullable();

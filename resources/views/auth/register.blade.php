@@ -23,6 +23,11 @@
                                 value="{{old('email')}}" placeholder="Enter email">
                         </div>
                         <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="numeric" class="form-control @error('phone') is-invalid @enderror" name="phone"
+                                value="{{old('phone')}}" placeholder="Enter phone">
+                        </div>
+                        <div class="form-group">
                             <label class="form-label">Password</label>
                             <input type="password" class="form-control @error('password') is-invalid @enderror"
                                 name="password" placeholder="Password">

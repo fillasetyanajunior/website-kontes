@@ -49,8 +49,6 @@ class WorkerController extends Controller
     {
         if ($request->role == 'contest') {
             ResultContest::where('id',$request->id)->update(['portfolio' => 'show']);
-        } else {
-            ResultProject::where('id',$request->id)->update(['portfolio' => 'show']);
         }
         return redirect()->back()->with('status','Portfolio Success in Show');
     }
@@ -58,8 +56,6 @@ class WorkerController extends Controller
     {
         if ($request->role == 'contest') {
             ResultContest::where('id',$request->id)->update(['portfolio' => 'hide']);
-        } else {
-            ResultProject::where('id',$request->id)->update(['portfolio' => 'hide']);
         }
         return redirect()->back()->with('status','Portfolio Success in hide');
     }

@@ -25,8 +25,8 @@
                                 <tr>
                                     <th class="w-1">No.</th>
                                     <th>Invoice Payment</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
+                                    <th>Name Transaksi</th>
+                                    <th>Email Transaksi</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -35,18 +35,33 @@
                                     $i=1;
                                 @endphp
                                 @foreach ($paymentlist as $itempaymentlist)
+                                @php
+                                    $perjanjian = DB::table('upload_file_perjanjians')->where('contest_id',$itempaymentlist->project_id)->first();
+                                @endphp
                                 <tr>
                                     <td><span class="text-muted">{{$i}}</span></td>
-                                    <td>{{$itempaymentlist->invoicepayment}}</td>
-                                    <td>{{$itempaymentlist->name}}</td>
-                                    <td>{{$itempaymentlist->email}}</td>
+                                    <td>{{$itempaymentlist->payment_id_transaksi}}</td>
+                                    <td>{{$itempaymentlist->name_transaksi}}</td>
+                                    <td>{{$itempaymentlist->email_transaksi}}</td>
                                     <td>
                                         @if ($itempaymentlist->is_active == 'waiting payment')
+                                        @if ($perjanjian != null)
+                                        @if ($perjanjian->perjanjian == null)
+                                        Silahkan isi File Perjanjian Terlebih Dahulu
+                                        @else
                                         <form action="/waittingpayment/confirm/{{$itempaymentlist->project_id}}" method="post">
                                             @csrf
                                             @method('put')
                                             <button type="submit" class="btn btn-primary btn-sm text-white text-uppercase">{{$itempaymentlist->is_active}}</button>
                                         </form>
+                                        @endif
+                                        @else
+                                        <form action="/waittingpayment/confirm/{{$itempaymentlist->project_id}}" method="post">
+                                            @csrf
+                                            @method('put')
+                                            <button type="submit" class="btn btn-primary btn-sm text-white text-uppercase">{{$itempaymentlist->is_active}}</button>
+                                        </form>
+                                        @endif
                                         @endif
                                     </td>
                                 </tr>

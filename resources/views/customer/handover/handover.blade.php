@@ -28,6 +28,28 @@
         @endif
         <div class="row">
             <div class="col-lg-8">
+                @if (request()->user()->role == 'customer' && $project->is_active == 'handover' || request()->user()->role == 'admin' && $project->is_active == 'handover')
+                @php
+                    $detail = DB::table('detail_projects')->where('project_id',$project->id)->first();
+                    $results = DB::table('result_projects')->where('contest_id',$project->id)->first();
+                    $result = explode('/',$results->description)
+                @endphp
+                @if ($detail->hari != $result[2])
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex ">
+                            <div class="flex-grow-1 ">
+                                <div class="alert alert-success text-capitalize">Deadline time from project</div>
+                            </div>
+                            <div class=" ml-5">
+                                <button type="button" class="btn btn-primary col-lg-12 mb-5 text-capitalize" data-toggle="modal"
+                                data-target="#ExtendedDeadline">Deadline time</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                @endif
                 <div class="card-body mb-4">
                     <div class="d-flex ">
                         <div class=" align-self-center">
@@ -246,6 +268,7 @@
                 <div class="row">
                     <div class="col-md-6 col-lg-12">
                         <div class="card">
+                            @if ($project->catagories_project == 'contest')
                             <div class="card-body">
                                 <div class="mb-4 text-center">
                                     <img src="{{asset('storage/result' . $project->catagories_project . '/' . $handover->filecontest)}}"
@@ -269,6 +292,36 @@
                                     </div>
                                 </div>
                             </div>
+                            @else
+                            <div class="card-body">
+                                <div class="mb-4 text-center">
+                                    @php
+                                    $user = DB::table('users')->where('id',$handover->user_id_worker)->first();
+                                    @endphp
+                                    @if ($user->avatar != 'default.jpg')
+                                        <img src="{{asset('/storage/profile/' . $user->avatar)}}"
+                                            class="img-fluid">
+                                    @else
+                                        <img src="{{asset('assets/dashboard/images/default.jpg')}}"
+                                            class="img-fluid">
+                                    @endif
+                                </div>
+                                <div class="d-flex align-items-center px-2">
+                                    @if ($user->avatar != 'default.jpg')
+                                        <div class="avatar avatar-md mr-3"
+                                            style="background-image: url({{asset('/storage/profile/' . $user->avatar)}})">
+                                        </div>
+                                    @else
+                                        <div class="avatar avatar-md mr-3"
+                                            style="background-image: url({{asset('assets/dashboard/images/default.jpg')}})">
+                                        </div>
+                                    @endif
+                                    <div>
+                                        <div>{{$user->name}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     </div>
                     @php
@@ -382,9 +435,9 @@
                 <div class="d-flex">
                     <div>
                         @if ($users->avatar == 'default.jpg')
-                        <img src="{{url('assets/dashboard/images/default.jpg')}}" width="75px" height="75px">
+                        <img src="{{url('assets/dashboard/images/default.jpg')}}" width="90px">
                         @else
-                        <img src="{{url('storage/profile/' . $users->avatar)}}" width="75px" height="75px">
+                        <img src="{{url('storage/profile/' . $users->avatar)}}" width="90px">
                         @endif
                     </div>
                     <div class="ml-3">
@@ -393,14 +446,14 @@
                             @if ($itemmessage->file == null)
                             <p class="mt-4">{{$itemmessage->feedback_customer}}</p>
                             @else
-                            <img src="{{asset('storage/filechat/' . $itemmessage->file)}}" alt="" width="200px">
+                            <a href="{{asset('storage/filechat/' . $itemmessage->file)}}" target="_blank"><img src="{{asset('storage/filechat/' . $itemmessage->file)}}" alt="" width="400px"></a>
                             <p class="mt-4">{{$itemmessage->feedback_customer}}</p>
                             @endif
                         @else
                             @if ($itemmessage->file == null)
                             <p class="mt-4">{{$itemmessage->feedback_worker}}</p>
                             @else
-                            <img src="{{asset('storage/filechat/' . $itemmessage->file)}}" alt="" width="200px">
+                            <a href="{{asset('storage/filechat/' . $itemmessage->file)}}" target="_blank"><img src="{{asset('storage/filechat/' . $itemmessage->file)}}" alt="" width="400px"></a>
                             <p class="mt-4">{{$itemmessage->feedback_worker}}</p>
                             @endif
                         @endif
@@ -498,6 +551,32 @@
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="ExtendedDeadline" tabindex="-1" aria-labelledby="ExtendedDeadlineLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ExtendedDeadlineLabel">Extened Deadline</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <form action="/extendeddeadlinedirect/{{$project->id}}" method="post">
+                @csrf
+                @method('put')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="extended">Extended Deadline</label>
+                        <input type="text" class="form-control" id="extended" name="extended">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

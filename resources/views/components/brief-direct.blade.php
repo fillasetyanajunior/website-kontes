@@ -101,10 +101,10 @@
                     <button type="submit" class="btn btn-azure col-lg-12 mb-5">Locked Project</button>
                 </form>
                 @else
-                    @if (request()->user()->id == $project->user_id && $resultdirects != null)
-                    <button type="button" class="btn btn-primary col-lg-12 mb-5" data-toggle="modal"
-                        data-target="#ExtendedDeadline">Extended Deadline</button>
-                    @endif
+                    @if (request()->user()->role == 'customer' && request()->user()->id == $project->user_id && $project->is_active == 'running' || $project->is_active == 'choose winner')
+                <button type="button" class="btn btn-primary col-lg-12 mb-5" data-toggle="modal" id="sharecontest" data-url="{{asset('assets/dashboard/images')}}"
+                    data-target="#ShareModal">Share</button>
+                @endif
                 @endif
             </div>
             {{-- <div class="col-md-6 col-lg-12">

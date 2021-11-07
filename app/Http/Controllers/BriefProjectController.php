@@ -43,6 +43,7 @@ class BriefProjectController extends Controller
     }
     public function ExtendedDirect(Project $project,Request $request)
     {
+        // dd(date('Y-m-d', strtotime('+' . $request->extended . 'days', strtotime($project->deadline))));
         $request->validate([
             'extended' => 'required'
         ]);
@@ -51,6 +52,10 @@ class BriefProjectController extends Controller
                 ->update([
                     'deadline' => date('Y-m-d', strtotime('+' . $request->extended . 'days', strtotime($project->deadline))),
                 ]);
+        DetailProject::where('project_id',$project->id)
+                    ->update([
+                        'hari' => $request->extended,
+                    ]);
         return redirect()->back()->with('status','Extended Deadline Berhasil Di Update');
     }
     public function LockedDirect(Project $project)

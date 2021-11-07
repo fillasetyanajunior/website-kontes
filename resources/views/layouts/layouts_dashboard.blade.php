@@ -20,6 +20,8 @@
     <!-- Generated: 2018-04-16 09:29:05 +0200 -->
     <title>Homepage - {{env('APP_NAME')}}</title>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    @livewireStyles
+    @livewireScripts
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -38,10 +40,10 @@
     <script src="{{url('assets/dashboard/formwizard/js/addcost.js')}}"></script>
     <style>
         div.image span{
-  position: absolute;
-  left: 0px;
-  top: 0px;
-}
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        }
     </style>
     {{-- <script type="text/javascript">
         $(document).ready(function () {
@@ -104,7 +106,6 @@
         requirejs.config({
             baseUrl: '.'
         });
-
     </script>
     <!-- Dashboard Core -->
     <link href="{{url('assets/dashboard/css/dashboard.css')}}" rel="stylesheet" />

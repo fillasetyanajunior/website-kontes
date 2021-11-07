@@ -95,26 +95,16 @@
         <div class="row row-cards">
             @foreach ($project as $itemproject)
                 @php
-                if ($itemproject->catagories_project == 'contest') {
                     $resultcontest = DB::table('result_contests')->where('contest_id',$itemproject->id)->where('user_id_worker',$worker->user_id)->where('portfolio','show')->get();
-                    $role = 'contest';
-                } else {
-                    $resultcontest = DB::table('result_projects')->where('contest_id',$itemproject->id)->where('user_id_worker',$worker->user_id)->where('portfolio','show')->get();
-                    $role = 'direct';
-                }
+                    $role = 'contest'
                 @endphp
             @foreach ($resultcontest as $itemresultcontest)
             <div class="col-sm-6 col-lg-4">
                 <div class="card p-3">
                     <a href="javascript:void(0)">
                         @if ($itemresultcontest->portfolio == 'show')
-                        @if ($itemproject->catagories_project == 'contest')
                         <img src="{{asset('/storage/resultcontest/' . $itemresultcontest->filecontest)}}"
                             class="rounded" style="width: 300px; height: 300px; overflow: hidden; width: 100%;">
-                        @else
-                        <img src="{{url('assets/dashboard/images/bid.png')}}" class="rounded"
-                            style="width: 300px; height: 300px; overflow: hidden; width: 100%;">
-                        @endif
                         @else
                         <img src="{{url('assets/dashboard/images/gembok.png')}}" class="rounded"
                             style="width: 300px; height: 300px; overflow: hidden; width: 100%;">

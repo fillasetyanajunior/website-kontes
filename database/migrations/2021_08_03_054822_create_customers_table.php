@@ -22,7 +22,6 @@ class CreateCustomersTable extends Migration
             $table->string('location')->nullable();
             $table->string('avatar')->nullable();
             $table->string('aboutme')->nullable();
-            $table->string('tagline')->nullable();
             $table->timestamps();
         });
     }

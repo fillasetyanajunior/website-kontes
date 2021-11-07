@@ -26,11 +26,19 @@
                         @if ($itemfavourites->catagories_project == 'contest')
                         <img src="{{asset('/storage/resultcontest/' . $data->filecontest)}}"class="rounded">
                         @else
+                        @if ($user->avatar == 'default.jpg')
+                        <img src="{{asset('assets/dashboard/images/default.jpg')}}"class="rounded">
+                        @else
                         <img src="{{asset('/storage/profile/' . $user->avatar)}}"class="rounded">
+                        @endif
                         @endif
                     </a>
                     <div class="d-flex align-items-center px-2">
+                        @if ($user->avatar == 'default.jpg')
+                        <div class="avatar avatar-md mr-3" style="background-image: url({{asset('assets/dashboard/images/default.jpg')}})"></div>
+                        @else
                         <div class="avatar avatar-md mr-3" style="background-image: url({{asset('/storage/profile/' . $user->avatar)}})"></div>
+                        @endif
                         <div>
                             <div><a href="/profileworker/{{$data->user_id_worker}}">{{$user->name}}</a></div>
                             <small class="d-block text-muted">{{$itemfavourites->catagories_project}}</small>
@@ -45,11 +53,19 @@
                         @if ($itemfavourites->catagories_project == 'contest')
                         <img src="{{asset('/storage/resultcontest/' . $data->filecontest)}}"class="rounded">
                         @else
+                        @if ($user->avatar == 'default.jpg')
+                        <img src="{{asset('assets/dashboard/images/default.jpg')}}"class="rounded">
+                        @else
                         <img src="{{asset('/storage/profile/' . $user->avatar)}}"class="rounded">
+                        @endif
                         @endif
                     </a>
                     <div class="d-flex align-items-center px-2">
-                        <div class="avatar avatar-md mr-3" style="background-image: url({{url('assets/dashboard/images/default.jpg')}})"></div>
+                        @if ($user->avatar == 'default.jpg')
+                        <div class="avatar avatar-md mr-3" style="background-image: url({{asset('assets/dashboard/images/default.jpg')}})"></div>
+                        @else
+                        <div class="avatar avatar-md mr-3" style="background-image: url({{asset('/storage/profile/' . $user->avatar)}})"></div>
+                        @endif
                         <div>
                             <div><a href="javascript:void(0)">Worker</a></div>
                             <small class="d-block text-muted">{{$itemfavourites->catagories_project}}</small>

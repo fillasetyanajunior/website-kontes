@@ -22,7 +22,7 @@
             </li>
         </ul>
         <x-brief-direct id="{{$project->id}}"></x-brief-direct>
-        <x-gallery-direct id="{{$project->id}}"></x-gallery-direct>
+        <livewire:gallery-direct :project="$project" :key="$project->id">
     </div>
 </div>
 <div class="modal fade" id="directModal" tabindex="-1" aria-labelledby="directModalLabel" aria-hidden="true">
@@ -219,27 +219,31 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="ExtendedDeadline" tabindex="-1" aria-labelledby="ExtendedDeadlineLabel" aria-hidden="true">
+<div class="modal fade" id="ShareModal" tabindex="-1" aria-labelledby="ShareModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="ExtendedDeadlineLabel">Extened Deadline</h5>
+                <h5 class="modal-title" id="ShareModalLabel">Share</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true"></span>
                 </button>
             </div>
-            <form action="/extendeddeadlinedirect/{{$project->id}}" method="post">
+            <form action="/sharecontest/{{$project->id}}" method="post">
                 @csrf
-                @method('put')
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="extended">Extended Deadline</label>
-                        <input type="text" class="form-control" id="extended" name="extended">
+                    <div class="d-flex justify-content-center">
+                        <div class="text-center">
+                            <div class="mt-3">
+                                <img src="" alt="" id="gambarShare" width="200px">
+                            </div>
+                            <div class="mt-3">
+                                <p id="captions_share"></p>
+                            </div>
+                            <div class="mt-3">
+                                <button type="submit" class="btn btn-primary footer_contest">Share</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
         </div>

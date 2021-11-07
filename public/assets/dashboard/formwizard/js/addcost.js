@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+    $(".btn-submit").attr('disabled',true);
     function initPayPalButton(payments) {
         paypal.Buttons({
             style: {
@@ -27,9 +28,10 @@ $(document).ready(function () {
                     // Full available details
                     console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
 
-                    var id_transaksi = orderData.id
+                    var id_transaksi = orderData.purchase_units['0'].payments.captures['0'].id
                     var email_transaksi = orderData.payer.email_address
                     var name_transaksi = orderData.payer.name.given_name + orderData.payer.name.surname
+
 
                     $('input[name="id_transaksi"]').val(id_transaksi)
                     $('input[name="email_transaksi"]').val(email_transaksi)
@@ -39,7 +41,7 @@ $(document).ready(function () {
                     const element = document.getElementById('paypal-button-container');
                     element.innerHTML = '';
                     element.innerHTML = '<h3>Thank you for your payment!</h3>';
-                    $("#btn-finish").removeClass('disabled');
+                    $(".btn-submit").attr('disabled',false);
 
                     // Or go to another URL:  actions.redirect('thank_you.html');
 

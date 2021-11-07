@@ -15,7 +15,7 @@
         <div class="mt-5">
             <div class="card card-profile">
                 <div class="card-header"
-                    style="background-image: url({{url('assets/dashboard/images/thumbnail.jpg')}});">
+                    style="background-image: white;">
                 </div>
                 <div class="card-body text-left">
                     @if ($worker->avatar != 'default.jpg')

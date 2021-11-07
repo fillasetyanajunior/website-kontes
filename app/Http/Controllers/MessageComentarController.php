@@ -9,6 +9,7 @@ use App\Models\NewsFeed;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class MessageComentarController extends Controller
@@ -37,6 +38,10 @@ class MessageComentarController extends Controller
                     ]);
                     $worker = User::where('id', $kirimnotifcomentar[$i]->user_id)->first();
                     Mail::to($worker->email)->send(new PublicDiscussionMail($request->feedback, $project->title));
+                    Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                        'number' => $worker->phone,
+                        'message' =>    'You get a comment from the contest' . $project->title
+                    ]);
                 }
             }
         } else {
@@ -55,6 +60,10 @@ class MessageComentarController extends Controller
             ]);
             $customer = User::where('id', $project->user_id)->first();
             Mail::to($customer->email)->send(new PublicDiscussionMail($request->feedback, $project->title));
+            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                'number' => $customer->phone,
+                'message' =>    'You get a comment from the contest' . $project->title
+            ]);
         }
         return redirect()->back()->with('status', 'Comentar Berhasil di kirim');
     }

@@ -8,6 +8,7 @@ use App\Models\NewsFeed;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class MessageHandoverController extends Controller
@@ -18,7 +19,7 @@ class MessageHandoverController extends Controller
 
         $file = $request->file('filechat');
         $name = time() . '.' . $file->getClientOriginalExtension();
-        $file->storeAs('profile', $name);
+        $file->storeAs('filechat', $name);
 
         if (request()->user()->role == 'customer') {
             if ($request->file('filechat')) {
@@ -48,11 +49,19 @@ class MessageHandoverController extends Controller
             $worker = User::where('id', $MessageHandover->worker_id)->first();
             if ($worker != null) {
                 Mail::to($worker->email)->send(new HandoverCommentMail($request->feedback, $project->title));
+                Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                    'number' => $worker->phone,
+                    'message' =>    'You get a comment from the contest' . $project->title
+                ]);
             } else {
                 $admin = User::where('role', 'admin')->get();
                 for ($i = 0; $i < count($admin); $i++) {
                     foreach ($admin as $itemadmin) {
                         Mail::to($itemadmin->email)->send(new HandoverCommentMail($request->feedback, $project->title));
+                        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                            'number' => $itemadmin->phone,
+                            'message' =>    'You get a comment from the contest' . $project->title
+                        ]);
                     }
                 }
             }
@@ -84,6 +93,10 @@ class MessageHandoverController extends Controller
             ]);
             $customer = User::where('id', $MessageHandover->customer_id)->first();
             Mail::to($customer->email)->send(new HandoverCommentMail($request->feedback, $project->title));
+            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                'number' => $customer->phone,
+                'message' =>    'You get a comment from the contest' . $project->title
+            ]);
         }
         return redirect()->back()->with('status', 'Message Bid Berhasil di kirim');
     }

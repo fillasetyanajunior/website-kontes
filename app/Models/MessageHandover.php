@@ -14,5 +14,6 @@ class MessageHandover extends Model
         'result_id',
         'feedback_customer',
         'feedback_worker',
+        'file'
     ];
 }

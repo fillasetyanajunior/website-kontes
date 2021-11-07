@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountingController;
 use App\Http\Controllers\BriefProjectController;
 use App\Http\Controllers\BrowseProjectController;
 use App\Http\Controllers\CatagoriesController;
+use App\Http\Controllers\CobaController;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DataTotalCostController;
@@ -28,6 +29,8 @@ use App\Http\Controllers\PDFController;
 use App\Http\Controllers\PerjanjianController;
 use App\Http\Controllers\ReplayPublicDiscusController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ResultTestContestController;
+use App\Http\Controllers\ShareController;
 use App\Http\Controllers\SubCatagoriesController;
 use App\Http\Controllers\WaittingpaymentController;
 use App\Http\Controllers\WorkerController;
@@ -51,18 +54,25 @@ Route::get('/', function () {
 
 //Coba Cek
 
-Route::get('/coba',
-function () {
-    // [PaypalController::class, 'Cheackout']
-    // \Illuminate\Support\Facades\Mail::to('customer@customer.com')->send(new \App\Mail\PembayaranProjectMail(3));
+Route::get('/coba',[CobaController::class,'coba']
+// function () {
 
-    return view('coba');
-    // $location = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
-    // return $location->toArray();
-}
+//         Telegram::sendMessage([
+//             'chat_id' => 'RECIPIENT_CHAT_ID',
+//             'text' => 'Hello world!'
+//         ]);
+//         $data = Telegram::getUserProfilePhotos();
+//         dd($data);
+//     [PaypalController::class, 'Cheackout']
+//     \Illuminate\Support\Facades\Mail::to('customer@customer.com')->send(new \App\Mail\PembayaranProjectMail(3));
+//     return view('coba');
+//     $location = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+//     return $location->toArray();
+// }
 );
 
 Route::get('/home', [HomeController::class,'index'])->name('home');
+Route::post('/feedback/users/{resultcontest}', [FeedbackController::class, 'UserFeedback']);
 
 Route::middleware('verified')->group(function () {
 
@@ -76,12 +86,8 @@ Route::middleware('verified')->group(function () {
     //Brief Project
     Route::get('/briefcontest/{project}', [BrowseProjectController::class,'BriefContestProject']);
     Route::get('/briefdirect/{project}', [BrowseProjectController::class,'BriefDirectProject']);
-    //Gallery Project
-    Route::get('/gallerycontest/{project}', [BrowseProjectController::class,'GalleryContestProject']);
-    Route::get('/gallerydirect/{project}', [BrowseProjectController::class,'GalleryDirectProject']);
     //Feedback Contest
     Route::post('/feedback/{resultcontest}', [FeedbackController::class, 'GetData']);
-    Route::post('/feedback/users/{resultcontest}', [FeedbackController::class, 'UserFeedback']);
     //Feedback Bid
     Route::post('/feedbackbid/{resultproject}', [FeedbackBidController::class, 'GetData']);
     Route::post('/feedbackbid/users/{resultproject}', [FeedbackBidController::class, 'UserFeedback']);
@@ -102,6 +108,8 @@ Route::middleware('verified')->group(function () {
     Route::post('/kirimessagehandover', [MessageHandoverController::class, 'KirimFeedbackMessage'])->name('messagehandover');
     //Replay Public Discus
     Route::post('/replaypublicdiscus', [ReplayPublicDiscusController::class, 'StoreReplayPublic'])->name('replaydiscus');
+    //NewsFeed
+    Route::get('/newsfeed', [NewsFeedController::class, 'NewsFeed'])->name('newsfeed');
 
     Route::middleware('admin')->group(function () {
         //Admin
@@ -146,14 +154,6 @@ Route::middleware('verified')->group(function () {
         Route::delete('/managementwebsite/jobdescription/delete/{jobcatagories}', [JobController::class,'DeleteJob']);
         //NDA
         Route::post ('/managementwebsite/nda/{uploadfileperjanjian}', [PerjanjianController::class,'UpdatePerjanjian']);
-        //Brief Contest Action
-        Route::delete('/deletecontest/{project}', [BriefProjectController::class,'DeleteContest']);
-        Route::put('/lockedcontest/{project}', [BriefProjectController::class,'LockedContest']);
-        Route::put('/extendeddeadlinecontest/{project}', [BriefProjectController::class,'ExtendedContest']);
-        //Brief Direct Action
-        Route::delete('/deletedirect/{project}', [BriefProjectController::class,'DeleteDirect']);
-        Route::put('/lockeddirect/{project}', [BriefProjectController::class,'LockedDirect']);
-        Route::put('/extendeddeadlinedirect/{project}', [BriefProjectController::class,'ExtendedDirect']);
         //Accounting
         Route::get('/acconting/data', [AccountingController::class, 'GetData'])->name('accounting');
         Route::get('/acconting/data/project/{pilihanproject}', [AccountingController::class, 'GetData']);
@@ -162,6 +162,12 @@ Route::middleware('verified')->group(function () {
         Route::get('/acconting/data/customer/{pilihancustomer}', [AccountingController::class, 'GetData']);
         //Code Create
         Route::post('/code', [CodeController::class,'StoreCode'])->name('codeStore');
+        //Test Contest
+        Route::get('/resulttestcontest', [ResultTestContestController::class,'ResultTestIndex'])->name('resultcontest');
+        Route::post('/resulttestcontest/viewaccount/{user_id_worker}', [ResultTestContestController::class, 'ViewAccount']);
+        Route::post('/resulttestcontest/viewproject/{user_id_worker}', [ResultTestContestController::class, 'ViewProject']);
+        Route::put('/resulttestcontest/updatetest/{user_id_worker}', [ResultTestContestController::class, 'UpdateTestContest']);
+        Route::post('/resulttestcontest/delete/{resultTestContest}', [ResultTestContestController::class, 'DeleteResultTestContest']);
     });
 
     Route::middleware('admincustomer')->group(function () {
@@ -185,6 +191,14 @@ Route::middleware('verified')->group(function () {
         Route::post('/getdatatotalcostupgrade', [DataTotalCostController::class, 'GetDataTotalCostUpgrade']);
         Route::post('/getdatatotalcostpack', [DataTotalCostController::class, 'GetDataTotalCostPack']);
         Route::post('/getdatatotalcostfreefee', [DataTotalCostController::class, 'GetDataTotalCostFreeFee']);
+        //Brief Contest Action
+        Route::delete('/deletecontest/{project}', [BriefProjectController::class, 'DeleteContest']);
+        Route::put('/lockedcontest/{project}', [BriefProjectController::class, 'LockedContest']);
+        Route::put('/extendeddeadlinecontest/{project}', [BriefProjectController::class, 'ExtendedContest']);
+        //Brief Direct Action
+        Route::delete('/deletedirect/{project}', [BriefProjectController::class, 'DeleteDirect']);
+        Route::put('/lockeddirect/{project}', [BriefProjectController::class, 'LockedDirect']);
+        Route::put('/extendeddeadlinedirect/{project}', [BriefProjectController::class, 'ExtendedDirect']);
     });
 
     Route::middleware('customer')->group(function () {
@@ -204,6 +218,8 @@ Route::middleware('verified')->group(function () {
         //Upload File
         Route::post('/fileuploadrevisi/store', [UploadFileController::class,'UploadfileRevisi']);
         Route::delete('/deletefileuploadrevisi/{uploadfile}', [UploadFileController::class,'DeleteFileUploadRevisi']);
+        //Share Contest
+        Route::post('/sharecontest/{project}', [ShareController::class,'ShareContest']);
     });
 
     Route::middleware('customerworker')->group(function () {
@@ -212,8 +228,6 @@ Route::middleware('verified')->group(function () {
         Route::post('/feedback/kirim/{resultcontest}', [FeedbackController::class, 'KirimFeedback']);
         //Feedback Bid
         Route::post('/feedbackbid/kirim/{resultproject}', [FeedbackBidController::class, 'KirimFeedback']);
-        //NewsFeed
-        Route::get('/newsfeed', [NewsFeedController::class, 'NewsFeed'])->name('newsfeed');
     });
 
     Route::middleware('worker')->group(function () {

@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\WinnerContest;
 use App\Models\Worker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class FeedbackController extends Controller
@@ -52,6 +53,10 @@ class FeedbackController extends Controller
                 ]);
 
                 Mail::to($worker->email)->send(new FeedbackMail($request->feedback, $project->title));
+                Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                    'number' => $worker->phone,
+                    'message' =>    'You get feedback from the contest.' . $resultcontest->title
+                ]);
             } else {
                 $admin = User::where('role','admin')->get();
                 for ($i=0; $i < count($admin); $i++) {
@@ -64,6 +69,10 @@ class FeedbackController extends Controller
                             'choices'       => 'feedback',
                         ]);
                         Mail::to($itemadmin->email)->send(new FeedbackMail($request->feedback, $project->title));
+                        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                            'number' => $itemadmin->phone,
+                            'message' =>    'You get feedback from the contest.' . $resultcontest->title
+                        ]);
                     }
                 }
             }
@@ -88,9 +97,10 @@ class FeedbackController extends Controller
         }
         return redirect()->back()->with('status','Feedback Berhasil di kirim');
     }
-    public function UserFeedback(ResultContest $resultcontest, Request $request)
+    public function UserFeedback(Request $request, ResultContest $resultcontest)
     {
-        if ($request->role_user == 'customer') {
+        $request->only('datas');
+        if ($request->datas == 'customer') {
             $user = Project::where('id',$resultcontest->contest_id)->first();
             $data = User::where('id', $user->user_id)->first();
         } else {
@@ -99,7 +109,7 @@ class FeedbackController extends Controller
 
         return response()->json([
             'user'  => $data,
-            'user2' => $request,
+            'request' => $request->datas,
         ]);
     }
     public function NilaiContest(Request $request, ResultContest $resultcontest)
@@ -150,6 +160,14 @@ class FeedbackController extends Controller
         if ($worker != null) {
             Mail::to($worker->email)->send(new EliminasiMail($resultcontest->contest_id,$worker->role));
             Mail::to(request()->user()->email)->send(new EliminasiMail($resultcontest->contest_id, request()->user()->role));
+            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                'number' => $worker->phone,
+                'message' =>    'Sorry you were eliminated from.' . $resultcontest->title
+            ]);
+            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                'number' => request()->user()->phone,
+                'message' =>    'Thank you for eliminating participants.' . $resultcontest->title
+            ]);
 
             NewsFeed::create([
                 'contest_id'    => $resultcontest->contest_id,
@@ -165,6 +183,10 @@ class FeedbackController extends Controller
             for ($i=0; $i < count($admin); $i++) {
                 foreach ($admin as $itemadmin) {
                     Mail::to($itemadmin->email)->send(new EliminasiMail($resultcontest->contest_id,$itemadmin->role));
+                    Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                        'number' => $admin->phone,
+                        'message' =>    'Sorry you were eliminated from.' . $resultcontest->title
+                    ]);
 
                     NewsFeed::create([
                         'contest_id'    => $resultcontest->contest_id,
@@ -176,7 +198,10 @@ class FeedbackController extends Controller
                 }
             }
             Mail::to(request()->user()->email)->send(new EliminasiMail($resultcontest->contest_id, request()->user()->role));
-
+            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                'number' => request()->user()->phone,
+                'message' =>    'Thank you for eliminating participants.' . $resultcontest->title
+            ]);
         }
 
         return redirect()->back()->with('status', 'Update Contest Success');
@@ -218,6 +243,14 @@ class FeedbackController extends Controller
 
             Mail::to($worker->email)->send(new WinnerChooseMail($resultcontest->contest_id, $worker->role));
             Mail::to(request()->user()->email)->send(new WinnerChooseMail($resultcontest->contest_id, request()->user()->role));
+            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                'number' => request()->user()->phone,
+                'message' =>    'You have chosen ' . $worker->name . ' as the champion of the contest .' . $resultcontest->title
+            ]);
+            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                'number' => $worker->phone,
+                'message' =>    'Congratulations you are the champion of' . $resultcontest->title
+            ]);
 
             Worker::where('user_id', $resultcontest->user_id_worker)
                 ->update([
@@ -245,9 +278,17 @@ class FeedbackController extends Controller
                     ]);
 
                     Mail::to($itemadmin->email)->send(new WinnerChooseMail($resultcontest->contest_id, $itemadmin->role));
+                    Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                        'number' => $itemadmin->phone,
+                        'message' =>    'Congratulations you are the champion of' . $resultcontest->title
+                    ]);
                 }
             }
             Mail::to(request()->user()->email)->send(new WinnerChooseMail($resultcontest->contest_id, request()->user()->role));
+            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                'number' => request()->user()->phone,
+                'message' =>    'You have chosen ' . request()->user()->name . ' as the champion of the contest .' . $resultcontest->title
+            ]);
         }
 
         Project::where('id', $resultcontest->contest_id)

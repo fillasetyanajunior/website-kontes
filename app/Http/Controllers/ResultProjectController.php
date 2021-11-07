@@ -7,8 +7,11 @@ use App\Models\NewsFeed;
 use App\Models\Project;
 use App\Models\ResultContest;
 use App\Models\ResultProject;
+use App\Models\ResultTestContest;
 use App\Models\User;
+use App\Models\Worker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class ResultProjectController extends Controller
@@ -30,39 +33,56 @@ class ResultProjectController extends Controller
             $portfolio = 'hide';
         }
 
-        $user = Project::where('id',$request->id)->first();
+        $workers = Worker::where('user_id',request()->user()->id)->first();
 
-        NewsFeed::create([
-            'contest_id'    => $request->id,
-            'user_id_from'  => request()->user()->id,
-            'user_id_to'    => $user->user_id,
-            'filecontest'   => $name,
-            'choices'       => 'submit'
-        ]);
+        if ($workers->status_account == 'verified') {
+            $user = Project::where('id',$request->id)->first();
 
-        $datetime = ResultContest::create([
-            'contest_id'    => $request->id,
-            'user_id_worker'=> request()->user()->id,
-            'title'         => $request->title,
-            'filecontest'   => $name,
-            'is_active'     => 'active',
-            'portfolio'     => $portfolio,
-        ]);
+            NewsFeed::create([
+                'contest_id'    => $request->id,
+                'user_id_from'  => request()->user()->id,
+                'user_id_to'    => $user->user_id,
+                'filecontest'   => $name,
+                'choices'       => 'submit'
+            ]);
 
-        Project::where('id',$request->id)
-                ->update([
-                    'submit' => $datetime->created_at,
-                ]);
+            $datetime = ResultContest::create([
+                'contest_id'    => $request->id,
+                'user_id_worker'=> request()->user()->id,
+                'title'         => $request->title,
+                'filecontest'   => $name,
+                'is_active'     => 'active',
+                'portfolio'     => $portfolio,
+            ]);
 
-        $result = ResultContest::where('user_id_worker',request()->user()->id)->distinct('contest_id')->count();
-        $admin = User::where('role','admin')->get();
-        // dd($result);
-        if ($result == 3 || $result >= 3 ) {
-            foreach ($admin as $itemadmin) {
-                Mail::to($itemadmin->email)->send(new VerifiedWorkerMail(request()->user()->id));
+            Project::where('id',$request->id)
+                    ->update([
+                        'submit' => $datetime->created_at,
+                    ]);
+        } else if ($workers->status_account == 'unverified') {
+
+            ResultTestContest::create([
+                'contest_id'    => $request->id,
+                'user_id_worker'=> request()->user()->id,
+                'title'         => $request->title,
+                'filecontest'   => $name,
+                'is_active'     => 'active',
+                'portfolio'     => $portfolio,
+            ]);
+
+            $result = ResultTestContest::where('user_id_worker',request()->user()->id)->distinct('contest_id')->count();
+            $admin  = User::where('role','admin')->get();
+            // dd($result);
+            if ($result == 3 || $result >= 3 ) {
+                foreach ($admin as $itemadmin) {
+                    Mail::to($itemadmin->email)->send(new VerifiedWorkerMail(request()->user()->id));
+                    Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                        'number' => $itemadmin->phone,
+                        'message' =>    'the system has detected that a worker has completed the test, please check your email for follow up'
+                    ]);
+                }
             }
         }
-
         return redirect()->back()->with('status', 'Submit Contest Success');
     }
     public function createSubmitDirect(Request $request)

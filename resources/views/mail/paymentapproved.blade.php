@@ -5,15 +5,16 @@
 </td>
 @php
     $project = DB::table('projects')->where('id',$id)->first();
+    $wallets = DB::table('detail_projects')->where('contest_id',$id)->first();
 
     if ($project->catagories_project == 'catagories') {
         $discon = (15/100) * $project->harga;
         $total  = $project->harga - 40 - $discon;
         $totalwallet = $harga - $discon;
     } else {
-        $discon = (15/100) * $project->harga;
-        $total  = $project->harga - $discon;
-        $totalwallet = $harga - $discon;
+        $walletbid = explode('/'.$wallets->description);
+        $discon = (15/100) * $walletbid[2];
+        $totalwallet  = $walletbid[2] - $discon;
     }
 
 @endphp
@@ -42,22 +43,6 @@
                 </td>
                 <td style="padding: 0.75rem;vertical-align: top;border-top: 1px solid #dee2e6;">
                     <p style="font-size:16px; color:#333333; ">{{$totalwallet}}</p>
-                </td>
-            </tr>
-            <tr>
-                <td style="padding: 0.75rem;vertical-align: top;border-top: 1px solid #dee2e6;">
-                    <p style="font-size:16px; color:#333333; ">potongan</p>
-                </td>
-                <td style="padding: 0.75rem;vertical-align: top;border-top: 1px solid #dee2e6;">
-                    <p style="font-size:16px; color:#333333; ">15%</p>
-                </td>
-            </tr>
-            <tr>
-                <td style="padding: 0.75rem;vertical-align: top;border-top: 1px solid #dee2e6;">
-                    <p style="font-size:16px; color:#333333; ">Total</p>
-                </td>
-                <td style="padding: 0.75rem;vertical-align: top;border-top: 1px solid #dee2e6;">
-                    <p style="font-size:16px; color:#333333; ">{{$total}}</p>
                 </td>
             </tr>
         </tbody>

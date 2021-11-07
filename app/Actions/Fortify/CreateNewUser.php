@@ -33,6 +33,7 @@ class CreateNewUser implements CreatesNewUsers
             ],
             'password' => $this->passwordRules(),
             'role' => ['required'],
+            'phone' => ['required','numeric'],
         ])->validate();
 
         if ($input['role'] == 1) {
@@ -47,6 +48,7 @@ class CreateNewUser implements CreatesNewUsers
             'password'          => Hash::make($input['password']),
             'role'              => $role,
             'avatar'            => 'default.jpg',
+            'phone'             => '62' . $input['phone'] . '@c.us',
             'messenger_color'   => '#2180f3',
         ]);
 
