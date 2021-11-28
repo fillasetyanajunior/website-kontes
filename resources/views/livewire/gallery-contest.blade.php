@@ -22,7 +22,7 @@
                     </select>
                 </div>
                 <div class="form-group ml-3">
-                    <input type="text" id="searchentries" class="form-control" placeholder="Filter By freelancer">
+                    <input type="text" wire:model="search" class="form-control" placeholder="Filter By freelancer">
                 </div>
             </div>
         </div>
@@ -50,7 +50,7 @@
                     </select>
                 </div>
                 <div class="form-group ml-3">
-                    <input type="text" id="searchentries" class="form-control" placeholder="Filter By freelancer">
+                    <input type="text" wire:model="search" class="form-control" placeholder="Filter By freelancer">
                 </div>
             </div>
         </div>

@@ -9,6 +9,7 @@ use App\Models\Rating;
 use App\Models\ResultContest;
 use App\Models\ResultTestContest;
 use App\Models\SuspendAccount;
+use App\Models\TestCountResult;
 use App\Models\User;
 use App\Models\Worker;
 use Carbon\Carbon;
@@ -29,46 +30,45 @@ class ResultTestContestController extends Controller
                                 ->simplePaginate(1);
         return view('admin.testcontest.testcontest',$data);
     }
-    public function UpdateTestContest(Request $request)
+    public function UpdateTestContest(ResultTestContest $resultTestContest)
     {
-        $testresult = ResultTestContest::where('user_id_worker',$request->user_id_worker)->get();
-        foreach ($testresult as $itemtestresult) {
-            $user = Project::where('id', $itemtestresult->contest_id)->first();
+        $user = Project::where('id', $resultTestContest->contest_id)->first();
 
-            NewsFeed::create([
-                'contest_id'    => $itemtestresult->contest_id,
-                'user_id_from'  => $itemtestresult->user_id_worker,
-                'user_id_to'    => $user->user_id,
-                'filecontest'   => $itemtestresult->filecontest,
-                'choices'       => 'submit'
-            ]);
-
-            $datetime = ResultContest::create([
-                'contest_id'    => $itemtestresult->contest_id,
-                'user_id_worker'=> $itemtestresult->user_id_worker,
-                'title'         => $itemtestresult->title,
-                'filecontest'   => $itemtestresult->filecontest,
-                'is_active'     => 'active',
-                'portfolio'     => $itemtestresult->portfolio,
-            ]);
-
-            Project::where('id', $itemtestresult->id)
-                ->update([
-                    'submit' => $datetime->created_at,
-                ]);
-        }
-        Worker::where('user_id', $request->user_id_worker)
-            ->update([
-                'status_account' => 'verified',
-            ]);
-
-        $user = User::where('id',$request->user_id_worker)->first();
-        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-            'number' => $user->phone,
-            'message' =>    'Congratulations, you have passed the test and your account has been verified'
+        NewsFeed::create([
+            'contest_id'    => $resultTestContest->contest_id,
+            'user_id_from'  => $resultTestContest->user_id_worker,
+            'user_id_to'    => $user->user_id,
+            'filecontest'   => $resultTestContest->filecontest,
+            'choices'       => 'submit'
         ]);
 
-        ResultTestContest::where('user_id_worker',$request->user_id_worker)->delete();
+        $datetime = ResultContest::create([
+            'contest_id'    => $resultTestContest->contest_id,
+            'user_id_worker'=> $resultTestContest->user_id_worker,
+            'title'         => $resultTestContest->title,
+            'filecontest'   => $resultTestContest->filecontest,
+            'is_active'     => 'active',
+            'portfolio'     => $resultTestContest->portfolio,
+        ]);
+
+        Project::where('id', $resultTestContest->id)
+            ->update([
+                'submit' => $datetime->created_at,
+            ]);
+
+        $user = User::where('id', $resultTestContest->user_id_worker)->first();
+        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+            'number' => $user->phone,
+            'message' =>    'Congratulations, your 1 design has been accepted by admin'
+        ]);
+
+        TestCountResult::where('result_contest_id', $resultTestContest->contest_id)
+                    ->update([
+                            'user_id_worker'    => request()->user()->id,
+                            'choices'           => 'accept'
+                        ]);
+
+        ResultTestContest::destroy($resultTestContest);
         return redirect()->back()->with('status', 'Account Success verified');
     }
     public function ViewAccount(Request $request)
@@ -83,12 +83,16 @@ class ResultTestContestController extends Controller
         } else {
             $status = "Offline. Last seen: " . Carbon::parse($user->last_seen)->diffForHumans();
         }
+        $resultreject   = TestCountResult::where('user_id_worker', $request->user_id_worker)->where('choices', 'reject')->count();
+        $resultaccept   = TestCountResult::where('user_id_worker', $request->user_id_worker)->where('choices', 'accept')->count();
         return response()->json([
             'worker'    => $worker,
             'rating'    => $rating,
             'status'    => $status,
             'user'      => $user,
             'suspend'   => $suspend,
+            'resultreject' => $resultreject,
+            'resultaccept' => $resultaccept,
         ]);
     }
     public function ViewProject(Request $request)
@@ -108,6 +112,11 @@ class ResultTestContestController extends Controller
             'number' => $user->phone,
             'message' =>    'sorry your design was rejected, please submit 1 more design'
         ]);
+        TestCountResult::where('result_contest_id', $resultTestContest->contest_id)
+            ->update([
+                'user_id_worker'    => request()->user()->id,
+                'choices'           => 'reject'
+            ]);
 
         Storage::delete('resultcontest/', $resultTestContest->filecontest);
         ResultTestContest::destroy($resultTestContest->id);

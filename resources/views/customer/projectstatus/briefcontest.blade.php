@@ -103,9 +103,9 @@
                                     <div class="dropzone-wrapper">
                                         <div class="dropzone-desc">
                                             <i class="glyphicon glyphicon-download-alt"></i>
-                                            <p>Choose an image file or drag it here.</p>
+                                            <p class="file-name">Choose an image file or drag it here.</p>
                                         </div>
-                                        <input type="file" name="filecontest" class="dropzone" multiple>
+                                        <input type="file" name="filecontest" class="dropzone" id="file">
                                     </div>
                                 </div>
                                 <div class="form-label text-capitalize" style="font-size: 12pt">

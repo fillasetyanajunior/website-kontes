@@ -46,6 +46,7 @@ class ProjectController extends Controller
             'subcatagories'         => 'required',
             'addpackage'            => 'required',
             'totalcost'             => 'required',
+            'paymentmethod'         => 'required',
         ]);
 
         $catagories     = Catagories::where('id', $request->catagories)->first();
@@ -137,6 +138,7 @@ class ProjectController extends Controller
                 'harga'                 => $request->totalcost,
                 'shouldhave'            => $request->shouldhave,
                 'shouldnothave'         => $request->shouldnothave,
+                'desaincard'            => 'not active',
             ]);
 
         if ($request->hasFile('fileperjanjian')) {
@@ -173,17 +175,33 @@ class ProjectController extends Controller
             'packageupgrade'    => $addprojectupgrades,
             'harga'             => $request->totalcost,
         ]);
-        ProjectPayment::create([
-            'user_id'               => request()->user()->id,
-            'id_project'            => $idproject,
-            'project_id'            => $id->id,
-            'payment_id_transaksi'  => $request->id_transaksi,
-            'invoicepayment'        => $request->title,
-            'name_transaksi'        => $request->name_transaksi,
-            'email_transaksi'       => $request->email_transaksi,
-            'name'                  => request()->user()->name,
-            'email'                 => request()->user()->email,
-        ]);
+
+        if ($request->paymentmethod == 1) {
+            ProjectPayment::create([
+                'user_id'               => request()->user()->id,
+                'id_project'            => $idproject,
+                'project_id'            => $id->id,
+                'payment_id_transaksi'  => $request->id_transaksi,
+                'invoicepayment'        => $request->title,
+                'name_transaksi'        => $request->name_transaksi,
+                'email_transaksi'       => $request->email_transaksi,
+                'name'                  => request()->user()->name,
+                'email'                 => request()->user()->email,
+            ]);
+        } else {
+            ProjectPayment::create([
+                'user_id'               => request()->user()->id,
+                'id_project'            => $idproject,
+                'project_id'            => $id->id,
+                'payment_id_transaksi'  => 'Other Banks',
+                'invoicepayment'        => $request->title,
+                'name_transaksi'        => 'Other Banks',
+                'email_transaksi'       => 'Other Banks',
+                'name'                  => request()->user()->name,
+                'email'                 => request()->user()->email,
+            ]);
+        }
+
         $user = User::where('id',request()->user()->id)->first();
         Http::post(env('API_WHATSAPP_URL') . 'send-message',[
             'number' => $user->phone,
@@ -210,6 +228,7 @@ Email Transaction   : ' . $request->email_transaksi
             'job_description'       => 'required',
             'budget'                => 'required',
             'timeline'              => 'required',
+            'paymentmethod'         => 'required',
         ]);
 
         $no = Project::orderBy('id_project', 'DESC')->first();
@@ -264,17 +283,31 @@ Email Transaction   : ' . $request->email_transaksi
             'harga'             => $request->budget,
             'is_active'         => 'active',
         ]);
-        ProjectPayment::create([
-            'user_id'               => request()->user()->id,
-            'id_project'            => $idproject,
-            'project_id'            => $id->id,
-            'payment_id_transaksi'  => $request->id_transaksi,
-            'invoicepayment'        => $request->title,
-            'name_transaksi'        => $request->name_transaksi,
-            'email_transaksi'       => $request->email_transaksi,
-            'name'                  => request()->user()->name,
-            'email'                 => request()->user()->email,
-        ]);
+        if ($request->paymentmethod == 1) {
+            ProjectPayment::create([
+                'user_id'               => request()->user()->id,
+                'id_project'            => $idproject,
+                'project_id'            => $id->id,
+                'payment_id_transaksi'  => $request->id_transaksi,
+                'invoicepayment'        => $request->title,
+                'name_transaksi'        => $request->name_transaksi,
+                'email_transaksi'       => $request->email_transaksi,
+                'name'                  => request()->user()->name,
+                'email'                 => request()->user()->email,
+            ]);
+        } else {
+            ProjectPayment::create([
+                'user_id'               => request()->user()->id,
+                'id_project'            => $idproject,
+                'project_id'            => $id->id,
+                'payment_id_transaksi'  => 'Other Banks',
+                'invoicepayment'        => $request->title,
+                'name_transaksi'        => 'Other Banks',
+                'email_transaksi'       => 'Other Banks',
+                'name'                  => request()->user()->name,
+                'email'                 => request()->user()->email,
+            ]);
+        }
         $user = User::where('id', request()->user()->id)->first();
         Http::post(env('API_WHATSAPP_URL') . 'send-message', [
             'number' => $user->phone,

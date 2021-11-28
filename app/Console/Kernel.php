@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new SuspendJob)->weekly();
         $schedule->job(new ProjectRunJob)->daily();
         $schedule->job(new NewsFeedJob)->lastDayOfMonth('18:00');
-        // $schedule->exec('php artisan queue:work')->everyMinute();
+        $schedule->exec('php artisan queue:work')->everyMinute();
     }
 
     /**

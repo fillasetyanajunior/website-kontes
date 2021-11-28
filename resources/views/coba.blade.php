@@ -357,6 +357,8 @@ $kirimnotifcomentar  = \App\Models\MessageComentar::where('result_id',1)->distin
 </head>
 
 <body style="font-size: 10pt">
+    <img src="{{$img}}" alt="">
+
     <div class="container mt-5">
         <div class="d-flex bd-highlight">
             <div class="w-100 h-100">

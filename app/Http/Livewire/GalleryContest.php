@@ -11,6 +11,7 @@ use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Models\ReplayPublicDiscus;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 
@@ -51,10 +52,12 @@ class GalleryContest extends Component
                         ]);
                         $worker = User::where('id', $kirimnotifcomentar[$i]->user_id)->first();
                         Mail::to($worker->email)->send(new PublicDiscussionMail($this->feedback, $project->title));
-                        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                            'number' => $worker->phone,
-                            'message' =>    'You get a comment from the contest ' . $project->title
-                        ]);
+                        if ($worker->role == 'customer') {
+                            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                                'number' => $worker->phone,
+                                'message' =>    'You get a comment from the contest ' . $project->title
+                            ]);
+                        }
                     }
                 }
             } else {
@@ -97,29 +100,7 @@ class GalleryContest extends Component
     public function render()
     {
         if (request()->user()->role == 'customer' || request()->user()->role == 'admin') {
-            if ($this->search == null) {
-                $data['resultcontest'] = ResultContest::orderBy('is_active', 'DESC')->where('contest_id', $this->project->id)->paginate(20);
-            } else {
-                if ($this->search == 1) {
-                    $data['resultcontest'] = ResultContest::orderBy('is_active', 'DESC')->where('contest_id', $this->project->id)->paginate(20);
-                } elseif ($this->search == 2) {
-                    $data['resultcontest'] = ResultContest::where('is_active', 'active')->where('contest_id', $this->project->id)->paginate(20);
-                } elseif ($this->search == 3) {
-                    $data['resultcontest'] = ResultContest::orderBy('nilai', 'DESC')->where('contest_id', $this->project->id)->paginate(20);
-                } elseif ($this->search == 4) {
-                    $data['resultcontest'] = ResultContest::where('is_active', 'eliminasi')->where('contest_id', $this->project->id)->paginate(20);
-                } elseif ($this->search == 5) {
-                    $data['resultcontest'] = ResultContest::orderBy('is_active', 'DESC')->where('contest_id', $this->project->id)->paginate(20);
-                } elseif ($this->search == 6) {
-                    $data['resultcontest'] = ResultContest::orderBy('nilai', 'DESC')->where('contest_id', $this->project->id)->paginate(20);
-                } else {
-                    $data['resultcontest'] = ResultContest::orderBy('created_at', 'DESC')->where('contest_id', $this->project->id)->paginate(20);
-                }
-            }
-        } else {
-            if ($this->project->is_active == 'running') {
-                $data['resultcontest'] = ResultContest::orderBy('is_active', 'DESC')->where('contest_id', $this->project->id)->where('user_id_worker', request()->user()->id)->paginate(20);
-            } else {
+            if (is_numeric($this->search)) {
                 if ($this->search == null) {
                     $data['resultcontest'] = ResultContest::orderBy('is_active', 'DESC')->where('contest_id', $this->project->id)->paginate(20);
                 } else {
@@ -138,6 +119,47 @@ class GalleryContest extends Component
                     } else {
                         $data['resultcontest'] = ResultContest::orderBy('created_at', 'DESC')->where('contest_id', $this->project->id)->paginate(20);
                     }
+                }
+            } else {
+                $data['resultcontest'] = DB::table('result_contests')
+                                            ->join('workers','result_contests.user_id_worker','=','workers.user_id')
+                                            ->orderBy('is_active', 'DESC')
+                                            ->where('contest_id', $this->project->id)
+                                            ->where('name', 'LIKE', '%' . $this->search . '%')
+                                            ->paginate(20);
+            }
+
+        } else {
+            if ($this->project->is_active == 'running') {
+                $data['resultcontest'] = ResultContest::orderBy('is_active', 'DESC')->where('contest_id', $this->project->id)->where('user_id_worker', request()->user()->id)->paginate(20);
+            } else {
+                if (is_numeric($this->search)) {
+                    if ($this->search == null) {
+                        $data['resultcontest'] = ResultContest::orderBy('is_active', 'DESC')->where('contest_id', $this->project->id)->paginate(20);
+                    } else {
+                        if ($this->search == 1) {
+                            $data['resultcontest'] = ResultContest::orderBy('is_active', 'DESC')->where('contest_id', $this->project->id)->paginate(20);
+                        } elseif ($this->search == 2) {
+                            $data['resultcontest'] = ResultContest::where('is_active', 'active')->where('contest_id', $this->project->id)->paginate(20);
+                        } elseif ($this->search == 3) {
+                            $data['resultcontest'] = ResultContest::orderBy('nilai', 'DESC')->where('contest_id', $this->project->id)->paginate(20);
+                        } elseif ($this->search == 4) {
+                            $data['resultcontest'] = ResultContest::where('is_active', 'eliminasi')->where('contest_id', $this->project->id)->paginate(20);
+                        } elseif ($this->search == 5) {
+                            $data['resultcontest'] = ResultContest::orderBy('is_active', 'DESC')->where('contest_id', $this->project->id)->paginate(20);
+                        } elseif ($this->search == 6) {
+                            $data['resultcontest'] = ResultContest::orderBy('nilai', 'DESC')->where('contest_id', $this->project->id)->paginate(20);
+                        } else {
+                            $data['resultcontest'] = ResultContest::orderBy('created_at', 'DESC')->where('contest_id', $this->project->id)->paginate(20);
+                        }
+                    }
+                } else {
+                    $data['resultcontest'] = DB::table('result_contests')
+                                                ->join('workers','result_contests.user_id_worker','=','workers.user_id')
+                                                ->orderBy('is_active', 'DESC')
+                                                ->where('contest_id', $this->project->id)
+                                                ->where('name','LIKE', '%' . $this->search . '%')
+                                                ->paginate(20);
                 }
             }
         }

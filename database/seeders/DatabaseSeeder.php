@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             'password'          => Hash::make("12345678"),
             'role'              => 'admin',
             'phone'             => '6285157163319@c.us',
+            'kodenegara'        => '62',
             'messenger_color'   => '#2180f3',
             'avatar'            => 'default.jpg',
             'created_at'        => Carbon::now(),
@@ -36,6 +37,7 @@ class DatabaseSeeder extends Seeder
             'password'          => Hash::make("12345678"),
             'role'              => 'customer',
             'phone'             => '6285157163319@c.us',
+            'kodenegara'        => '62',
             'messenger_color'   => '#2180f3',
             'avatar'            => 'default.jpg',
             'created_at'        => Carbon::now(),
@@ -48,6 +50,7 @@ class DatabaseSeeder extends Seeder
             'password'          => Hash::make("12345678"),
             'role'              => 'worker',
             'phone'             => '6285157163319@c.us',
+            'kodenegara'        => '62',
             'messenger_color'   => '#2180f3',
             'avatar'            => 'default.jpg',
             'created_at'        => Carbon::now(),
@@ -60,6 +63,7 @@ class DatabaseSeeder extends Seeder
             'password'          => Hash::make("12345678"),
             'role'              => 'customer',
             'phone'             => '6285157163319@c.us',
+            'kodenegara'        => '62',
             'messenger_color'   => '#2180f3',
             'avatar'            => 'default.jpg',
             'created_at'        => Carbon::now(),
@@ -72,6 +76,7 @@ class DatabaseSeeder extends Seeder
             'password'          => Hash::make("12345678"),
             'role'              => 'worker',
             'phone'             => '6285157163319@c.us',
+            'kodenegara'        => '62',
             'messenger_color'   => '#2180f3',
             'avatar'            => 'default.jpg',
             'created_at'        => Carbon::now(),
@@ -269,8 +274,9 @@ class DatabaseSeeder extends Seeder
         DB::table('opsi_package_upgrades')->insert($opsiupgrade);
         DB::table('job_catagories')->insert($job);
 
-        // $this->call([
-        //     IconSeeder::class,
-        // ]);
+        $this->call([
+            KodeNegara::class,
+            ColorCodeSeeder::class,
+        ]);
     }
 }

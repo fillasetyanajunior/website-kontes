@@ -3,6 +3,8 @@
 namespace App\Actions\Fortify;
 
 use App\Models\Customer;
+use App\Models\EmailList;
+use App\Models\KodeTelponNegara;
 use App\Models\User;
 use App\Models\Worker;
 use Illuminate\Support\Facades\Hash;
@@ -29,7 +31,7 @@ class CreateNewUser implements CreatesNewUsers
                 'string',
                 'email',
                 'max:255',
-                Rule::unique(User::class),
+                Rule::unique(EmailList::class),
             ],
             'password' => $this->passwordRules(),
             'role' => ['required'],
@@ -42,14 +44,28 @@ class CreateNewUser implements CreatesNewUsers
             $role = "customer";
         }
 
+        $kodes = KodeTelponNegara::where('code',$input['kodenegara'])->first();
+        $kode = explode(' ',$kodes->code);
+        if (count($kode) > 1) {
+            $code = rand($kode[0], $kode[1]);
+        } else {
+            $code = $kodes->code;
+        }
+
+
         $id = User::create([
             'name'              => $input['name'],
             'email'             => $input['email'],
             'password'          => Hash::make($input['password']),
             'role'              => $role,
             'avatar'            => 'default.jpg',
-            'phone'             => '62' . $input['phone'] . '@c.us',
+            'phone'             => $code . $input['phone'] . '@c.us',
+            'kodenegera'        => $input['kodenegara'],
             'messenger_color'   => '#2180f3',
+        ]);
+
+        EmailList::create([
+            'email' => $input['email'],
         ]);
 
         $location = geoip()->getLocation($_SERVER['REMOTE_ADDR']);

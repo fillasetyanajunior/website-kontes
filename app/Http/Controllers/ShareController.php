@@ -22,10 +22,6 @@ class ShareController extends Controller
         foreach ($data as $item) {
             $worker = User::where('id',$item->user_id_worker)->first();
             Mail::to($worker->email)->send(new ShareContestMail($project->id));
-            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                'number' => $worker->phone,
-                'message' =>    'Congratulations, you received a contest invitation from a customer, please check your email for the contest link'
-            ]);
 
         }
         return redirect()->back()->with('status','Share Contest Success');

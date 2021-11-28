@@ -9,7 +9,11 @@
         alt="summer‘s coming trimm your sheeps" style="display:block; border:0; margin:0 0 44px; background:#eeeeee;">
     <p
         style="margin:0 30px 33px; text-align:center; text-transform:uppercase; font-size:24px; line-height:30px; font-weight:bold; color:#484a42;">
+        @if ($role == 'customer')
         Email Choose Winner
+        @else
+        Email Winner
+        @endif
     </p>
     <p
         style="margin:0 30px 33px; text-align:left; text-transform:capitalize; font-size:14px; line-height:30px; font-weight:bold; color:#484a42;">

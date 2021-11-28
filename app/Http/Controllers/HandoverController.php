@@ -57,10 +57,6 @@ class HandoverController extends Controller
             'number' => $user->phone,
             'message' =>    'The project you ordered has been completed.'
         ]);
-        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-            'number' => $worker->phone,
-            'message' =>    'the handover has been confirmed successfully and we will immediately send the payment to you'
-        ]);
 
         Project::where('id',$project->id)
                 ->update([
@@ -165,5 +161,23 @@ class HandoverController extends Controller
         $id = Crypt::decrypt($request->id);
         Font::where('name', $id)->delete();
         return redirect()->back()->with('status','Delete Font Berhasil di Delete');
+    }
+    public function SubmitPilihanDesain(Project $project, Request $request)
+    {
+        $pilihan = $request->pilihan1 . '/' . $request->pilihan2 . '/' . $request->pilihan3;
+        Project::where('id',$project->id)
+                ->update([
+                    'pilihandesain' => $pilihan,
+                ]);
+        return redirect()->back();
+    }
+    public function AcceptPilihanDesain(Project $project)
+    {
+        Project::where('id',$project->id)
+                ->update([
+                    'expired_desaincard'    => date('Y-m-d', strtotime('+2 weeks')),
+                    'desaincard'            => 'active',
+                ]);
+        return redirect()->back();
     }
 }

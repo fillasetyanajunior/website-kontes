@@ -12,6 +12,12 @@ $(document).ready(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     });
+    $("#searchcustomer").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#resulttabelcustomer tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
     $("#searchprojectrunningadmin").on("keyup", function () {
         var value = $(this).val().toLowerCase();
         $("#resultprojectrunningadmin tr").filter(function () {
@@ -99,13 +105,56 @@ $(document).ready(function () {
             window.location.assign('/browseproject/sort/' + value)
         }
     });
-    //search enteries
-    $('#searchentries').keyup(function () {
-        var value = $(this).val().toLowerCase();
-        $("#gallerysearch").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+
+    //Management Admin
+    $('#addadmin').on('click', function () {
+        $('.footer_admin button[type=submit]').html('Add');
+        $('#AdminModalLabel').html('Add Admin');
+        $('.body_admin form').attr('action', '/managementadmin/store');
+        $('.body_admin form').attr('method', 'post');
+
+        $('.password').show()
+        $('#name').val('')
+        $('#email').val('')
+        $('#passoword').val('')
+        $('#phone').val('')
+        $('#kodenegara').val('')
+    });
+    $('#editadmin*').on('click', function () {
+        var _id = $(this).data('id');
+        $('.footer_admin button[type=submit]').html('Edit');
+        $('#AdminModalLabel').html('Edit Admin');
+        $('.body_admin form').attr('action', '/managementadmin/update/' + _id);
+        $('.body_admin form').attr('method', 'post');
+
+
+        let _url = '/managementadmin/edit/';
+        let _token = $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+            type: 'POST',
+            url: _url + _id,
+            data: {
+                _token: _token,
+            },
+            success: function (hasil) {
+                $('.password').hide()
+                $('#name').val(hasil.user.name)
+                $('#email').val(hasil.user.email)
+                var phone = hasil.user.phone
+                $('#phone').val(phone.split('@')[0])
+                $("#kodenegara option[value='" + hasil.user.kodenegara + "']").attr('selected', true);
+            }
         });
-    })
+    });
+
+    // //search enteries
+    // $('#searchentries').keyup(function () {
+    //     var value = $(this).val().toLowerCase();
+    //     $("#gallerysearch").filter(function () {
+    //         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    //     });
+    // })
 
     //Contest
     var s = $('#tambahresultcontest').data('catagories')
@@ -1119,6 +1168,7 @@ $(document).ready(function () {
                 $('#statusaccount').html(hasil.worker.status_account)
                 $('#earnings').html(formatter.format(hasil.worker.earning))
                 $('#oncesuspend').html(hasil.suspend + ' X Account Suspend')
+                $('#statustest').html(hasil.resultaccept + ' Accept ' + hasil.resultreject + ' Reject')
 
                 if (hasil.rating > 20) {
                     $('#rating').append(
@@ -1180,9 +1230,13 @@ $(document).ready(function () {
                                 '<img src="' + _asset + '/resultcontest' + '/' + resultproject.filecontest + '" class="rounded" style="width: 300px; height: 300px; overflow: hidden width: 100%;" >' +
                                 '</a>' +
                                 '<div class="d-flex align-items-center px-2 mt-5">' +
+                                '<a href="/briefcontest/' + resultproject.id + '" type="submit" class="btn btn-green"> View </a>' +
+                                '<form action="/resulttestcontest/updatetest/' + resultproject.id +
+                                '" method="post" class="mx-3"><input type="hidden" name="_token" value="' + _token +
+                                '"> <button type="submit" class="btn btn-primary"> Accept </button> </form>' +
                                 '<form action="/resulttestcontest/delete/' + resultproject.id +
                                 '" method="post"><input type="hidden" name="_token" value="' + _token +
-                                '"> <button type="submit" class="btn btn-primary"> Delete </button> </form>' +
+                                '"> <button type="submit" class="btn btn-red"> Reject </button> </form>' +
                                 '</div>' +
                                 '</div>' +
                                 '</div>'
@@ -1304,5 +1358,21 @@ $(document).ready(function () {
 
     $('#customer_id').prop('disabled', true);
     $('#locationcustomer').prop('disabled', true);
+
+    const file = document.querySelector('#file');
+    file.addEventListener('change', (e) => {
+        // Get the selected file
+        const [file] = e.target.files;
+        // Get the file name and size
+        const {
+            name: fileName,
+            size
+        } = file;
+        // Convert size in bytes to kilo bytes
+        const fileSize = (size / 1000).toFixed(2);
+        // Set the text content
+        const fileNameAndSize = `${fileName} - ${fileSize}KB`;
+        document.querySelector('.file-name').textContent = fileNameAndSize;
+    });
 
 });

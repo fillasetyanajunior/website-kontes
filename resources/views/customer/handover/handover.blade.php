@@ -52,6 +52,173 @@
                 </div>
                 @endif
                 @endif
+                @if ($project->desaincard != null)
+
+                @if ($project->desaincard == 'not active' && $project->is_active == 'handover' && request()->user()->role != 'worker')
+                <div class="card">
+                    <div class="card-body">
+                        @if ($project->pilihandesain == null)
+                        <form action="/handoverproject/submitdesaincard/{{$project->id}}" method="post" class="row">
+                            @csrf
+                            <div class="form-group col-lg-4">
+                                <label for="pilihan1">Desain Card 1</label>
+                                <select name="pilihan1" id="pilihan1" class="form-control">
+                                    <option value="">-- Pilihan --</option>
+                                    <option value="1">Business Card</option>
+                                    <option value="2">Email Signature</option>
+                                    <option value="3">Letterheads</option>
+                                    <option value="4">Flayer</option>
+                                    <option value="5">Invoices</option>
+                                    <option value="6">Post Card</option>
+                                    <option value="7">Facebook Cover</option>
+                                    <option value="8">Facebook Post</option>
+                                    <option value="9">Youtube Benners</option>
+                                    <option value="10">Instagram Post</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <label for="pilihan2">Desain Card 2</label>
+                                <select name="pilihan2" id="pilihan1" class="form-control">
+                                    <option value="">-- Pilihan --</option>
+                                    <option value="1">Business Card</option>
+                                    <option value="2">Email Signature</option>
+                                    <option value="3">Letterheads</option>
+                                    <option value="4">Flayer</option>
+                                    <option value="5">Invoices</option>
+                                    <option value="6">Post Card</option>
+                                    <option value="7">Facebook Cover</option>
+                                    <option value="8">Facebook Post</option>
+                                    <option value="9">Youtube Benners</option>
+                                    <option value="10">Instagram Post</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <label for="pilihan3">Desain Card 3</label>
+                                <select name="pilihan3" id="pilihan3" class="form-control">
+                                    <option value="">-- Pilihan --</option>
+                                    <option value="1">Business Card</option>
+                                    <option value="2">Email Signature</option>
+                                    <option value="3">Letterheads</option>
+                                    <option value="4">Flayer</option>
+                                    <option value="5">Invoices</option>
+                                    <option value="6">Post Card</option>
+                                    <option value="7">Facebook Cover</option>
+                                    <option value="8">Facebook Post</option>
+                                    <option value="9">Youtube Benners</option>
+                                    <option value="10">Instagram Post</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary ml-auto mr-3 text-capitalize">Submit</button>
+                        </form>
+                        @else
+                        @php
+                            $projectdesaincard = explode('/',$project->pilihandesain);
+                            for ($i=0; $i < count($projectdesaincard); $i++) {
+                                if ($projectdesaincard[$i] == 1) {
+                                    $pilihan[$i] = 'Business Card';
+                                } elseif($projectdesaincard[$i] == 2){
+                                    $pilihan[$i] = 'Email Signature';
+                                } elseif($projectdesaincard[$i] == 3){
+                                    $pilihan[$i] = 'Letterheads';
+                                } elseif($projectdesaincard[$i] == 4){
+                                    $pilihan[$i] = 'Flayer';
+                                } elseif($projectdesaincard[$i] == 5){
+                                    $pilihan[$i] = 'Invoices';
+                                } elseif($projectdesaincard[$i] == 6){
+                                    $pilihan[$i] = 'Post Card';
+                                } elseif($projectdesaincard[$i] == 7){
+                                    $pilihan[$i] = 'Facebook Cover';
+                                } elseif($projectdesaincard[$i] == 8){
+                                    $pilihan[$i] = 'Facebook Post';
+                                } elseif($projectdesaincard[$i] == 9){
+                                    $pilihan[$i] = 'Youtube Benners';
+                                }elseif ($projectdesaincard[$i] == 10) {
+                                    $pilihan[$i] = 'Instagram Post';
+                                }else{
+                                    $pilihan[$i] = '';
+                                }
+                            }
+                        @endphp
+                        <div class="row">
+                            <div class="form-group col-lg-4">
+                                <label for="pilihan1">Desain Card 1</label>
+                                <input type="text" value="{{$pilihan[0]}}" class="form-control">
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <label for="pilihan2">Desain Card 2</label>
+                                <input type="text" value="{{$pilihan[1]}}" class="form-control">
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <label for="pilihan3">Desain Card 3</label>
+                                <input type="text" value="{{$pilihan[2]}}" class="form-control">
+                            </div>
+                        </div>
+                    @endif
+                    </div>
+                </div>
+                @elseif($project->desaincard == 'not active' && $project->is_active == 'handover' && request()->user()->role == 'worker')
+                @if ($project->pilihandesain != null)
+                <div class="card">
+                    <div class="card-body">
+                        <form action="/handoverproject/acceptdesaincard/{{$project->id}}" method="post" class="row">
+                            @csrf
+                            @php
+                                $projectdesaincard = explode('/',$project->pilihandesain);
+                                for ($i=0; $i < count($projectdesaincard); $i++) {
+                                    if ($projectdesaincard[$i] == 1) {
+                                        $pilihan[$i] = 'Business Card';
+                                    } elseif($projectdesaincard[$i] == 2){
+                                        $pilihan[$i] = 'Email Signature';
+                                    } elseif($projectdesaincard[$i] == 3){
+                                        $pilihan[$i] = 'Letterheads';
+                                    } elseif($projectdesaincard[$i] == 4){
+                                        $pilihan[$i] = 'Flayer';
+                                    } elseif($projectdesaincard[$i] == 5){
+                                        $pilihan[$i] = 'Invoices';
+                                    } elseif($projectdesaincard[$i] == 6){
+                                        $pilihan[$i] = 'Post Card';
+                                    } elseif($projectdesaincard[$i] == 7){
+                                        $pilihan[$i] = 'Facebook Cover';
+                                    } elseif($projectdesaincard[$i] == 8){
+                                        $pilihan[$i] = 'Facebook Post';
+                                    } elseif($projectdesaincard[$i] == 9){
+                                        $pilihan[$i] = 'Youtube Benners';
+                                    }elseif ($projectdesaincard[$i] == 10) {
+                                        $pilihan[$i] = 'Instagram Post';
+                                    }else{
+                                        $pilihan[$i] = '';
+                                    }
+                                }
+                            @endphp
+                            <div class="form-group col-lg-4">
+                                <label for="pilihan1">Desain Card 1</label>
+                                <input type="text" value="{{$pilihan[0]}}" class="form-control">
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <label for="pilihan2">Desain Card 2</label>
+                                <input type="text" value="{{$pilihan[1]}}" class="form-control">
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <label for="pilihan3">Desain Card 3</label>
+                                <input type="text" value="{{$pilihan[2]}}" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary ml-auto mr-3 text-capitalize">Accept</button>
+                        </form>
+                    </div>
+                </div>
+                @endif
+                @else
+                @if ($project->desaincard == 'active' && $project->is_active == 'handover')
+                <div class="card">
+                    <div class="card-body">
+                        <div class="flex-grow-1 ">
+                            <div class="alert alert-success text-capitalize">When the card design work has begun please go to the list of project designs to do the design work requested by the customer. Your work time is 2 weeks.</div>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                @endif
+                @endif
                 <div class="card-body mb-4">
                     <div class="d-flex ">
                         <div class=" align-self-center">

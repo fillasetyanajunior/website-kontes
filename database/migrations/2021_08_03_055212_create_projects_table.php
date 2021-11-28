@@ -29,6 +29,9 @@ class CreateProjectsTable extends Migration
             $table->integer('nilai')->nullable();
             $table->date('submit')->nullable();
             $table->enum('guarded', ['active', 'not active'])->default('not active');
+            $table->enum('desaincard', ['active', 'not active','expired'])->nullable();
+            $table->string('pilihandesain')->nullable();
+            $table->date('expired_desaincard')->nullable();
             $table->timestamps();
         });
     }

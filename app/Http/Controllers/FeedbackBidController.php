@@ -53,10 +53,6 @@ class FeedbackBidController extends Controller
                 ]);
 
                 Mail::to($worker->email)->send(new FeedbackMail($request->feedback,$project->title));
-                Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                    'number' => $worker->phone,
-                    'message' =>    'You get feedback from the Direct ' . $project->title
-                ]);
             } else {
                 $admin = User::where('role','admin')->get();
                 for ($i=0; $i < count($admin); $i++) {
@@ -170,10 +166,6 @@ class FeedbackBidController extends Controller
             Mail::to($worker->email)->send(new EliminasiMail($resultproject->contest_id, $worker->role));
             Mail::to(request()->user()->email)->send(new EliminasiMail($resultproject->contest_id, request()->user()->role));
             Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                'number' => $worker->phone,
-                'message' =>    'Sorry you were eliminated from ' . $project->title
-            ]);
-            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
                 'number' => request()->user()->phone,
                 'message' =>    'Thank you for eliminating participants ' . $project->title
             ]);
@@ -249,10 +241,6 @@ class FeedbackBidController extends Controller
             Http::post(env('API_WHATSAPP_URL') . 'send-message', [
                 'number' => request()->user()->phone,
                 'message' =>    'You have chosen ' . $worker->name . ' as the champion of the Direct ' . $project->title
-            ]);
-            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                'number' => $worker->phone,
-                'message' =>    'Congratulations you are the champion of ' . $project->title
             ]);
 
             Worker::where('user_id',$resultproject->user_id_worker)

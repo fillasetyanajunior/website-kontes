@@ -4,7 +4,7 @@
 <div class="page-single">
     <div class="container">
         <div class="row">
-            <div class="col col-login mx-auto">
+            <div class="col-lg-6 mx-auto">
                 <div class="text-center mb-6">
                     <img src="{{url('assets/auth/img/logo.jpg')}}" class="h-6" alt="">
                 </div>
@@ -22,10 +22,21 @@
                             <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
                                 value="{{old('email')}}" placeholder="Enter email">
                         </div>
-                        <div class="form-group">
+                        <div>
                             <label class="form-label">Phone Number</label>
-                            <input type="numeric" class="form-control @error('phone') is-invalid @enderror" name="phone"
-                                value="{{old('phone')}}" placeholder="Enter phone">
+                            <div class="row">
+                                <div class="form-group col-4">
+                                    <select id="select-beast" class="form-control custom-select" name="kodenegara">
+                                        @foreach ($kodenegara as $itemkodenegara)
+                                        <option value="{{$itemkodenegara->code}}">{{$itemkodenegara->name}} +{{$itemkodenegara->code}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-8">
+                                    <input type="numeric" class="form-control @error('phone') is-invalid @enderror"
+                                        name="phone" value="{{old('phone')}}" placeholder="Enter phone">
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Password</label>

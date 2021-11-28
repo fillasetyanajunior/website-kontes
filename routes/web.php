@@ -8,11 +8,14 @@ use App\Http\Controllers\CobaController;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DataTotalCostController;
+use App\Http\Controllers\DesainCardController;
+use App\Http\Controllers\DesainListController;
 use App\Http\Controllers\FeedbackBidController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HandoverController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\ManagementAdminController;
 use App\Http\Controllers\ManagementCustomerController;
 use App\Http\Controllers\ManagementWebsiteController;
 use App\Http\Controllers\ManagementWorkerController;
@@ -23,7 +26,6 @@ use App\Http\Controllers\UploadFileController;
 use App\Http\Controllers\ZipController;
 use App\Http\Controllers\MessageHandoverController;
 use App\Http\Controllers\OpsiContestController;
-use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\PerjanjianController;
 use App\Http\Controllers\ReportController;
@@ -32,7 +34,6 @@ use App\Http\Controllers\ShareController;
 use App\Http\Controllers\SubCatagoriesController;
 use App\Http\Controllers\WaittingpaymentController;
 use App\Http\Controllers\WorkerController;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,8 +52,9 @@ Route::get('/', function () {
 });
 
 //Coba Cek
-
-Route::get('/coba',[CobaController::class,'coba']
+Route::get('/coba',
+// [DesainCardController::class,'BusinessCard']
+// [CobaController::class,'coba']
 // function () {
 
 //         Telegram::sendMessage([
@@ -106,6 +108,26 @@ Route::middleware('verified')->group(function () {
     Route::post('/kirimessagehandover', [MessageHandoverController::class, 'KirimFeedbackMessage'])->name('messagehandover');
     //NewsFeed
     Route::get('/newsfeed', [NewsFeedController::class, 'NewsFeed'])->name('newsfeed');
+    //Desain Canvas
+    Route::get('/themes', [DesainListController::class, 'DesainList'])->name('desainlist');
+    Route::middleware('mobile')->group(function () {
+        Route::get('/themes/businesscard', [DesainCardController::class, 'BusinessCard'])->name('businesscard');
+        Route::get('/themes/emailsignature',[DesainCardController::class, 'EmailSignature'])->name('emailsignature');
+        Route::get('/themes/letterheads', [DesainCardController::class, 'Letterheads'])->name('letterheads');
+        Route::get('/themes/flayer', [DesainCardController::class, 'Flayer'])->name('flayer');
+        Route::get('/themes/invoices', [DesainCardController::class, 'Invoices'])->name('invoices');
+        Route::get('/themes/postcard', [DesainCardController::class, 'PostCard'])->name('postcard');
+        Route::get('/themes/facebookcover', [DesainCardController::class, 'FacebookCover'])->name('facebookcover');
+        Route::get('/themes/facebookpost', [DesainCardController::class, 'FacebookPost'])->name('facebookpost');
+        Route::get('/themes/youtubebenners',[DesainCardController::class, 'YoutubeBenners'])->name('youtubebenners');
+        Route::get('/themes/instagrampost', [DesainCardController::class, 'InstagramPost'])->name('instagrampost');
+        Route::post('/themes/store', [DesainCardController::class, 'StoreDesainCard']);
+        Route::post('/themes/update/{themesDesainCard}', [DesainCardController::class, 'UpdateDesainCard']);
+        Route::post('/themes/loadthemes/{themesDesainCard}', [DesainCardController::class, 'LoadThemes']);
+    });
+    //Accept And Submit Desain Card
+    Route::post('/handoverproject/acceptdesaincard/{project}', [HandoverController::class,'AcceptPilihanDesain']);
+    Route::post('/handoverproject/submitdesaincard/{project}', [HandoverController::class,'SubmitPilihanDesain']);
 
     Route::middleware('admin')->group(function () {
         //Admin
@@ -164,6 +186,12 @@ Route::middleware('verified')->group(function () {
         Route::post('/resulttestcontest/viewproject/{user_id_worker}', [ResultTestContestController::class, 'ViewProject']);
         Route::put('/resulttestcontest/updatetest/{user_id_worker}', [ResultTestContestController::class, 'UpdateTestContest']);
         Route::post('/resulttestcontest/delete/{resultTestContest}', [ResultTestContestController::class, 'DeleteResultTestContest']);
+        //Management Admin
+        Route::get('/managementadmin', [ManagementAdminController::class,'Admin'])->name('managementadmin');
+        Route::post('/managementadmin/store', [ManagementAdminController::class,'AdminStore']);
+        Route::post('/managementadmin/edit/{user}', [ManagementAdminController::class,'AdminEdit']);
+        Route::post('/managementadmin/update/{user}', [ManagementAdminController::class,'AdminUpdate']);
+        Route::delete('/managementadmin/delete/{user}', [ManagementAdminController::class,'AdminDelete']);
     });
 
     Route::middleware('admincustomer')->group(function () {

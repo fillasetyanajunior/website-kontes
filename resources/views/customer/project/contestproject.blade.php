@@ -391,6 +391,11 @@
                                         <div class="text-center">
                                             <h2>Payment Method</h2>
                                         </div>
+                                        <select name="paymentmethod" id="paymentmethod" class="form-control mb-4">
+                                            <option value="">-- Pilih --</option>
+                                            <option value="1">Paypal</option>
+                                            <option value="2">Other Banks</option>
+                                        </select>
                                         <div id="paypal-button-container" class="text-center"></div>
                                     </div>
                                 </div>

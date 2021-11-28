@@ -10,6 +10,11 @@
         </div>
         <div class="row row-cards row-deck">
             <div class="col-12">
+                <div class="d-flex mb-4">
+                    <div class="ml-auto">
+                        <input type="text" id="searchcustomer" class="form-control" placeholder="Search">
+                    </div>
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">List Customer</h3>
@@ -25,7 +30,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="resulttabelcustomer">
                                 @php
                                 $i=1;
                                 @endphp

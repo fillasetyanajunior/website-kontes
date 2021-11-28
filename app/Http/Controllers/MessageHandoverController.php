@@ -49,10 +49,6 @@ class MessageHandoverController extends Controller
             $worker = User::where('id', $MessageHandover->worker_id)->first();
             if ($worker != null) {
                 Mail::to($worker->email)->send(new HandoverCommentMail($request->feedback, $project->title));
-                Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                    'number' => $worker->phone,
-                    'message' =>    'You get a comment from the contest ' . $project->title
-                ]);
             } else {
                 $admin = User::where('role', 'admin')->get();
                 for ($i = 0; $i < count($admin); $i++) {

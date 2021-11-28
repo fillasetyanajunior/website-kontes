@@ -6,6 +6,7 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Models\KodeTelponNegara;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -32,7 +33,7 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot()
     {
         Fortify::loginView(fn () => view('auth.login'));
-        Fortify::registerView(fn () => view('auth.register'));
+        Fortify::registerView(fn () => view('auth.register',['kodenegara' => KodeTelponNegara::all()]));
         Fortify::verifyEmailView(fn () => view('auth.verify'));
         Fortify::requestPasswordResetLinkView(fn () => view('auth.forgot'));
         Fortify::resetPasswordView(fn (Request $request) => view('auth.reset', compact('request')));

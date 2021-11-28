@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->enum('role', ['admin', 'customer', 'worker']);
             $table->string('phone');
+            $table->string('kodenegara');
             $table->string('avatar')->nullable();
             $table->string('messenger_color');
             $table->integer('dark_mode')->default(0);

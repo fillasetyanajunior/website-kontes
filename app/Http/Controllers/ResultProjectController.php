@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\ResultContest;
 use App\Models\ResultProject;
 use App\Models\ResultTestContest;
+use App\Models\TestCountResult;
 use App\Models\User;
 use App\Models\Worker;
 use Illuminate\Http\Request;
@@ -61,13 +62,19 @@ class ResultProjectController extends Controller
                     ]);
         } else if ($workers->status_account == 'unverified') {
 
-            ResultTestContest::create([
+            $result = ResultTestContest::create([
                 'contest_id'    => $request->id,
                 'user_id_worker'=> request()->user()->id,
                 'title'         => $request->title,
                 'filecontest'   => $name,
                 'is_active'     => 'active',
                 'portfolio'     => $portfolio,
+            ]);
+
+            TestCountResult::create([
+                'result_contest_id' => $result->id,
+                'user_id_worker'    => request()->user()->id,
+                'choices'           => 'active'
             ]);
 
             $result = ResultTestContest::where('user_id_worker',request()->user()->id)->distinct('contest_id')->count();

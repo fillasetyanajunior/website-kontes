@@ -133,7 +133,7 @@
                 @else
                 @if (request()->user()->role == 'customer' && request()->user()->id == $project->user_id && $project->is_active == 'running' || $project->is_active == 'choose winner')
                 <button type="button" class="btn btn-primary col-lg-12 mb-5" data-toggle="modal" id="sharecontest" data-url="{{asset('assets/dashboard/images')}}"
-                    data-target="#ShareModal">Share</button>
+                    data-target="#ShareModal">Invite To Favorite Workers</button>
                 @endif
                 @endif
             </div>

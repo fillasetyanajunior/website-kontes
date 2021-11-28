@@ -2,18 +2,9 @@
     <div class="container">
         <div class="d-flex">
             <a class="header-brand" href="{{route('home')}}">
-                <img src="{{url('assets/auth/img/logo.jpg')}}" class="header-brand-img">
+                <img src="{{url('assets/dashboard/images/logo1.jpg')}}" class="header-brand-img">
             </a>
             <div class="d-flex order-lg-2 ml-auto">
-                {{-- <div class="dropdown d-none d-md-flex">
-                    <a class="nav-link icon notif" data-toggle="dropdown" data-url="{{asset('profile')}}"
-                data-id="{{request()->user()->id}}">
-                <i class="fe fe-mail"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow" id="notifdropdown">
-
-                </div>
-            </div> --}}
             <div class="dropdown">
                 <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
                     @if (Auth::user()->avatar != 'default.jpg')
@@ -107,6 +98,7 @@
                         <div class="dropdown-menu dropdown-menu-arrow">
                             <a href="{{route('managementworker')}}" class="dropdown-item ">Account Worker</a>
                             <a href="{{route('managementcustomer')}}" class="dropdown-item ">Account Customer</a>
+                            <a href="{{route('managementadmin')}}" class="dropdown-item ">Account Admin</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -125,6 +117,10 @@
                     <li class="nav-item">
                         <a href="{{route('browseproject')}}" class="nav-link"><i
                                 class="fe fe-search"></i>Browse Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('desainlist')}}" class="nav-link"><i
+                                class="fe fe-list"></i>List Desain Project</a>
                     </li>
                     @if (request()->user()->role != 'admin')
                     <li class="nav-item">

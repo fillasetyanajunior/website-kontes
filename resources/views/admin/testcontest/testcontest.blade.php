@@ -44,7 +44,7 @@
                                     <td width="100px">
                                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" id="viewtest" data-id="{{$itemtestcontest->user_id_worker}}" data-url="{{asset('storage')}}"
                                             data-target="#ViewTestModal">View</button>
-                                        <form action="/resulttestcontest/updatetest/{{$user->user_id}}" method="post"
+                                        <form action="/managementworker/statusaccount/{{$user->user_id}}" method="post"
                                             class="d-inline">
                                             @csrf
                                             @method('put')
@@ -55,6 +55,13 @@
                                             <button type="submit"
                                                 class="btn btn-success btn-sm text-white">Unverified</button>
                                             @endif
+                                            <form action="/managementworker/deleteaccount/{{$user->id}}" method="post"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit"
+                                                class="btn btn-danger btn-sm text-white">Delete</button>
+                                        </form>
                                         </form>
                                     </td>
                                 </tr>
@@ -114,6 +121,10 @@
                                     <div class="form-group mx-3">
                                         <label class="form-label">Once Suspend</label>
                                         <div class="form-control-plaintext" id="oncesuspend"></div>
+                                    </div>
+                                    <div class="form-group mx-3">
+                                        <label class="form-label">Status Test</label>
+                                        <div class="form-control-plaintext" id="statustest"></div>
                                     </div>
                                 </div>
                             </div>

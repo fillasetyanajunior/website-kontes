@@ -1,6 +1,5 @@
 $(document).ready(function () {
 
-    $(".btn-submit").attr('disabled',true);
     function initPayPalButton(payments) {
         paypal.Buttons({
             style: {
@@ -41,7 +40,6 @@ $(document).ready(function () {
                     const element = document.getElementById('paypal-button-container');
                     element.innerHTML = '';
                     element.innerHTML = '<h3>Thank you for your payment!</h3>';
-                    $(".btn-submit").attr('disabled',false);
 
                     // Or go to another URL:  actions.redirect('thank_you.html');
 
@@ -53,6 +51,24 @@ $(document).ready(function () {
             }
         }).render('#paypal-button-container');
     }
+
+    //Payment Metohod
+    $(".btn-submit").attr('disabled', true);
+    $("#paypal-button-container").hide();
+    $('#paymentmethod').change(function () {
+        var data = $(this).val();
+        if (data == 1) {
+            $(".btn-submit").attr('disabled', false);
+            $("#paypal-button-container").show();
+        } else if (data == 2) {
+            $("#paypal-button-container").hide();
+            $(".btn-submit").attr('disabled', false);
+        } else {
+            $(".btn-submit").attr('disabled', true);
+            $("#paypal-button-container").hide();
+        }
+    })
+
     $('#projectupgrades').hide()
     $('#codediscount').hide()
     $('#fileperjanjians').hide()
