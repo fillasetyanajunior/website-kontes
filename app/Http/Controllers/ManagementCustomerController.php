@@ -10,6 +10,7 @@ class ManagementCustomerController extends Controller
 {
     public function index()
     {
+        $data['title'] = 'Management Customer';
         $data['customer'] = Customer::paginate(20);
         return view('admin.customer.customer', $data);
     }

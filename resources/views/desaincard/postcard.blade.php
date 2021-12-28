@@ -708,6 +708,7 @@
                 themes: json,
                 imagess: dataURL,
                 choices: 'postcard',
+                title: '{{$title}}',
             },
             success: function (hasil) {
                 // console.log(hasil.data)

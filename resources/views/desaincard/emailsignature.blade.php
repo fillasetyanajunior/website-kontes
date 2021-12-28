@@ -744,6 +744,7 @@
                 _token: _token,
                 themes: json,
                 imagess: dataURL,
+                title: '{{$title}}',
             },
             success: function (hasil) {
                 // console.log(hasil.data)

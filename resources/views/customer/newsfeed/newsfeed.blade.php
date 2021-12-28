@@ -1,4 +1,5 @@
 @extends('layouts.layouts_dashboard')
+@section('title',$title)
 @section('content')
 <x-slidebar></x-slidebar>
 <div class="my-3 my-md-5">
@@ -32,7 +33,7 @@
                                                 </a>
                                                 You have been eliminated for
                                                 <a
-                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    href="{{'/brief' . $project->catagories_project . '/' . Crypt::encrypt($itemnewsfeed->contest_id)}}">
                                                     {{$project->title}}
                                                 </a>
                                             </div>
@@ -65,7 +66,7 @@
                                                 </a>
                                                 Your got feedback for
                                                 <a
-                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    href="{{'/brief' . $project->catagories_project . '/' . Crypt::encrypt($itemnewsfeed->contest_id)}}">
                                                     {{$project->title}}
                                                 </a>
                                             </div>
@@ -96,7 +97,7 @@
                                                 {{$project->catagories_project}} project you have passed the time
                                                 limit, choose a winner immediately for
                                                 <a
-                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    href="{{'/brief' . $project->catagories_project . '/' . Crypt::encrypt($itemnewsfeed->contest_id)}}">
                                                     {{$project->title}}
                                                 </a>
                                             </div>
@@ -121,7 +122,7 @@
                                                 </a>
                                                 Congrats you got the rating for
                                                 <a
-                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    href="{{'/brief' . $project->catagories_project . '/' . Crypt::encrypt($itemnewsfeed->contest_id)}}">
                                                     {{$project->title}}
                                                 </a>
                                             </div>
@@ -213,7 +214,7 @@
                                                 </a>
                                                 Your got comment public for
                                                 <a
-                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    href="{{'/brief' . $project->catagories_project . '/' . Crypt::encrypt($itemnewsfeed->contest_id)}}">
                                                     {{$project->title}}
                                                 </a>
                                             </div>
@@ -243,7 +244,7 @@
                                                 </a>
                                                 {{$itemnewsfeed->feedback}} for
                                                 <a
-                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    href="{{'/brief' . $project->catagories_project . '/' . Crypt::encrypt($itemnewsfeed->contest_id)}}">
                                                     {{$project->title}}
                                                 </a>
                                             </div>
@@ -268,7 +269,7 @@
                                                 </a>
                                                 Congratulations you are the winner of the contest for
                                                 <a
-                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    href="{{'/brief' . $project->catagories_project . '/' . Crypt::encrypt($itemnewsfeed->contest_id)}}">
                                                     {{$project->title}}
                                                 </a>
                                             </div>
@@ -301,7 +302,7 @@
                                                 </a>
                                                 Your got handover command for
                                                 <a
-                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    href="{{'/brief' . $project->catagories_project . '/' . Crypt::encrypt($itemnewsfeed->contest_id)}}">
                                                     {{$project->title}}
                                                 </a>
                                             </div>
@@ -331,7 +332,7 @@
                                                 </a>
                                                 submit your contest for
                                                 <a
-                                                    href="{{'/brief' . $project->catagories_project . '/' . $itemnewsfeed->contest_id}}">
+                                                    href="{{'/brief' . $project->catagories_project . '/' . Crypt::encrypt($itemnewsfeed->contest_id)}}">
                                                     {{$project->title}}
                                                 </a>
                                             </div>

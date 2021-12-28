@@ -18,6 +18,7 @@ class ManagementWorkerController extends Controller
 {
     public function index()
     {
+        $data['title']  = 'Management Worker';
         $data['worker'] = Worker::paginate(20);
         return view('admin.worker.worker', $data);
     }

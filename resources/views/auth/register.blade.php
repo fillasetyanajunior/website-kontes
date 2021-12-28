@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-lg-6 mx-auto">
                 <div class="text-center mb-6">
-                    <img src="{{url('assets/auth/img/logo.jpg')}}" class="h-6" alt="">
+                    <img src="{{url('assets/dashboard/images/logo3.png')}}" width="200px">
                 </div>
                 <form class="card" action="{{route('register')}}" method="post">
                     @csrf

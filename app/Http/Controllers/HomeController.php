@@ -15,6 +15,7 @@ class HomeController extends Controller
     }
     public function index()
     {
+        $data['title'] = 'Home';
         if (request()->user()->role == 'admin') {
             $data['project']                    = Project::paginate(20);
             $data['waittingpayment']            = Project::where('is_active', 'waiting payment')->count();

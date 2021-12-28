@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use ZipArchive;
 use Illuminate\Support\Facades\File as File;
 
@@ -11,10 +12,12 @@ class ZipController extends Controller
     {
         $zip = new ZipArchive;
 
-        $fileName = 'storage/fileuploads/AllFile' . $request->id .'.Zip';
+        $id = Crypt::decrypt($request->id);
+
+        $fileName = 'storage/fileuploads/AllFile' . $id .'.Zip';
         if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
 
-            $files = File::files(public_path('storage/fileuploads/AllFile' . $request->id));
+            $files = File::files(public_path('storage/fileuploads/AllFile' . $id));
             foreach ($files as $value) {
                 $file = basename($value);
                 $zip->addFile($value, $file);
@@ -28,10 +31,12 @@ class ZipController extends Controller
     {
         $zip = new ZipArchive;
 
-        $fileName = 'storage/fileproject/AllFileProject' . $request->id .'.Zip';
+        $id = Crypt::decrypt($request->id);
+
+        $fileName = 'storage/fileproject/AllFileProject' . $id .'.Zip';
         if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
 
-            $files = File::files(public_path('storage/fileproject/AllFileProject' . $request->id));
+            $files = File::files(public_path('storage/fileproject/AllFileProject' . $id));
             foreach ($files as $value) {
                 $file = basename($value);
                 $zip->addFile($value, $file);

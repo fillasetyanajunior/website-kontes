@@ -91,7 +91,7 @@
                     <h4 class="text-capitalize">file</h4>
                     <div class="d-flex bd-highlight mb-3">
                         <div class="bd-highlight ml-3">
-                            <a href="/convertzipproject/{{$project->id}}" class="btn btn-primary">Download All
+                            <a href="/convertzipproject/{{Crypt::encrypt($project->id)}}" class="btn btn-primary">Download All
                                 Files</a>
                         </div>
                     </div>

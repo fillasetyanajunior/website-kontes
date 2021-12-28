@@ -21,8 +21,10 @@ use Illuminate\Support\Facades\Mail;
 
 class HandoverController extends Controller
 {
-    public function HandoverIndex(Project $project)
+    public function HandoverIndex(Request $request)
     {
+        $data['title'] = 'Handover';
+        $project = Project::where('id',Crypt::decrypt($request->project))->first();
         $data['handover'] = WinnerContest::where('contest_id',$project->id)->first();
         if (request()->user()->role == 'admin') {
             $data['message']     = MessageHandover::where('result_id',$project->id)->get();

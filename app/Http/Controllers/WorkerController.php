@@ -12,6 +12,7 @@ use App\Models\Worker;
 use Carbon\Carbon;
 use Cache;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -19,6 +20,7 @@ class WorkerController extends Controller
 {
     public function profileWorker()
     {
+        $data['title']      = 'Profile';
         $data['worker']     = Worker::where('user_id',request()->user()->id)->first();
         $data['project']    = Project::where('catagories_project','contest')->get();
         $data['projects']   = Project::first();
@@ -33,11 +35,12 @@ class WorkerController extends Controller
     }
     public function ProfileWorkerPublic(Request $request)
     {
-        $data['worker']     = Worker::where('user_id',$request->id)->first();
+        $data['title']      = 'Profile Worker';
+        $data['worker']     = Worker::where('user_id',Crypt::decrypt($request->id))->first();
         $data['project']    = Project::all();
         $data['projects']   = Project::first();
-        $data['rating']     = Rating::where('user_id_worker',$request->id)->count();
-        $user               = User::where('id', $request->id)->first();
+        $data['rating']     = Rating::where('user_id_worker',Crypt::decrypt($request->id))->count();
+        $user               = User::where('id', Crypt::decrypt($request->id))->first();
         if (Cache::has('user-is-online-' . $user->id)) {
             $data['status'] =  "Online. Last seen: " . Carbon::parse($user->last_seen)->diffForHumans();
         } else {
@@ -61,7 +64,7 @@ class WorkerController extends Controller
     }
     public function profileWorkerSetting()
     {
-        $data['title']      = 'Worker Profile';
+        $data['title']      = 'Setting Profile';
         $data['worker']     = Worker::where('user_id', request()->user()->id)->first();
         return view('worker.profile_setting', $data);
     }

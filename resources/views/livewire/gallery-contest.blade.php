@@ -284,7 +284,7 @@
                         @if ($project->is_active == 'handover' && $itemresultcontest->is_active == 'winner')
                             @if (request()->user()->id == $itemresultcontest->user_id_worker || request()->user()->id == $project->user_id || request()->user()->role == 'admin')
                                 <div class="mb-1">
-                                    <a class="btn btn-primary col-12" href="/handoverproject/{{$project->id}}">Handover</a>
+                                    <a class="btn btn-primary col-12" href="/handoverproject/{{Crypt::encrypt($project->id)}}">Handover</a>
                                 </div>
                             @endif
                         @endif

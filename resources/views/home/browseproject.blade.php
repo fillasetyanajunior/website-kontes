@@ -1,4 +1,5 @@
 @extends('layouts.layouts_dashboard')
+@section('title',$title)
 @section('content')
 <x-slidebar></x-slidebar>
 <div class="my-3 my-md-5">
@@ -95,18 +96,18 @@
                             $time           = (int)((mktime (0,0,0,$month,$day,$year) - time())/86400);
                         @endphp
                         @if ($projectupgrade == null)
-                            <tr id="browsetable" data-url="{{'/brief' . $role . '/' . $itemproject->id}}">
+                            <tr id="browsetable" data-url="{{'/brief' . $role . '/' . Crypt::encrypt($itemproject->id)}}">
                         @elseif ($data->packageupgrade == null)
-                            <tr id="browsetable" data-url="{{'/brief' . $role . '/' . $itemproject->id}}">
+                            <tr id="browsetable" data-url="{{'/brief' . $role . '/' . Crypt::encrypt($itemproject->id)}}">
                         @else
                             @for ($i = 0; $i < count($projectupgrade); $i++)
                                 @php
                                     $upgrade = DB::table('opsi_package_upgrades')->where('id',$projectupgrade[$i])->first()
                                 @endphp
                                 @if ($upgrade->name == 'Non Disclosure Agreement (NDA)')
-                                    <tr id="browsetable" data-url="{{'/briefnda/' . $itemproject->id}}">
+                                    <tr id="browsetable" data-url="{{'/briefnda/' . Crypt::encrypt($itemproject->id)}}">
                                 @else
-                                    <tr id="browsetable" data-url="{{'/brief' . $role . '/' . $itemproject->id}}">
+                                    <tr id="browsetable" data-url="{{'/brief' . $role . '/' . Crypt::encrypt($itemproject->id)}}">
                                 @endif
                             @endfor
                         @endif

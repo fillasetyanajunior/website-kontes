@@ -13,6 +13,7 @@ class ManagementAdminController extends Controller
 {
     public function Admin()
     {
+        $data['title'] = 'Management Admin';
         $data['admin'] = User::where('role','admin')->simplePaginate(20);
         $data['kodenegara'] = KodeTelponNegara::all();
         return view('admin.admin.admin',$data);

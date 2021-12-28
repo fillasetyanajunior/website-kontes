@@ -708,6 +708,7 @@
                 themes: json,
                 imagess: dataURL,
                 choices: 'facebookpost',
+                title: '{{$title}}',
             },
             success: function (hasil) {
                 // console.log(hasil.data)

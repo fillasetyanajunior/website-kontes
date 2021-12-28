@@ -1,4 +1,5 @@
 @extends('layouts.layouts_dashboard')
+@section('title',$title)
 @section('content')
 <x-slidebar></x-slidebar>
 <div class="my-3 my-md-5">
@@ -149,28 +150,6 @@
                             <a href="javascript:void(0)" data-nilai="4"><i class="fa fa-star-o"></i></a>
                             <a href="javascript:void(0)" data-nilai="5"><i class="fa fa-star-o"></i></a>
                             @endif
-                        </div>
-                        <div class="ml-auto">
-                            @if ($itemresultcontest->portfolio == 'show')
-                            <div class="mb-1">
-                                <form action="/worker/profile/hideportfolio/{{$itemresultcontest->id}}" method="post">
-                                    @csrf
-                                    @method('put')
-                                    <input type="hidden" name="role" value="{{$role}}">
-                                    <button type="submit" class="btn btn-azure col-12">Hide</button>
-                                </form>
-                            </div>
-                            @else
-                            <div class="mb-1">
-                                <form action="/worker/profile/showportfolio/{{$itemresultcontest->id}}" method="post">
-                                    @csrf
-                                    @method('put')
-                                    <input type="hidden" name="role" value="{{$role}}">
-                                    <button type="submit" class="btn btn-green col-12">Show</button>
-                                </form>
-                            </div>
-                            @endif
-
                         </div>
                     </div>
                 </div>

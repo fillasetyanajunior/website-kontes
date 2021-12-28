@@ -1,4 +1,5 @@
 @extends('layouts.layouts_dashboard')
+@section('title',$title)
 @section('content')
 <x-slidebar></x-slidebar>
 <div class="my-3 my-md-5">
@@ -61,7 +62,7 @@
                         <form action="/handoverproject/submitdesaincard/{{$project->id}}" method="post" class="row">
                             @csrf
                             <div class="form-group col-lg-4">
-                                <label for="pilihan1">Desain Card 1</label>
+                                <label for="pilihan1">Add-on Design 1</label>
                                 <select name="pilihan1" id="pilihan1" class="form-control">
                                     <option value="">-- Pilihan --</option>
                                     <option value="1">Business Card</option>
@@ -77,7 +78,7 @@
                                 </select>
                             </div>
                             <div class="form-group col-lg-4">
-                                <label for="pilihan2">Desain Card 2</label>
+                                <label for="pilihan2">Add-on Design 2</label>
                                 <select name="pilihan2" id="pilihan1" class="form-control">
                                     <option value="">-- Pilihan --</option>
                                     <option value="1">Business Card</option>
@@ -93,7 +94,7 @@
                                 </select>
                             </div>
                             <div class="form-group col-lg-4">
-                                <label for="pilihan3">Desain Card 3</label>
+                                <label for="pilihan3">Add-on Design 3</label>
                                 <select name="pilihan3" id="pilihan3" class="form-control">
                                     <option value="">-- Pilihan --</option>
                                     <option value="1">Business Card</option>
@@ -212,7 +213,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="flex-grow-1 ">
-                            <div class="alert alert-success text-capitalize">When the card design work has begun please go to the list of project designs to do the design work requested by the customer. Your work time is 2 weeks.</div>
+                            <div class="alert alert-success text-capitalize">Addon Design work has been confirmed. Please go to List Design Project menu to do the design work requested  by the Customer. Your deadline is 2 weeks.</div>
                         </div>
                     </div>
                 </div>
@@ -254,13 +255,13 @@
                             @endphp
                             @if ($lower1 == 'logo' || $capitalize1 == 'Logo' || $lower2 == 'logo' || $capitalize2 == 'Logo' ||$lower3 == 'logo' || $capitalize3 == 'Logo')
                             <div class="">
-                                <a href="/convertpdf/{{$handover->id}}" class="btn btn-primary">Download Certificate</a>
+                                <a href="/convertpdf/{{Crypt::encrypt($handover->id)}}" class="btn btn-primary">Download Certificate</a>
                             </div>
                             @else
 
                             @endif
                             <div class=" ml-3">
-                                <a href="{{'/convertzip/' . $handover->id}}" class="btn btn-primary">Download All
+                                <a href="{{'/convertzip/' . Crypt::encrypt($handover->id)}}" class="btn btn-primary">Download All
                                     Files</a>
                             </div>
                         </div>

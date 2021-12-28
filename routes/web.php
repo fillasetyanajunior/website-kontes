@@ -99,7 +99,7 @@ Route::middleware('verified')->group(function () {
     //Convert PDF
     Route::get('/convertpdf/{winnercontest}', [PDFController::class, 'PDFConvert']);
     //Comentar
-    Route::post('/comentar', [MessageComentarController::class, 'MessageComentar'])->name('comentar');
+    // Route::post('/comentar', [MessageComentarController::class, 'MessageComentar'])->name('comentar');
     //Report Result Project
     Route::post('/report', [ReportController::class,'ReportCreate'])->name('reportcreate');
     //Profile Worker Public
@@ -111,16 +111,16 @@ Route::middleware('verified')->group(function () {
     //Desain Canvas
     Route::get('/themes', [DesainListController::class, 'DesainList'])->name('desainlist');
     Route::middleware('mobile')->group(function () {
-        Route::get('/themes/businesscard', [DesainCardController::class, 'BusinessCard'])->name('businesscard');
+        Route::get('/themes/businesscard/{id}', [DesainCardController::class, 'BusinessCard'])->name('businesscard');
         Route::get('/themes/emailsignature',[DesainCardController::class, 'EmailSignature'])->name('emailsignature');
-        Route::get('/themes/letterheads', [DesainCardController::class, 'Letterheads'])->name('letterheads');
-        Route::get('/themes/flayer', [DesainCardController::class, 'Flayer'])->name('flayer');
-        Route::get('/themes/invoices', [DesainCardController::class, 'Invoices'])->name('invoices');
-        Route::get('/themes/postcard', [DesainCardController::class, 'PostCard'])->name('postcard');
-        Route::get('/themes/facebookcover', [DesainCardController::class, 'FacebookCover'])->name('facebookcover');
-        Route::get('/themes/facebookpost', [DesainCardController::class, 'FacebookPost'])->name('facebookpost');
+        Route::get('/themes/letterheads/{id}', [DesainCardController::class, 'Letterheads'])->name('letterheads');
+        Route::get('/themes/flayer/{id}', [DesainCardController::class, 'Flayer'])->name('flayer');
+        Route::get('/themes/invoices/{id}', [DesainCardController::class, 'Invoices'])->name('invoices');
+        Route::get('/themes/postcard/{id}', [DesainCardController::class, 'PostCard'])->name('postcard');
+        Route::get('/themes/facebookcover/{id}', [DesainCardController::class, 'FacebookCover'])->name('facebookcover');
+        Route::get('/themes/facebookpost/{id}', [DesainCardController::class, 'FacebookPost'])->name('facebookpost');
         Route::get('/themes/youtubebenners',[DesainCardController::class, 'YoutubeBenners'])->name('youtubebenners');
-        Route::get('/themes/instagrampost', [DesainCardController::class, 'InstagramPost'])->name('instagrampost');
+        Route::get('/themes/instagrampost/{id}', [DesainCardController::class, 'InstagramPost'])->name('instagrampost');
         Route::post('/themes/store', [DesainCardController::class, 'StoreDesainCard']);
         Route::post('/themes/update/{themesDesainCard}', [DesainCardController::class, 'UpdateDesainCard']);
         Route::post('/themes/loadthemes/{themesDesainCard}', [DesainCardController::class, 'LoadThemes']);

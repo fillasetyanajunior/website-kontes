@@ -1,4 +1,5 @@
 @extends('layouts.layouts_dashboard')
+@section('title',$title)
 @section('content')
 <x-slidebar></x-slidebar>
 <div class="my-3 my-md-5">
@@ -202,39 +203,39 @@
                                         <a href="/waittingpayment" class="btn btn-warning btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                         @elseif ($itemproject->is_active == 'running')
                                             @if ($itemproject->catagories_project == 'contest')
-                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-success btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefcontest/{{Crypt::encrypt($itemproject->id)}}" class="btn btn-success btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                             @else
-                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-success btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefdirect/{{Crypt::encrypt($itemproject->id)}}" class="btn btn-success btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                             @endif
                                         @elseif ($itemproject->is_active == 'choose winner')
                                              @if ($itemproject->catagories_project == 'contest')
-                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-azure btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefcontest/{{Crypt::encrypt($itemproject->id)}}" class="btn btn-azure btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                             @else
-                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-azure btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefdirect/{{Crypt::encrypt($itemproject->id)}}" class="btn btn-azure btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                             @endif
                                         @elseif ($itemproject->is_active == 'handover')
                                             @if ($itemproject->catagories_project == 'contest')
-                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-primary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefcontest/{{Crypt::encrypt($itemproject->id)}}" class="btn btn-primary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                             @else
-                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-primary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefdirect/{{Crypt::encrypt($itemproject->id)}}" class="btn btn-primary btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                             @endif
                                         @elseif ($itemproject->is_active == 'close')
                                             @if ($itemproject->catagories_project == 'contest')
-                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefcontest/{{Crypt::encrypt($itemproject->id)}}" class="btn btn-secondary btn-sm text-uppercase">{{$itemproject->is_active}}</a>
                                             @else
-                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-secondary btn-sm text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefdirect/{{Crypt::encrypt($itemproject->id)}}" class="btn btn-secondary btn-sm text-uppercase">{{$itemproject->is_active}}</a>
                                             @endif
                                         @elseif ($itemproject->is_active == 'cancel')
                                             @if ($itemproject->catagories_project == 'contest')
-                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-danger btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefcontest/{{Crypt::encrypt($itemproject->id)}}" class="btn btn-danger btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                             @else
-                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-danger btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefdirect/{{Crypt::encrypt($itemproject->id)}}" class="btn btn-danger btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                             @endif
                                         @else
                                             @if ($itemproject->catagories_project == 'contest')
-                                            <a href="/briefcontest/{{$itemproject->id}}" class="btn btn-gray-dark btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefcontest/{{Crypt::encrypt($itemproject->id)}}" class="btn btn-gray-dark btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                             @else
-                                            <a href="/briefdirect/{{$itemproject->id}}" class="btn btn-gray-dark btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
+                                            <a href="/briefdirect/{{Crypt::encrypt($itemproject->id)}}" class="btn btn-gray-dark btn-sm text-white text-uppercase">{{$itemproject->is_active}}</a>
                                             @endif
                                         @endif
                                     </td>

@@ -708,6 +708,7 @@
                 themes: json,
                 imagess: dataURL,
                 choices: 'invoices',
+                title: '{{$title}}',
             },
             success: function (hasil) {
                 // console.log(hasil.data)

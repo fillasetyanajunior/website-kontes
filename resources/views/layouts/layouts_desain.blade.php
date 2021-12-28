@@ -9,6 +9,8 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="Business Card Design Tool">
     <meta name="author" content="Ahmed YILMAZ">
+    <link rel="icon" href="{{url('assets/dashboard/images/logo3.png')}}" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{url('assets/dashboard/images/logo3.png')}}" />
     <title>Business Card Generator</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"
         integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous">

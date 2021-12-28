@@ -9,11 +9,13 @@ use App\Models\ResultProject;
 use App\Models\SortCatagories;
 use App\Models\Worker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class BrowseProjectController extends Controller
 {
     public function index(Request $request)
     {
+        $data['title'] = 'Browser Project';
         if (request()->user()->role == 'admin' || request()->user()->role == 'customer') {
             if ($request->id != null) {
                 if ($request->id == 1) {
@@ -93,16 +95,20 @@ class BrowseProjectController extends Controller
 
         return view('home.browseproject',$data);
     }
-    public function BriefContestProject(Project $project)
+    public function BriefContestProject(Request $request)
     {
-        $data['winner']  = ResultContest::where('contest_id',$project->id)->where('is_active','winner')->first();
-        $data['report']  = Report::where('contest_id',$project)->count();
+        $data['title']      = 'Brieft Contest Project';
+        $project            = Project::where('id',Crypt::decrypt($request->project))->first();
+        $data['winner']     = ResultContest::where('contest_id',$project->id)->where('is_active','winner')->first();
+        $data['report']     = Report::where('contest_id',$project)->count();
         return view('customer.projectstatus.briefcontest',compact('project'),$data);
     }
-    public function BriefDirectProject(Project $project)
+    public function BriefDirectProject(Request $request)
     {
-        $data['winner']  = ResultProject::where('contest_id',$project->id)->where('is_active','winner')->first();
-        $data['report']  = Report::where('contest_id',$project)->count();
+        $data['title']      = 'Brieft Direct Project';
+        $project            = Project::where('id',Crypt::decrypt($request->project))->first();
+        $data['winner']     = ResultProject::where('contest_id',$project->id)->where('is_active','winner')->first();
+        $data['report']     = Report::where('contest_id',$project)->count();
         return view('customer.projectstatus.briefdirect',compact('project'),$data);
     }
 }

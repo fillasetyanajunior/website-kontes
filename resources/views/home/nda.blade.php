@@ -1,4 +1,5 @@
 @extends('layouts.layouts_dashboard')
+@section('title',$title)
 @section('content')
 <x-slidebar></x-slidebar>
 <div class="my-3 my-md-5">
@@ -13,7 +14,7 @@
                                 to. Please enter your full name below and click 'Continue' to view the NDA before agreeing to it.
                             </p>
                             <h5 class="text-capitalize">note: by clicking 'Continue' you are not yet agreeing to the document.</h5>
-                            <a href="/briefnda/perjanjianfileconfirm/{{$id}}" class="btn btn-primary text-uppercase mt-2">Continue</a>
+                            <a href="/briefnda/perjanjianfileconfirm/{{Crypt::encrypt($id)}}" class="btn btn-primary text-uppercase mt-2">Continue</a>
                         </center>
                     </div>
                 </div>

@@ -59,7 +59,7 @@
                         <select id="colors" class="form-control">
                             <option value="">Color</option>
                             @foreach ($color as $itemcolor)
-                            <option value="{{$itemcolor->hex_code}}">{{$itemcolor->name}}</option>
+                            <option value="{{$itemcolor->hex_code}}" style="background-color: {{$itemcolor->name}}">{{$itemcolor->name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -137,7 +137,7 @@
                     <select id="color" class="form-control" aria-describedby="">
                         <option value="">Color</option>
                         @foreach ($color as $itemcolor)
-                        <option value="{{$itemcolor->hex_code}}">{{$itemcolor->name}}</option>
+                        <option value="{{$itemcolor->hex_code}}" style="background-color: {{$itemcolor->name}}">{{$itemcolor->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -708,6 +708,7 @@
                 themes: json,
                 imagess: dataURL,
                 choices: 'businesscard',
+                title: '{{$title}}',
             },
             success: function (hasil) {
                 // console.log(hasil.data)

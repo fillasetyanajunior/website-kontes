@@ -24,7 +24,8 @@ class ResultTestContestController extends Controller
 {
     public function ResultTestIndex()
     {
-        $data['testcontest'] = DB::table('result_test_contests')
+        $data['title']          = 'Contest Test';
+        $data['testcontest']    = DB::table('result_test_contests')
                                 ->select('user_id_worker')
                                 ->distinct()
                                 ->simplePaginate(1);

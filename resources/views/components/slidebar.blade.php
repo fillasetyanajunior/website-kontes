@@ -2,7 +2,7 @@
     <div class="container">
         <div class="d-flex">
             <a class="header-brand" href="{{route('home')}}">
-                <img src="{{url('assets/dashboard/images/logo1.jpg')}}" class="header-brand-img">
+                <img src="{{url('assets/dashboard/images/logo2.jpg')}}" class="" width="180px">
             </a>
             <div class="d-flex order-lg-2 ml-auto">
             <div class="dropdown">

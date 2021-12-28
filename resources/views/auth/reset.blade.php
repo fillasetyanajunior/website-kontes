@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col col-login mx-auto">
                 <div class="text-center mb-6">
-                    <img src="{{url('assets/auth/img/logo.jpg')}}" class="h-6" alt="">
+                    <img src="{{url('assets/dashboard/images/logo3.png')}}" width="200px">
                 </div>
                 <form class="card" action="{{route('password.update')}}" method="post">
                     @csrf

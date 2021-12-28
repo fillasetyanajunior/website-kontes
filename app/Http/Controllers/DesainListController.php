@@ -10,6 +10,7 @@ class DesainListController extends Controller
 {
     public function DesainList()
     {
+        $data['title'] = 'List Desain Project';
         if (request()->user()->role == 'admin') {
             $data['desaincard'] = Project::where('desaincard','active')->paginate(20);
         }elseif (request()->user()->role == 'customer') {

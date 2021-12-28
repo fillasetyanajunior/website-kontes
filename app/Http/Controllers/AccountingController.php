@@ -111,6 +111,7 @@ class AccountingController extends Controller
             $data['customer']   = AccountingController::Customer(4);
             $data['income']     = AccountingController::Income(4);
         }
+        $data['title'] = 'Accounting';
 
         return view('admin.accounting.accounting', $data);
     }

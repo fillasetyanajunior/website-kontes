@@ -1,6 +1,7 @@
 @extends('layouts.layouts_dashboard')
-<x-slidebar></x-slidebar>
+@section('title',$title)
 @section('content')
+<x-slidebar></x-slidebar>
 <div class="my-3 my-md-5">
     <div class="container">
         <div class="page-header">

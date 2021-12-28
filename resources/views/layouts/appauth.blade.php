@@ -15,8 +15,8 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
+    <link rel="icon" href="{{url('assets/dashboard/images/logo3.png')}}" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{url('assets/dashboard/images/logo3.png')}}" />
     <!-- Generated: 2018-04-16 09:29:05 +0200 -->
     <title>@yield('title') - {{env('APP_NAME')}}</title>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />

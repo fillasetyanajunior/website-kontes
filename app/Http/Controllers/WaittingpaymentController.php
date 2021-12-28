@@ -10,7 +10,8 @@ class WaittingpaymentController extends Controller
 {
     public function GetData()
     {
-        $data['paymentlist'] = DB::table('projects')
+        $data['title']          = 'Waiting Payment';
+        $data['paymentlist']    = DB::table('projects')
                                 ->join('project_payments','projects.id','=','project_payments.project_id')
                                 ->paginate(20);
         return view('admin.paymenthistory.paymentlist',$data);

@@ -1,4 +1,5 @@
 @extends('layouts.layouts_dashboard')
+@section('title',$title)
 @section('content')
 <x-slidebar></x-slidebar>
 <div class="my-3 my-md-5">
@@ -71,14 +72,14 @@
                                     <td>{{$itemdesaincard->title}}</td>
                                     <td width="100px">
                                         @if ($pilihan[0] != '' && $pilihan[1] != '' && $pilihan[2] != '')
-                                        <a href="{{route($pilihan[0])}}" class="btn btn-primary btn-sm">{{$nama[0]}}</a>
-                                        <a href="{{route($pilihan[1])}}" class="btn btn-primary btn-sm">{{$nama[1]}}</a>
-                                        <a href="{{route($pilihan[2])}}" class="btn btn-primary btn-sm">{{$nama[2]}}</a>
+                                        <a href="{{route($pilihan[0],['id' => Crypt::encrypt($itemdesaincard->title)])}}" class="btn btn-primary btn-sm">{{$nama[0]}}</a>
+                                        <a href="{{route($pilihan[1],['id' => Crypt::encrypt($itemdesaincard->title)])}}" class="btn btn-primary btn-sm">{{$nama[1]}}</a>
+                                        <a href="{{route($pilihan[2],['id' => Crypt::encrypt($itemdesaincard->title)])}}" class="btn btn-primary btn-sm">{{$nama[2]}}</a>
                                         @elseif ($pilihan[0] != '' && $pilihan[1] != '' && $pilihan[2] == '')
-                                        <a href="{{route($pilihan[0])}}" class="btn btn-primary btn-sm">{{$nama[0]}}</a>
-                                        <a href="{{route($pilihan[1])}}" class="btn btn-primary btn-sm">{{$nama[1]}}</a>
+                                        <a href="{{route($pilihan[0],['id' => Crypt::encrypt($itemdesaincard->title)])}}" class="btn btn-primary btn-sm">{{$nama[0]}}</a>
+                                        <a href="{{route($pilihan[1],['id' => Crypt::encrypt($itemdesaincard->title)])}}" class="btn btn-primary btn-sm">{{$nama[1]}}</a>
                                         @else
-                                        <a href="{{route($pilihan[0])}}" class="btn btn-primary btn-sm">{{$nama[0]}}</a>
+                                        <a href="{{route($pilihan[0],['id' => Crypt::encrypt($itemdesaincard->title)])}}" class="btn btn-primary btn-sm">{{$nama[0]}}</a>
                                         @endif
                                     </td>
                                 </tr>

@@ -1,4 +1,5 @@
 @extends('layouts.layouts_dashboard')
+@section('title',$title)
 @section('content')
 <x-slidebar></x-slidebar>
 <div class="my-3 my-md-5">
@@ -40,7 +41,7 @@
                         <div class="avatar avatar-md mr-3" style="background-image: url({{asset('/storage/profile/' . $user->avatar)}})"></div>
                         @endif
                         <div>
-                            <div><a href="/profileworker/{{$data->user_id_worker}}">{{$user->name}}</a></div>
+                            <div><a href="/profileworker/{{Crypt::encrypt($data->user_id_worker)}}">{{$user->name}}</a></div>
                             <small class="d-block text-muted">{{$itemfavourites->catagories_project}}</small>
                         </div>
                     </div>
