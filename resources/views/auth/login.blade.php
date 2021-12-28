@@ -15,7 +15,7 @@
                         <div class="form-group">
                             <label class="form-label">Email address</label>
                             <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
-                                value="{{old('email')}}" id="exampleInputEmail1" aria-describedby="emailHelp"
+                                value="{{old('email')}}" id="exampleInputEmail1"
                                 placeholder="Enter email">
                         </div>
                         <div class="form-group">
