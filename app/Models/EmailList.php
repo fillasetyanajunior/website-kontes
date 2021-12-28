@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class EmailList extends Model
 {
     use HasFactory;
-    protected $filleable = [
+    protected $fillable = [
         'email',
     ];
 }

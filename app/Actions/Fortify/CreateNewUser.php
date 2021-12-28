@@ -24,6 +24,7 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input)
     {
+        // dd($input['kodenegara']);
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => [
@@ -60,7 +61,7 @@ class CreateNewUser implements CreatesNewUsers
             'role'              => $role,
             'avatar'            => 'default.jpg',
             'phone'             => $code . $input['phone'] . '@c.us',
-            'kodenegera'        => $input['kodenegara'],
+            'kodenegara'        => $input['kodenegara'],
             'messenger_color'   => '#2180f3',
         ]);
 
