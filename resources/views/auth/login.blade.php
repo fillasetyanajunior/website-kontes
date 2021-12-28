@@ -15,7 +15,7 @@
                         <div class="form-group">
                             <label class="form-label">Email address</label>
                             <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
-                                value="{{old('email')}}" id="exampleInputEmail1"
+                                value="{{old('email')}}" id="email"
                                 placeholder="Enter email">
                         </div>
                         <div class="form-group">

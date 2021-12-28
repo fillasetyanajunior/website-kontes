@@ -23,7 +23,7 @@
                         <div class="card-title">Forgot Password</div>
                         <div class="form-group">
                             <label class="form-label">Email address</label>
-                            <input type="email" class="form-control" name="email" value="" id="exampleInputEmail1"
+                            <input type="email" class="form-control" name="email" value="" id="email"
                                 aria-describedby="emailHelp" placeholder="Enter email">
                         </div>
                         <div class="form-footer">

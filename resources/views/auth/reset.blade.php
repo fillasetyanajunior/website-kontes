@@ -16,8 +16,7 @@
                         <div class="form-group">
                             <label class="form-label">Email address</label>
                             <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
-                                value="{{ $request->email ?? old('email') }}" id="exampleInputEmail1"
-                                aria-describedby="emailHelp" placeholder="Enter email">
+                                value="{{ $request->email ?? old('email') }}" id="email" placeholder="Enter email">
                         </div>
                         <div class="form-group">
                             <label class="form-label">New Password</label>
