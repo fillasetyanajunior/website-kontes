@@ -21,10 +21,10 @@ class ReportController extends Controller
                     'link'          => $request->link,
                 ]);
         Mail::to($admin->email)->send(new ReportMail($id->id, $request->idfrom));
-        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-            'number' => $admin->phone,
-            'message' =>    'our system can report that there is cheating in the contest immediately check email'
-        ]);
+        // Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+        //     'number' => $admin->phone,
+        //     'message' =>    'our system can report that there is cheating in the contest immediately check email'
+        // ]);
         return redirect()->back()->with('status','Report Desain Success');
     }
 }

@@ -83,10 +83,10 @@ class ResultProjectController extends Controller
             if ($result == 3 || $result >= 3 ) {
                 foreach ($admin as $itemadmin) {
                     Mail::to($itemadmin->email)->send(new VerifiedWorkerMail(request()->user()->id));
-                    Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                        'number' => $itemadmin->phone,
-                        'message' =>    'the system has detected that a worker has completed the test, please check your email for follow up'
-                    ]);
+                    // Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                    //     'number' => $itemadmin->phone,
+                    //     'message' =>    'the system has detected that a worker has completed the test, please check your email for follow up'
+                    // ]);
                 }
             }
         }

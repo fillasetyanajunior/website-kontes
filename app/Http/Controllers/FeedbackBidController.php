@@ -65,10 +65,10 @@ class FeedbackBidController extends Controller
                             'choices'       => 'feedback',
                         ]);
                         Mail::to($itemadmin->email)->send(new FeedbackMail($request->feedback,$project->title));
-                        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                            'number' => $admin->phone,
-                            'message' =>    'You get feedback from the Direct ' . $project->title
-                        ]);
+                        // Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                        //     'number' => $admin->phone,
+                        //     'message' =>    'You get feedback from the Direct ' . $project->title
+                        // ]);
                     }
                 }
             }
@@ -90,10 +90,10 @@ class FeedbackBidController extends Controller
 
             $customer = User::where('id', $feedbackbis->customer_id)->first();
             Mail::to($customer->email)->send(new FeedbackMail($request->feedback, $project->title));
-            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                'number' => $customer->phone,
-                'message' =>    'You get feedback from the Direct ' . $project->title
-            ]);
+            // Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+            //     'number' => $customer->phone,
+            //     'message' =>    'You get feedback from the Direct ' . $project->title
+            // ]);
         }
 
         return redirect()->back()->with('status', 'Feedback Bid Berhasil di kirim');
@@ -165,10 +165,10 @@ class FeedbackBidController extends Controller
         if ($worker != null) {
             Mail::to($worker->email)->send(new EliminasiMail($resultproject->contest_id, $worker->role));
             Mail::to(request()->user()->email)->send(new EliminasiMail($resultproject->contest_id, request()->user()->role));
-            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                'number' => request()->user()->phone,
-                'message' =>    'Thank you for eliminating participants ' . $project->title
-            ]);
+            // Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+            //     'number' => request()->user()->phone,
+            //     'message' =>    'Thank you for eliminating participants ' . $project->title
+            // ]);
 
             NewsFeed::create([
                 'contest_id'    => $resultproject->contest_id,
@@ -181,10 +181,10 @@ class FeedbackBidController extends Controller
             for ($i=0; $i < count($admin); $i++) {
                 foreach ($admin as $itemadmin) {
                     Mail::to($itemadmin->email)->send(new EliminasiMail($resultproject->contest_id, $itemadmin->role));
-                    Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                        'number' => $admin->phone,
-                        'message' =>    'Sorry you were eliminated from ' . $project->title
-                    ]);
+                    // Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                    //     'number' => $admin->phone,
+                    //     'message' =>    'Sorry you were eliminated from ' . $project->title
+                    // ]);
 
                     NewsFeed::create([
                         'contest_id'    => $resultproject->contest_id,
@@ -195,10 +195,10 @@ class FeedbackBidController extends Controller
                 }
             }
             Mail::to(request()->user()->email)->send(new EliminasiMail($resultproject->contest_id, request()->user()->role));
-            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                'number' => request()->user()->phone,
-                'message' =>    'Thank you for eliminating participants ' . $project->title
-            ]);
+            // Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+            //     'number' => request()->user()->phone,
+            //     'message' =>    'Thank you for eliminating participants ' . $project->title
+            // ]);
         }
 
         return redirect()->back()->with('status', 'Update Direct Success');
@@ -238,10 +238,10 @@ class FeedbackBidController extends Controller
 
             Mail::to($worker->email)->send(new WinnerChooseMail($resultproject->contest_id, $worker->role));
             Mail::to(request()->user()->email)->send(new WinnerChooseMail($resultproject->contest_id, request()->user()->role));
-            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                'number' => request()->user()->phone,
-                'message' =>    'You have chosen ' . $worker->name . ' as the champion of the Direct ' . $project->title
-            ]);
+            // Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+            //     'number' => request()->user()->phone,
+            //     'message' =>    'You have chosen ' . $worker->name . ' as the champion of the Direct ' . $project->title
+            // ]);
 
             Worker::where('user_id',$resultproject->user_id_worker)
                     ->update([
@@ -267,17 +267,17 @@ class FeedbackBidController extends Controller
                     ]);
 
                     Mail::to($itemadmin->email)->send(new WinnerChooseMail($resultproject->contest_id, $itemadmin->role));
-                    Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                        'number' => $itemadmin->phone,
-                        'message' =>    'Congratulations you are the champion of ' . $project->title
-                    ]);
+                    // Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+                    //     'number' => $itemadmin->phone,
+                    //     'message' =>    'Congratulations you are the champion of ' . $project->title
+                    // ]);
                 }
             }
             Mail::to(request()->user()->email)->send(new WinnerChooseMail($resultproject->contest_id, request()->user()->role));
-            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                'number' => request()->user()->phone,
-                'message' =>    'You have chosen ' . $worker->name . ' as the champion of the Direct  ' . $project->title
-            ]);
+            // Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+            //     'number' => request()->user()->phone,
+            //     'message' =>    'You have chosen ' . $worker->name . ' as the champion of the Direct  ' . $project->title
+            // ]);
         }
 
         Project::where('id', $resultproject->contest_id)

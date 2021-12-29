@@ -58,10 +58,10 @@ class ResultTestContestController extends Controller
             ]);
 
         $user = User::where('id', $resultTestContest->user_id_worker)->first();
-        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-            'number' => $user->phone,
-            'message' =>    'Congratulations, your 1 design has been accepted by admin'
-        ]);
+        // Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+        //     'number' => $user->phone,
+        //     'message' =>    'Congratulations, your 1 design has been accepted by admin'
+        // ]);
 
         TestCountResult::where('result_contest_id', $resultTestContest->contest_id)
                     ->update([
@@ -109,10 +109,10 @@ class ResultTestContestController extends Controller
         $worker = Worker::where('user_id',$resultTestContest->user_id_worker)->first();
         Mail::to($worker->email)->send(new DeleteResultTestMail($resultTestContest->filecontest));
         $user = User::where('id', $worker->user_id)->first();
-        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-            'number' => $user->phone,
-            'message' =>    'sorry your design was rejected, please submit 1 more design'
-        ]);
+        // Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+        //     'number' => $user->phone,
+        //     'message' =>    'sorry your design was rejected, please submit 1 more design'
+        // ]);
         TestCountResult::where('result_contest_id', $resultTestContest->contest_id)
             ->update([
                 'user_id_worker'    => request()->user()->id,

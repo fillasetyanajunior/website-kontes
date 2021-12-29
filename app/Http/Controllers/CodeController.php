@@ -35,10 +35,10 @@ class CodeController extends Controller
         $customer = User::where('role','customer')->get();
         foreach ($customer as $itemcustomer) {
             Mail::to($itemcustomer->email)->send(new CodeMail);
-            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                'number' => $itemcustomer->phone,
-                'message' =>    'please check your email because we have sent a discount code ' . $choices
-            ]);
+            // Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+            //     'number' => $itemcustomer->phone,
+            //     'message' =>    'please check your email because we have sent a discount code ' . $choices
+            // ]);
         }
         return redirect()->back()->with('status','Code Success');
     }

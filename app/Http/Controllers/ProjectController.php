@@ -191,16 +191,16 @@ class ProjectController extends Controller
                 'email'                 => request()->user()->email,
             ]);
             Mail::to(request()->user()->email)->send(new PaymentValidationEmail($request->id_transaksi,$request->title,$request->totalcost,$request->email_transaksi));
-            Http::post(env('API_WHATSAPP_URL') . 'send-message',[
-                'number' => request()->user()->phone,
-                'message' =>    'Thank you for ordering.
-Here are the contest details:' . '
+//             Http::post(env('API_WHATSAPP_URL') . 'send-message',[
+//                 'number' => request()->user()->phone,
+//                 'message' =>    'Thank you for ordering.
+// Here are the contest details:' . '
 
-Transaction ID        : ' . $request->id_transaksi . '
-Title Project            : ' . $request->title . '
-Price                       : ' . '$' . $request->totalcost . '
-Email Transaction   : ' . $request->email_transaksi
-            ]);
+// Transaction ID        : ' . $request->id_transaksi . '
+// Title Project            : ' . $request->title . '
+// Price                       : ' . '$' . $request->totalcost . '
+// Email Transaction   : ' . $request->email_transaksi
+//             ]);
         } else {
             ProjectPayment::create([
                 'user_id'               => request()->user()->id,
@@ -214,16 +214,16 @@ Email Transaction   : ' . $request->email_transaksi
                 'email'                 => request()->user()->email,
             ]);
             Mail::to(request()->user()->email)->send(new PaymentValidationEmail('Other Banks',$request->title,$request->totalcost, 'Other Banks'));
-            Http::post(env('API_WHATSAPP_URL') . 'send-message',[
-                'number' => request()->user()->phone,
-                'message' =>    'Thank you for ordering.
-Here are the contest details:' . '
+//             Http::post(env('API_WHATSAPP_URL') . 'send-message',[
+//                 'number' => request()->user()->phone,
+//                 'message' =>    'Thank you for ordering.
+// Here are the contest details:' . '
 
-Transaction ID        : Other Banks' . '
-Title Project            : ' . $request->title . '
-Price                       : ' . '$' . $request->totalcost . '
-Email Transaction   : Other Banks'
-            ]);
+// Transaction ID        : Other Banks' . '
+// Title Project            : ' . $request->title . '
+// Price                       : ' . '$' . $request->totalcost . '
+// Email Transaction   : Other Banks'
+//             ]);
         }
 
         return redirect('/home')->with('status','Add contest project success');
@@ -310,16 +310,16 @@ Email Transaction   : Other Banks'
                 'email'                 => request()->user()->email,
             ]);
             Mail::to(request()->user()->email)->send(new PaymentValidationEmail($request->id_transaksi, $request->title, $request->totalcost, $request->email_transaksi));
-            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                'number' => request()->user()->phone,
-                'message' =>    'Thank you for ordering.
-Here are the contest details:' . '
+//             Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+//                 'number' => request()->user()->phone,
+//                 'message' =>    'Thank you for ordering.
+// Here are the contest details:' . '
 
-Transaction ID        : ' . $request->id_transaksi . '
-Title Project            : ' . $request->title . '
-Price                       : ' . '$' . $request->totalcost . '
-Email Transaction   : ' . $request->email_transaksi
-            ]);
+// Transaction ID        : ' . $request->id_transaksi . '
+// Title Project            : ' . $request->title . '
+// Price                       : ' . '$' . $request->totalcost . '
+// Email Transaction   : ' . $request->email_transaksi
+//             ]);
         } else {
             ProjectPayment::create([
                 'user_id'               => request()->user()->id,
@@ -333,16 +333,16 @@ Email Transaction   : ' . $request->email_transaksi
                 'email'                 => request()->user()->email,
             ]);
             Mail::to(request()->user()->email)->send(new PaymentValidationEmail('Other Banks', $request->title, $request->totalcost, 'Other Banks'));
-            Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-                'number' => request()->user()->phone,
-                'message' =>    'Thank you for ordering.
-Here are the contest details:' . '
+//             Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+//                 'number' => request()->user()->phone,
+//                 'message' =>    'Thank you for ordering.
+// Here are the contest details:' . '
 
-Transaction ID        : Other Banks' . '
-Title Project            : ' . $request->title . '
-Price                       : ' . '$' . $request->totalcost . '
-Email Transaction   : Other Banks'
-            ]);
+// Transaction ID        : Other Banks' . '
+// Title Project            : ' . $request->title . '
+// Price                       : ' . '$' . $request->totalcost . '
+// Email Transaction   : Other Banks'
+//             ]);
         }
         return redirect('/home')->with('status','Add direct project success');
     }

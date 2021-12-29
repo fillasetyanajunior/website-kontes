@@ -55,10 +55,10 @@ class HandoverController extends Controller
 
         Mail::to($user->email)->send(new ProjectDoneMail());
         Mail::to($worker->email)->send(new PaymentApprovedMail($project->id));
-        Http::post(env('API_WHATSAPP_URL') . 'send-message', [
-            'number' => $user->phone,
-            'message' =>    'The project you ordered has been completed.'
-        ]);
+        // Http::post(env('API_WHATSAPP_URL') . 'send-message', [
+        //     'number' => $user->phone,
+        //     'message' =>    'The project you ordered has been completed.'
+        // ]);
 
         Project::where('id',$project->id)
                 ->update([
