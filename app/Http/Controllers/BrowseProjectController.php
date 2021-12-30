@@ -16,20 +16,29 @@ class BrowseProjectController extends Controller
     public function index(Request $request)
     {
         $data['title'] = 'Browser Project';
+        $sort = null;
+        if ($request->id != null) {
+            $id     = Crypt::decrypt($request->id);
+            $sort   = $id;
+        }
         if (request()->user()->role == 'admin' || request()->user()->role == 'customer') {
             if ($request->id != null) {
-                if ($request->id == 1) {
+                if ($id == 1) {
                     $data['project']    = Project::orderBy('created_at','desc')->where('is_active', 'running')->paginate(20);
-                }elseif ($request->id == 2) {
+                }elseif ($id == 2) {
                     $data['project']    = Project::orderBy('deadline','desc')->where('is_active', 'running')->paginate(20);
-                }elseif ($request->id == 3) {
+                }elseif ($id == 3) {
                     $data['project']    = Project::orderBy('submit','desc')->where('is_active', 'running')->paginate(20);
-                }elseif ($request->id == 4) {
+                }elseif ($id == 4) {
                     $data['project']    = Project::orderBy('harga','desc')->where('is_active', 'running')->paginate(20);
-                }elseif ($request->id == 5) {
+                }elseif ($id == 5) {
                     $data['project']    = Project::orderBy('nilai','desc')->where('is_active', 'running')->paginate(20);
-                }elseif ($request->id == 7) {
+                }elseif ($id == 6) {
+                    $data['project']    = Project::where('is_active', 'running')->paginate(20);
+                }elseif ($id == 7) {
                     $data['project']    = Project::where('is_active', 'close')->paginate(20);
+                }elseif ($id == 8) {
+                    $data['project']    = Project::where('is_active', 'running')->paginate(20);
                 }else{
                     $data['project']    = Project::where('guarded', 'active')->paginate(20);
                 }
@@ -44,18 +53,22 @@ class BrowseProjectController extends Controller
             $worker = Worker::where('user_id',request()->user()->id)->first();
             if ($worker->status_account == 'verified') {
                 if ($request->id != null) {
-                    if ($request->id == 1) {
+                    if ($id == 1) {
                         $data['project']    = Project::orderBy('created_at', 'desc')->where('is_active', 'running')->paginate(20);
-                    } elseif ($request->id == 2) {
+                    } elseif ($id == 2) {
                         $data['project']    = Project::orderBy('deadline', 'desc')->where('is_active', 'running')->paginate(20);
-                    } elseif ($request->id == 3) {
+                    } elseif ($id == 3) {
                         $data['project']    = Project::orderBy('submit', 'desc')->where('is_active', 'running')->paginate(20);
-                    } elseif ($request->id == 4) {
+                    } elseif ($id == 4) {
                         $data['project']    = Project::orderBy('harga', 'desc')->where('is_active', 'running')->paginate(20);
-                    } elseif ($request->id == 5) {
+                    } elseif ($id == 5) {
                         $data['project']    = Project::orderBy('nilai', 'desc')->where('is_active', 'running')->paginate(20);
-                    } elseif ($request->id == 7) {
+                    } elseif ($id == 6) {
+                        $data['project']    = Project::where('is_active', 'running')->paginate(20);
+                    } elseif ($id == 7) {
                         $data['project']    = Project::where('is_active', 'close')->paginate(20);
+                    } elseif ($id == 8) {
+                        $data['project']    = Project::where('is_active', 'running')->paginate(20);
                     } else {
                         $data['project']    = Project::where('guarded', 'active')->paginate(20);
                     }
@@ -68,18 +81,22 @@ class BrowseProjectController extends Controller
                 $data['sortcatagories']     = SortCatagories::all();
             } else {
                 if ($request->id != null) {
-                    if ($request->id == 1) {
+                    if ($id == 1) {
                         $data['project']    = Project::orderBy('created_at', 'desc')->where('is_active', 'running')->where('catagories_project','contest')->paginate(20);
-                    } elseif ($request->id == 2) {
+                    } elseif ($id == 2) {
                         $data['project']    = Project::orderBy('deadline', 'desc')->where('is_active', 'running')->where('catagories_project','contest')->paginate(20);
-                    } elseif ($request->id == 3) {
+                    } elseif ($id == 3) {
                         $data['project']    = Project::orderBy('submit', 'desc')->where('is_active', 'running')->where('catagories_project','contest')->paginate(20);
-                    } elseif ($request->id == 4) {
+                    } elseif ($id == 4) {
                         $data['project']    = Project::orderBy('harga', 'desc')->where('is_active', 'running')->where('catagories_project','contest')->paginate(20);
-                    } elseif ($request->id == 5) {
+                    } elseif ($id == 5) {
                         $data['project']    = Project::orderBy('nilai', 'desc')->where('is_active', 'running')->where('catagories_project','contest')->paginate(20);
-                    } elseif ($request->id == 7) {
+                    } elseif ($id == 6) {
+                        $data['project']        = Project::where('is_active', 'running')->where('catagories_project', 'contest')->paginate(20);
+                    } elseif ($id == 7) {
                         $data['project']    = Project::where('is_active', 'close')->where('catagories_project','contest')->paginate(20);
+                    } elseif ($id == 8) {
+                        $data['project']        = Project::where('is_active', 'running')->where('catagories_project', 'contest')->paginate(20);
                     } else {
                         $data['project']    = Project::where('guarded', 'active')->where('catagories_project','contest')->paginate(20);
                     }
@@ -92,8 +109,7 @@ class BrowseProjectController extends Controller
                 $data['sortcatagories']     = SortCatagories::where('name','!=','Direct Project')->get();
             }
         }
-
-        return view('home.browseproject',$data);
+        return view('home.browseproject',$data,compact('sort'));
     }
     public function BriefContestProject(Request $request)
     {

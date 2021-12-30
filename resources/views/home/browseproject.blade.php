@@ -31,37 +31,31 @@
                     @endphp
                 </select>
             </div>
-            <div class="col-lg-2 mt-2">
+            <div class="col-lg-4 mt-2">
                 <select class="form-control" id="search_status">
                     <option value="">-- Pilih --</option>
-                    <option value="6">Open Jobs ({{$totalproject}})</option>
-                    <option value="7">Close Jobs ({{$totalcloseproject}})</option>
+                    <option value="{{ Crypt::encrypt(6) }}" @if ($sort == 6) selected @endif>Open Jobs ({{$totalproject}})</option>
+                    <option value="{{ Crypt::encrypt(7) }}" @if ($sort == 7) selected @endif>Close Jobs ({{$totalcloseproject}})</option>
                 </select>
-            </div>
-            <div class="col-lg-2 mt-2">
-                <button type="button" class="btn btn-secondary col-lg-12" id="button_fillter">Show Fillters</button>
             </div>
         </div>
         <div id="show_fillters" class="row mb-5">
-            <div class="col-lg-5 mt-2">
+            <div class="col-lg-6 mt-2">
                 <select class="form-control" id="search_by">
                     <option value="">-- Pilih Search By --</option>
-                    <option value="1">Most Recent</option>
-                    <option value="2">Closing Soon</option>
-                    <option value="3">Needs Submissions</option>
-                    <option value="4">Payment Size</option>
-                    <option value="5">Design Quality</option>
+                    <option value="{{ Crypt::encrypt(1) }}" @if ($sort == 1) selected @endif>Most Recent</option>
+                    <option value="{{ Crypt::encrypt(2) }}" @if ($sort == 2) selected @endif>Closing Soon</option>
+                    <option value="{{ Crypt::encrypt(3) }}" @if ($sort == 3) selected @endif>Needs Submissions</option>
+                    <option value="{{ Crypt::encrypt(4) }}" @if ($sort == 4) selected @endif>Payment Size</option>
+                    <option value="{{ Crypt::encrypt(5) }}" @if ($sort == 5) selected @endif>Design Quality</option>
                 </select>
             </div>
-            <div class="col-lg-5 mt-2">
+            <div class="col-lg-6 mt-2">
                 <select class="form-control" id="search_payment">
                     <option value="">-- Pilih Search Payment --</option>
-                    <option value="8">Any</option>
-                    <option value="9">Guaranteed Only</option>
+                    <option value="{{ Crypt::encrypt(8) }}" @if ($sort == 8) selected @endif>Any</option>
+                    <option value="{{ Crypt::encrypt(9) }}" @if ($sort == 9) selected @endif>Guaranteed Only</option>
                 </select>
-            </div>
-            <div class="col-lg-2 mt-2">
-                <button type="button" class="btn btn-secondary col-lg-12" id="reset_fillter">Reset Fillters</button>
             </div>
         </div>
         <div class="row row-cards">

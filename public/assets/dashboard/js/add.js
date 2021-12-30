@@ -43,17 +43,17 @@ $(document).ready(function () {
         });
     });
     //Search Browse
-    $('#show_fillters').hide();
-    $('#button_fillter').click(function () {
-        var html = $(this).html();
-        if (html == 'Show Fillters') {
-            $(this).html('Hide Fillters')
-            $('#show_fillters').show();
-        } else {
-            $('#show_fillters').hide();
-            $(this).html('Show Fillters')
-        }
-    });
+    // $('#show_fillters').hide();
+    // $('#button_fillter').click(function () {
+    //     var html = $(this).html();
+    //     if (html == 'Show Fillters') {
+    //         $(this).html('Hide Fillters')
+    //         $('#show_fillters').show();
+    //     } else {
+    //         $('#show_fillters').hide();
+    //         $(this).html('Show Fillters')
+    //     }
+    // });
 
     $("#search_text").on("keyup", function () {
         var value = $(this).val().toLowerCase();
@@ -77,33 +77,15 @@ $(document).ready(function () {
 
     $("#search_by").on("change", function () {
         var value = $(this).val();
-        if (value == 1) {
-            window.location.assign('/browseproject/sort/' + value)
-        } else if (value == 2) {
-            window.location.assign('/browseproject/sort/' + value)
-        } else if (value == 3) {
-            window.location.assign('/browseproject/sort/' + value)
-        } else if (value == 4) {
-            window.location.assign('/browseproject/sort/' + value)
-        } else if (value == 5) {
-            window.location.assign('/browseproject/sort/' + value)
-        }
+        window.location.assign('/browseproject/sort/' + value)
     });
     $("#search_status").on("change", function () {
         var value = $(this).val();
-        if (value == 6) {
-            window.location.assign('/browseproject')
-        } else {
-            window.location.assign('/browseproject/sort/' + value)
-        }
+        window.location.assign('/browseproject/sort/' + value)
     });
     $("#search_payment").on("change", function () {
         var value = $(this).val();
-        if (value == 8) {
-            window.location.assign('/browseproject')
-        } else {
-            window.location.assign('/browseproject/sort/' + value)
-        }
+        window.location.assign('/browseproject/sort/' + value)
     });
 
     //Management Admin
