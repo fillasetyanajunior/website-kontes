@@ -61,17 +61,18 @@
                                     @foreach ($catagories as $itemcatagories)
                                     <div class="col-lg-3 col-sm-3">
                                         <label class="imagecheck mb-4">
-                                            <input type="radio" value="{{$itemcatagories->id}}"
-                                                class="imagecheck-input" name="catagories" id="catagories"
-                                                data-name="{{$itemcatagories->name}}"
+                                            <input type="radio" value="{{$itemcatagories->id}}" class="imagecheck-input"
+                                                name="catagories" id="catagories" data-name="{{$itemcatagories->name}}"
                                                 data-url="{{asset('storage/icon/')}}"
                                                 data-harga="{{$itemcatagories->harga}}">
                                             <figure class="imagecheck-figure">
                                                 <div class="card-body imagecheck-image">
                                                     <div class="d-flex flex-row">
                                                         <div class="align-self-center">
-                                                            <img src="{{asset('storage/icon/' . $itemcatagories->icon)}}" alt="" width="100px">
-                                                            {{-- <i class="fa {{$itemcatagories->icon}}" style="font-size: 50pt"></i> --}}
+                                                            <img src="{{asset('storage/icon/' . $itemcatagories->icon)}}"
+                                                                alt="" width="100px">
+                                                            {{-- <i class="fa {{$itemcatagories->icon}}"
+                                                            style="font-size: 50pt"></i> --}}
                                                         </div>
                                                         <div class="align-self-center ml-4">
                                                             <div class="d-flex flex-column">
@@ -198,7 +199,8 @@
                                     <div class="card">
                                         <div class="card-body text-center">
                                             <div class="card-category">{{$itemopsipackage->name}}</div>
-                                            <div class="display-4 my-4 font-weight-bold">{{"$ ". number_format($itemopsipackage->harga)}}
+                                            <div class="display-4 my-4 font-weight-bold">
+                                                {{"$ ". number_format($itemopsipackage->harga)}}
                                             </div>
                                             <ul class="list-unstyled leading-loose">
                                                 @php
@@ -233,7 +235,9 @@
                                         <table class="table card-table table-vcenter col-lg-8">
                                             @foreach ($opsipackageupgrade as $itemopsipackageupgrade)
                                             <tr>
-                                                <td width="40px"><img src="{{url('assets/dashboard/images/' . $itemopsipackageupgrade->icon)}}" width="100px"></td>
+                                                <td width="40px"><img
+                                                        src="{{url('assets/dashboard/images/' . $itemopsipackageupgrade->icon)}}"
+                                                        width="100px"></td>
                                                 <td width="50px">
                                                     <h6>{{$itemopsipackageupgrade->name}}</h6>
                                                     <p class="text-justify d-none d-md-table-cell text-nowrap">
@@ -243,13 +247,15 @@
                                                 <td class="align-middle" width="70px">
                                                     {{"$". number_format($itemopsipackageupgrade->harga)}}
                                                 </td>
-                                                @if ($itemopsipackageupgrade->name == 'Urgent' || $itemopsipackageupgrade->name == 'Extended')
-                                                <td class="align-middle" width="90px" id="day{{$itemopsipackageupgrade->name}}">
+                                                @if ($itemopsipackageupgrade->name == 'Urgent' ||
+                                                $itemopsipackageupgrade->name == 'Extended')
+                                                <td class="align-middle" width="90px"
+                                                    id="day{{$itemopsipackageupgrade->name}}">
                                                     {{-- <small style="font-size:9pt">Days</small> --}}
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" name="day{{$itemopsipackageupgrade->name}}"
-                                                            placeholder="Day"
-                                                            value="">
+                                                        <input type="text" class="form-control"
+                                                            name="day{{$itemopsipackageupgrade->name}}"
+                                                            placeholder="Day" value="">
                                                     </div>
                                                 </td>
                                                 @else
@@ -272,7 +278,7 @@
                                     <div class="card" id="fileperjanjians">
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <div class="form-label" >Non Disclosure Agreement (NDA)</div>
+                                                <div class="form-label">Non Disclosure Agreement (NDA)</div>
                                                 <div class="custom-file">
                                                     <input type="file" class="custom-file-input" name="fileperjanjian">
                                                     <label class="custom-file-label">Choose file</label>
@@ -289,7 +295,8 @@
                                                             <label for="coupon">Discount Code</label>
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control" id="coupon" name="coupon">
+                                                            <input type="text" class="form-control" id="coupon"
+                                                                name="coupon">
                                                         </td>
                                                     </tr>
                                                 </tbody>

@@ -31,7 +31,6 @@ class CustomerController extends Controller
                 ->update([
                     'name'      => $request->name,
                     'email'     => $request->email,
-                    'tagline'   => $request->tagline,
                     'aboutme'   => $request->aboutme,
                     'avatar'    => $name,
                 ]);
@@ -46,7 +45,6 @@ class CustomerController extends Controller
                 ->update([
                     'name'      => $request->name,
                     'email'     => $request->email,
-                    'tagline'   => $request->tagline,
                     'aboutme'   => $request->aboutme,
                 ]);
             User::where('id', $customer->user_id)
