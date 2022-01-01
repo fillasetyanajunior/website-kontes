@@ -10,6 +10,7 @@ use App\Models\SortCatagories;
 use App\Models\Worker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class BrowseProjectController extends Controller
 {

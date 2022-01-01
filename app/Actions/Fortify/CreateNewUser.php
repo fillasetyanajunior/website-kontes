@@ -37,6 +37,7 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $this->passwordRules(),
             'role' => ['required'],
             'phone' => ['required','numeric'],
+            'tos' => ['required'],
         ])->validate();
 
         if ($input['role'] == 1) {

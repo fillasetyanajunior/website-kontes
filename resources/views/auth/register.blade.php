@@ -63,7 +63,7 @@
                         </div>
                         <div class="form-group">
                             <label class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="agree" />
+                                <input type="checkbox" class="custom-control-input" id="agree" name="tos" />
                                 <span class="custom-control-label">Agree the <a href="terms.html">terms and
                                         policy</a></span>
                             </label>
