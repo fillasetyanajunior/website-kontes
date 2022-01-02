@@ -26,8 +26,7 @@
 {{-- -------------------- Sender card (owner) -------------------- --}}
 @if($viewType == 'sender')
     <div class="message-card mc-sender" data-id="{{ $id }}">
-        <p>
-            {!! ($message == null && $attachment != null && @$attachment[2] != 'file') ? $attachment[1] : nl2br($message) !!}
+        <p>{!! ($message == null && $attachment != null && @$attachment[2] != 'file') ? $attachment[1] : nl2br($message) !!}
             <sub title="{{ $fullTime }}" class="message-time">
                 <span class="fas fa-{{ $seen > 0 ? 'check-double' : 'check' }} seen"></span> {{ $time }}</sub>
                 {{-- If attachment is a file --}}

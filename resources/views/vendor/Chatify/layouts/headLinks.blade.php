@@ -2,11 +2,11 @@
 
 {{-- Meta tags --}}
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="route" content="{{ $route }}">
+<meta name="id" content="{{ $id }}">
+<meta name="type" content="{{ $type }}">
+<meta name="messenger-color" content="{{ $messengerColor }}">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="url" content="{{ url('').'/'.config('chatify.routes.prefix') }}" data-user="{{ Auth::user()->id }}">
-<link rel="icon" href="{{url('assets/dashboard/images/logo3.png')}}" type="image/x-icon" />
-<link rel="shortcut icon" type="image/x-icon" href="{{url('assets/dashboard/images/logo3.png')}}" />
 
 {{-- scripts --}}
 <script

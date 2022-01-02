@@ -7,7 +7,7 @@ return [
     | Messenger display name
     |-------------------------------------
     */
-    'name' => env('CHATIFY_NAME', 'Messenger'),
+    'name' => env('CHATIFY_NAME', 'Chatify Messenger'),
 
     /*
     |-------------------------------------
@@ -15,9 +15,9 @@ return [
     |-------------------------------------
     */
     'routes' => [
-        'prefix' => env('CHATIFY_ROUTES_PREFIX', 'messenger'),
-        'middleware' => env('CHATIFY_ROUTES_MIDDLEWARE', ['web','auth']),
-        'namespace' => env('CHATIFY_ROUTES_NAMESPACE', 'App\Http\Controllers\vendor\Chatify'),
+        'prefix' => env('CHATIFY_ROUTES_PREFIX', 'chatify'),
+        'middleware' => env('CHATIFY_ROUTES_MIDDLEWARE', ['web', 'auth', 'verified', 'admincustomer']),
+        'namespace' => env('CHATIFY_ROUTES_NAMESPACE', 'Chatify\Http\Controllers'),
     ],
     'api_routes' => [
         'prefix' => env('CHATIFY_API_ROUTES_PREFIX', 'chatify/api'),

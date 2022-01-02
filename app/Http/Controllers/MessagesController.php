@@ -10,14 +10,12 @@ use App\Models\ChFavorite as Favorite;
 use Chatify\Facades\ChatifyMessenger as Chatify;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 use Illuminate\Support\Str;
+
+
 class MessagesController extends Controller
 {
-    protected $perPage = 30;
-    protected $messengerFallbackColor = '#2180f3';
-
     /**
      * Authinticate the connection for pusher
      *
@@ -42,7 +40,7 @@ class MessagesController extends Controller
             );
         }
         // if not authorized
-        return response()->json(['message'=>'Unauthorized'], 401);
+        return new Response('Unauthorized', 401);
     }
 
     /**
@@ -54,14 +52,15 @@ class MessagesController extends Controller
     public function index( $id = null)
     {
         $routeName= FacadesRequest::route()->getName();
-        $type = in_array($routeName, ['user','group'])
-            ? $routeName
-            : 'user';
+        $route = (in_array($routeName, ['user', config('chatify.routes.prefix')]))
+            ? 'user'
+            : $routeName;
 
+        // prepare id
         return view('Chatify::pages.app', [
-            'id' => $id ?? 0,
-            'type' => $type ?? 'user',
-            'messengerColor' => Auth::user()->messenger_color ?? $this->messengerFallbackColor,
+            'id' => ($id == null) ? 0 : $route . '_' . $id,
+            'route' => $route,
+            'messengerColor' => Auth::user()->messenger_color,
             'dark_mode' => Auth::user()->dark_mode < 1 ? 'light' : 'dark',
         ]);
     }
@@ -81,16 +80,13 @@ class MessagesController extends Controller
         // User data
         if ($request['type'] == 'user') {
             $fetch = User::where('id', $request['id'])->first();
-            if($fetch){
-                $userAvatar = asset('/storage/' . config('chatify.user_avatar.folder') . '/' . $fetch->avatar);
-            }
         }
 
         // send the response
         return Response::json([
             'favorite' => $favorite,
-            'fetch' => $fetch ?? [],
-            'user_avatar' => $userAvatar ?? null,
+            'fetch' => $fetch,
+            'user_avatar' => asset('/storage/' . config('chatify.user_avatar.folder') . '/' . $fetch->avatar),
         ]);
     }
 
@@ -164,7 +160,7 @@ class MessagesController extends Controller
                 'body' => htmlentities(trim($request['message']), ENT_QUOTES, 'UTF-8'),
                 'attachment' => ($attachment) ? json_encode((object)[
                     'new_name' => $attachment,
-                    'old_name' => htmlentities(trim($attachment_title), ENT_QUOTES, 'UTF-8'),
+                    'old_name' => $attachment_title,
                 ]) : null,
             ]);
 
@@ -196,34 +192,31 @@ class MessagesController extends Controller
      */
     public function fetch(Request $request)
     {
-        $query = Chatify::fetchMessagesQuery($request['id'])->latest();
-        $messages = $query->paginate($request->per_page ?? $this->perPage);
-        $totalMessages = $messages->total();
-        $lastPage = $messages->lastPage();
-        $response = [
-            'total' => $totalMessages,
-            'last_page' => $lastPage,
-            'last_message_id' => collect($messages->items())->last()->id ?? null,
-            'messages' => '',
-        ];
-
-        // if there is no messages yet.
-        if ($totalMessages < 1) {
-            $response['messages'] ='<p class="message-hint center-el"><span>Say \'hi\' and start messaging</span></p>';
-            return Response::json($response);
-        }
-        if (count($messages->items()) < 1) {
-            $response['messages'] = '';
-            return Response::json($response);
-        }
+        // messages variable
         $allMessages = null;
-        foreach ($messages->reverse() as $message) {
-            $allMessages .= Chatify::messageCard(
-                Chatify::fetchMessage($message->id)
-            );
+
+        // fetch messages
+        $query = Chatify::fetchMessagesQuery($request['id'])->orderBy('created_at', 'asc');
+        $messages = $query->get();
+
+        // if there is a messages
+        if ($query->count() > 0) {
+            foreach ($messages as $message) {
+                $allMessages .= Chatify::messageCard(
+                    Chatify::fetchMessage($message->id)
+                );
+            }
+            // send the response
+            return Response::json([
+                'count' => $query->count(),
+                'messages' => $allMessages,
+            ]);
         }
-        $response['messages'] = $allMessages;
-        return Response::json($response);
+        // send the response
+        return Response::json([
+            'count' => $query->count(),
+            'messages' => '<p class="message-hint center-el"><span>Say \'hi\' and start messaging</span></p>',
+        ]);
     }
 
     /**
@@ -257,29 +250,29 @@ class MessagesController extends Controller
         })
         ->where(function ($q) {
             $q->where('ch_messages.from_id', Auth::user()->id)
-            ->orWhere('ch_messages.to_id', Auth::user()->id);
+              ->orWhere('ch_messages.to_id', Auth::user()->id);
         })
-        ->where('users.id','!=',Auth::user()->id)
-        ->select('users.*',DB::raw('MAX(ch_messages.created_at) max_created_at'))
-        ->orderBy('max_created_at', 'desc')
-        ->groupBy('users.id')
-        ->paginate($request->per_page ?? $this->perPage);
+        ->orderBy('ch_messages.created_at', 'desc')
+        ->get()
+        ->unique('id');
 
-        $usersList =$users->items();
-
-        if (count($usersList) > 0) {
+        $contacts = '<p class="message-hint center-el"><span>Your contact list is empty</span></p>';
+        $users = $users->where('id','!=',Auth::user()->id);
+        if ($users->count() > 0) {
+            // fetch contacts
             $contacts = '';
-            foreach ($usersList as $user) {
-                $contacts .= Chatify::getContactItem($user);
+            foreach ($users as $user) {
+                if ($user->id != Auth::user()->id) {
+                    // Get user data
+                    $userCollection = User::where('id', $user->id)->first();
+                    $contacts .= Chatify::getContactItem($request['messenger_id'], $userCollection);
+                }
             }
-        }else{
-            $contacts = '<p class="message-hint center-el"><span>Your contact list is empty</span></p>';
         }
 
+        // send the response
         return Response::json([
             'contacts' => $contacts,
-            'total' => $users->total() ?? 0,
-            'last_page' => $users->lastPage() ?? 1,
         ], 200);
     }
 
@@ -292,13 +285,8 @@ class MessagesController extends Controller
     public function updateContactItem(Request $request)
     {
         // Get user data
-        $user = User::where('id', $request['user_id'])->first();
-        if(!$user){
-            return Response::json([
-                'message' => 'User not found!',
-            ], 401);
-        }
-        $contactItem = Chatify::getContactItem($user);
+        $userCollection = User::where('id', $request['user_id'])->first();
+        $contactItem = Chatify::getContactItem($request['messenger_id'], $userCollection);
 
         // send the response
         return Response::json([
@@ -367,29 +355,24 @@ class MessagesController extends Controller
     {
         $getRecords = null;
         $input = trim(filter_var($request['input'], FILTER_SANITIZE_STRING));
-        // $records = User::where('id','!=',Auth::user()->id)
-        //             ->where('name', 'LIKE', "%{$input}%")
-        //             ->paginate($request->per_page ?? $this->perPage);
-        if (Auth::user()->role == 'admin') {
-            $records = User::where('id', '!=', Auth::user()->id)->where('name', 'LIKE', "%{$input}%")->paginate($request->per_page ?? $this->perPage);
-        } else {
-            $records = User::where('id', '!=', Auth::user()->id)->where('role', 'admin')->where('name', 'LIKE', "%{$input}%")->paginate($request->per_page ?? $this->perPage);
+        if (request()->user()->role == 'admin') {
+            $records = User::where('name', 'LIKE', "%{$input}%");
+        } else{
+            $records = User::where('role', 'admin')->where('name', 'LIKE', "%{$input}%");
         }
-        foreach ($records->items() as $record) {
+        foreach ($records->get() as $record) {
             $getRecords .= view('Chatify::layouts.listItem', [
                 'get' => 'search_item',
                 'type' => 'user',
                 'user' => $record,
             ])->render();
         }
-        if($records->total() < 1){
-            $getRecords = '<p class="message-hint center-el"><span>Nothing to show.</span></p>';
-        }
         // send the response
         return Response::json([
-            'records' => $getRecords,
-            'total' => $records->total(),
-            'last_page' => $records->lastPage()
+            'records' => $records->count() > 0
+                ? $getRecords
+                : '<p class="message-hint center-el"><span>Nothing to show.</span></p>',
+            'addData' => 'html'
         ], 200);
     }
 
