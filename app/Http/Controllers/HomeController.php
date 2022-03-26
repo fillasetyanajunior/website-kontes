@@ -27,7 +27,7 @@ class HomeController extends Controller
             $data['projectlocked']              = Project::where('is_active','cancel')->count();
             $data['projectclose']               = Project::where('is_active','close')->count();
             $data['accountworker']              = Worker::count();
-            $data['accountworker']              = Customer::count();
+            $data['accountcustomer']            = Customer::count();
             return view('admin.dashboard_admin',$data);
         }elseif (request()->user()->role == 'customer') {
             $data['project']                    = Project::where('user_id', request()->user()->id)->paginate(20);

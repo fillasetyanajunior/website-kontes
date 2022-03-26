@@ -113,7 +113,7 @@
                             <i class="fe fe-users"></i>
                         </span>
                         <div>
-                            <h6 class="m-0 text-white">{{$accountworker}}<small class="text-white"> Account Client</small></h6>
+                            <h6 class="m-0 text-white">{{$accountcustomer}}<small class="text-white"> Account Client</small></h6>
                         </div>
                     </div>
                 </div>
