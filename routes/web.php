@@ -14,6 +14,7 @@ use App\Http\Controllers\FeedbackBidController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HandoverController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ManagementAdminController;
 use App\Http\Controllers\ManagementCustomerController;
@@ -47,10 +48,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 //Coba Cek
 Route::get('/coba',
 // [DesainCardController::class,'BusinessCard']
@@ -70,6 +67,8 @@ Route::get('/coba',
 //     return $location->toArray();
 // }
 );
+Route::get('/', [HomepageController::class, 'index']);
+Route::post('/', [HomepageController::class, 'store']);
 
 Route::get('/home', [HomeController::class,'index'])->name('home');
 Route::post('/feedback/users/{resultcontest}', [FeedbackController::class, 'UserFeedback']);
@@ -223,6 +222,8 @@ Route::middleware('verified')->group(function () {
         Route::delete('/deletedirect/{project}', [BriefProjectController::class, 'DeleteDirect']);
         Route::put('/lockeddirect/{project}', [BriefProjectController::class, 'LockedDirect']);
         Route::put('/extendeddeadlinedirect/{project}', [BriefProjectController::class, 'ExtendedDirect']);
+        //HandoverConfirm
+        Route::put('/handoverproject/confirm/{project}', [HandoverController::class, 'HandoverConfirm']);
     });
 
     Route::middleware('customer')->group(function () {
@@ -237,8 +238,6 @@ Route::middleware('verified')->group(function () {
         Route::get('/favourites', [NewsFeedController::class,'Favourites'])->name('favourites');
         //Api Deadline
         Route::get('/deadline/{project}', [HomeController::class,'Deadline']);
-        //HandoverConfirm
-        Route::put('/handoverproject/confirm/{project}', [HandoverController::class,'HandoverConfirm']);
         //Upload File
         Route::post('/fileuploadrevisi/store', [UploadFileController::class,'UploadfileRevisi']);
         Route::delete('/deletefileuploadrevisi/{uploadfile}', [UploadFileController::class,'DeleteFileUploadRevisi']);
